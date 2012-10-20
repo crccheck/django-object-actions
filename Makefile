@@ -6,7 +6,10 @@ help:
 
 
 test:
-	python $(PROJECT)/manage.py test
+#
+#   -s    don't capture stdout
+#
+	python $(PROJECT)/manage.py test -s
 
 
 resetdb:
