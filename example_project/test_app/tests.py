@@ -1,5 +1,7 @@
 from django.test import TestCase
 
+from example_project.polls.models import Choice
+
 
 class LoggedInTestCase(TestCase):
     def setUp(self):
@@ -18,6 +20,15 @@ class AppTests(LoggedInTestCase):
         response = self.client.get('/admin/polls/choice/add/')
         self.assertEqual(response.status_code, 200)
         self.assertIn('objectactions', response.context_data)
+
+    def test_tool_func_gets_executed(self):
+        c = Choice.objects.get(pk=1)
+        votes = c.votes
+        response = self.client.get('/admin/polls/choice/1/tools/increment_vote/')
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response['location'].endswith('/admin/polls/choice/1/'))
+        c = Choice.objects.get(pk=1)
+        self.assertEqual(c.votes, votes + 1)
 
     def test_tool_can_return_httpresponse(self):
         # we know this url works because of fixtures
