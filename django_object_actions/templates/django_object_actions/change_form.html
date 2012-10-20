@@ -8,7 +8,7 @@ more template code than necessary. This markup gets the link into the DOM,
 which is "good enough".
 {% endcomment %}
 {% block object-tools %}{{ block.super }}
-  {% for tool, help in djtools %}
+  {% for tool, help in objectactions %}
     <li class="djtool-item"><a href='tools/{{ tool }}/' title="{{ help }}">
       {# White space deliberately inserted #}
       {{ tool|capfirst }}

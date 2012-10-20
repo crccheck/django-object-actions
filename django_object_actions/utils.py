@@ -5,7 +5,7 @@ from django.views.generic import View
 from django.views.generic.detail import SingleObjectMixin
 
 
-class DjObjectTools(object):
+class DjangoObjectActions(object):
     """
     mixin to add object-tools just like you would add admin actions.
 
@@ -15,26 +15,26 @@ class DjObjectTools(object):
 
         def toolfunc(self, request, obj)
 
-    They are exposed by putting them in a djobjecttools attribute in your
+    They are exposed by putting them in a `objectactions` attribute in your
     modeladmin like:
 
-        class MyModelAdmin(DjObjectTools, admin.ModelAdmin):
+        class MyModelAdmin(DjangoObjectActions, admin.ModelAdmin):
             def toolfunc(self, request, obj):
                 pass
             toolfunc.short_description = "does nothing"
 
-            djobjecttools = ('toolfunc',)
+            objectactions = ('toolfunc',)
 
     Why this functionality isn't baked into contrib.admin is beyond me.
 
     TODO: get `form` and `change` so you can write tools that can also save
     TODO: handle getting returned an HttpResponse
     """
-    change_form_template = "djobjecttools/change_form.html"
+    change_form_template = "django_object_actions/change_form.html"
 
     def get_tool_urls(self):
         tools = {}
-        for tool in self.djobjecttools:
+        for tool in self.objectactions:
             tools[tool] = getattr(self, tool)
         my_urls = patterns('',
             (r'^(?P<pk>\d+)/tools/(?P<tool>\w+)/$', self.admin_site.admin_view(
@@ -43,14 +43,14 @@ class DjObjectTools(object):
         return my_urls
 
     def get_urls(self):
-        urls = super(DjObjectTools, self).get_urls()
+        urls = super(DjangoObjectActions, self).get_urls()
         return self.get_tool_urls() + urls
 
     def render_change_form(self, request, context, **kwargs):
-        context['djtools'] = [(x,
+        context['objectactions'] = [(x,
             getattr(getattr(self, x), 'short_description', ''))
-            for x in self.djobjecttools]
-        return super(DjObjectTools, self).render_change_form(request,
+            for x in self.objectactions]
+        return super(DjangoObjectActions, self).render_change_form(request,
             context, **kwargs)
 
 
