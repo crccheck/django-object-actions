@@ -1,0 +1,4 @@
+Django>=1.4.2
+
+dj-database-url>=0.2.1
+psycopg2>=2.4.5

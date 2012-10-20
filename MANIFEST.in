@@ -1,0 +1,2 @@
+include setup.py README.* MANIFEST.in LICENSE
+recursive-include django_object_actions *
