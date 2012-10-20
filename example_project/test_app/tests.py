@@ -18,3 +18,11 @@ class AppTests(LoggedInTestCase):
         response = self.client.get('/admin/polls/choice/add/')
         self.assertEqual(response.status_code, 200)
         self.assertIn('objectactions', response.context_data)
+
+    def test_tool_can_return_httpresponse(self):
+        # we know this url works because of fixtures
+        url = 'http://localhost:8000/admin/polls/choice/2/tools/edit_poll/'
+        response = self.client.get(url)
+        # we expect a redirect
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response['location'].endswith('/admin/polls/poll/1/'))

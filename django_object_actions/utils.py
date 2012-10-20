@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import patterns
 from django.contrib import messages
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.views.generic import View
 from django.views.generic.detail import SingleObjectMixin
 
@@ -70,9 +70,11 @@ class ModelToolsView(SingleObjectMixin, View):
         #   is instantiated with `model` and the urlpattern has `pk`.
         obj = self.get_object()
         try:
-            self.tools[kwargs['tool']](request, obj)
+            ret = self.tools[kwargs['tool']](request, obj)
         except KeyError:
             raise Http404
+        if isinstance(ret, HttpResponse):
+            return ret
         back = request.path.rsplit('/', 3)[0] + '/'
         return HttpResponseRedirect(back)
 

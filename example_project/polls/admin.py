@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
 
 from django_object_actions import DjangoObjectActions
 
@@ -23,7 +25,12 @@ class ChoiceAdmin(DjangoObjectActions, admin.ModelAdmin):
         obj.save()
     increment_vote.short_description = "0"
 
-    objectactions = ('increment_vote', 'decrement_vote', 'reset_vote')
+    def edit_poll(self, request, obj):
+        url = reverse('admin:polls_poll_change', args=(obj.poll.pk,))
+        return HttpResponseRedirect(url)
+
+    objectactions = ('increment_vote', 'decrement_vote', 'reset_vote',
+        'edit_poll')
 
 admin.site.register(Choice, ChoiceAdmin)
 
