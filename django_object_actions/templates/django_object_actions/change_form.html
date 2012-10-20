@@ -2,10 +2,12 @@
 
 
 {% block object-tools-items %}
-  {% for tool, help in objectactions %}
-    <li class="objectaction-item"><a href='tools/{{ tool }}/' title="{{ help }}">
-      {{ tool|capfirst }}
-    </a></li>
+  {% for tool in objectactions %}
+    <li class="objectaction-item">
+      <a href='tools/{{ tool.name }}/' title="{{ tool.short_description }}">
+      {{ tool.label|capfirst }}
+      </a>
+    </li>
   {% endfor %}
   {{ block.super }}
 {% endblock %}

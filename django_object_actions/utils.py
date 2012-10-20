@@ -54,8 +54,11 @@ class DjangoObjectActions(object):
 
     def render_change_form(self, request, context, **kwargs):
         """ put `objectactions` into the context """
-        context['objectactions'] = [(x,
-            getattr(getattr(self, x), 'short_description', ''))
+        context['objectactions'] = [
+            dict(
+                name=x,
+                label=x,
+                short_description=getattr(getattr(self, x), 'short_description', ''))
             for x in self.objectactions]
         return super(DjangoObjectActions, self).render_change_form(request,
             context, **kwargs)
