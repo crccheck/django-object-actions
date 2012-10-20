@@ -9,12 +9,21 @@ class ChoiceAdmin(DjangoObjectActions, admin.ModelAdmin):
     list_display = ('poll', 'choice_text', 'votes')
 
     def increment_vote(self, request, obj):
-        print obj
         obj.votes += 1
         obj.save()
-    increment_vote.short_description = "hi"
+    increment_vote.short_description = "+1"
 
-    objectactions = ('increment_vote', )
+    def decrement_vote(self, request, obj):
+        obj.votes -= 1
+        obj.save()
+    increment_vote.short_description = "-1"
+
+    def reset_vote(self, request, obj):
+        obj.votes = 0
+        obj.save()
+    increment_vote.short_description = "0"
+
+    objectactions = ('increment_vote', 'decrement_vote', 'reset_vote')
 
 admin.site.register(Choice, ChoiceAdmin)
 
