@@ -122,6 +122,9 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
     'example_project.polls',
 
+    # my app
+    'django_object_actions',
+
     # Uncomment the next line to get runshell_plus, shell_plus, etc
     # 'django_extensions',
 

@@ -31,6 +31,7 @@ class DjangoObjectActions(object):
     TODO: handle getting returned an HttpResponse
     """
     change_form_template = "django_object_actions/change_form.html"
+    objectactions = []
 
     def get_tool_urls(self):
         tools = {}
