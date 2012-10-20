@@ -1,0 +1,17 @@
+media
+
+*.log
+*.pot
+*.pyc
+.DS_Store
+.sass-cache
+
+
+*.sqlite
+.codeintel
+*.sublime-*
+
+
+MANIFEST
+dist/*
+
