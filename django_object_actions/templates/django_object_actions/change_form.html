@@ -1,0 +1,29 @@
+{% extends "admin/change_form.html" %}
+
+
+{% comment %}
+FIXME this markup is all wrong but it'll work for now. The problem is it's not
+easy just to add another list item, to do it right, you have to copy in a lot
+more template code than necessary. This markup gets the link into the DOM,
+which is "good enough".
+{% endcomment %}
+{% block object-tools %}{{ block.super }}
+  {% for tool, help in djtools %}
+    <li class="djtool-item"><a href='tools/{{ tool }}/' title="{{ help }}">
+      {# White space deliberately inserted #}
+      {{ tool|capfirst }}
+    </a></li>
+  {% endfor %}
+  <script>
+    (function($){
+
+// custom one-off javascript that will in no way work for anything else
+$(function(){
+  $('li.djtool-item a').addClass('btn').prepend($('<i class="icon-globe"/>'))
+    .prependTo($('#actions-right-alt'));
+  $('li.djtool-item').remove();
+});
+
+    })(window.django.jQuery);
+  </script>
+{% endblock %}
