@@ -120,6 +120,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
+    'example_project.polls',
 
     # Uncomment the next line to get runshell_plus, shell_plus, etc
     # 'django_extensions',
