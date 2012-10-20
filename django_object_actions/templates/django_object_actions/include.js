@@ -14,4 +14,10 @@ admin staticfiles.
 {% endcomment %}
 */
 /* global: $ */
-$('li.objectaction-item').prependTo($('#content-main ul.object-tools'));
+var $items = $('li.objectaction-item'),
+    $container = $('#content-main ul.object-tools');
+if ($container.length){
+  $items.prependTo($container);
+} else {
+  $items.remove();
+}
