@@ -29,11 +29,15 @@ class DjangoObjectActions(object):
 
     TODO: get `form` and `change` so you can write tools that can also save
     TODO: handle getting returned an HttpResponse
+
     """
+    # override default change_form_template
     change_form_template = "django_object_actions/change_form.html"
+    # list to hold each object action tool
     objectactions = []
 
     def get_tool_urls(self):
+        """ get the url patterns that route each tool to a special view """
         tools = {}
         for tool in self.objectactions:
             tools[tool] = getattr(self, tool)
@@ -44,10 +48,12 @@ class DjangoObjectActions(object):
         return my_urls
 
     def get_urls(self):
+        """ prepend `get_urls` with our own patterns """
         urls = super(DjangoObjectActions, self).get_urls()
         return self.get_tool_urls() + urls
 
     def render_change_form(self, request, context, **kwargs):
+        """ put `objectactions` into the context """
         context['objectactions'] = [(x,
             getattr(getattr(self, x), 'short_description', ''))
             for x in self.objectactions]
@@ -56,9 +62,12 @@ class DjangoObjectActions(object):
 
 
 class ModelToolsView(SingleObjectMixin, View):
+    """ special view that run the tool's callable """
     tools = {}
 
     def get(self, request, **kwargs):
+        # SingleOjectMixin's `get_object`. Works because the view
+        #   is instantiated with `model` and the urlpattern has `pk`.
         obj = self.get_object()
         try:
             self.tools[kwargs['tool']](request, obj)
@@ -69,4 +78,5 @@ class ModelToolsView(SingleObjectMixin, View):
 
     def message_user(self, request, message):
         # copied from django.contrib.admin.options
+        # included to mimic admin actions
         messages.info(request, message)
