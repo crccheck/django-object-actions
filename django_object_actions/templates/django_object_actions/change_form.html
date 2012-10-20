@@ -1,24 +1,11 @@
 {% extends "admin/change_form.html" %}
 
-{% comment %}
 
-This markup is technically wrong but it'll work for now. The problem is it's not
-easy just to add another list item to ul.object-tools, to do it right, you have
-to copy in a lot more template code than necessary. This markup just gets the
-link into the DOM, then uses JavaScript to move it to where it's supposed to go.
-
-{% endcomment %}
-{% block object-tools %}{{ block.super }}
+{% block object-tools-items %}
   {% for tool, help in objectactions %}
     <li class="objectaction-item"><a href='tools/{{ tool }}/' title="{{ help }}">
       {{ tool|capfirst }}
     </a></li>
   {% endfor %}
-  <script>
-    (function($){
-      $(function(){
-        {% include "django_object_actions/include.js" %}
-      });
-    })(window.django.jQuery);
-  </script>
+  {{ block.super }}
 {% endblock %}
