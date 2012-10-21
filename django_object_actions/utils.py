@@ -6,31 +6,7 @@ from django.views.generic.detail import SingleObjectMixin
 
 
 class DjangoObjectActions(object):
-    """
-    mixin to add object-tools just like you would add admin actions.
-
-    Tools are defined just like defining actions as modeladmin methods, see:
-    https://docs.djangoproject.com/en/dev/ref/contrib/admin/actions/#actions-as-modeladmin-methods
-    and follow this prototype:
-
-        def toolfunc(self, request, obj)
-
-    They are exposed by putting them in a `objectactions` attribute in your
-    modeladmin like:
-
-        class MyModelAdmin(DjangoObjectActions, admin.ModelAdmin):
-            def toolfunc(self, request, obj):
-                pass
-            toolfunc.short_description = "does nothing"
-
-            objectactions = ('toolfunc',)
-
-    Why this functionality isn't baked into contrib.admin is beyond me.
-
-    TODO: get `form` and `change` so you can write tools that can also save
-    TODO: handle getting returned an HttpResponse
-
-    """
+    """ ModelAdmin mixin to add object-tools just like adding admin actions """
     # override default change_form_template
     change_form_template = "django_object_actions/change_form.html"
     # list to hold each object action tool
