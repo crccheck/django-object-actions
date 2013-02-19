@@ -1,18 +1,17 @@
 from setuptools import find_packages
 from distutils.core import setup
 
-import django_object_actions as app
 
 setup(
-    name=app.__name__,
-    version=app.__version__,
+    name='django-object-actions',
+    version='0.0.1',
     author="Chris Chang",
     author_email="c@crccheck.com",
     # url
     packages=find_packages('.', exclude=('example_project*',)),
     include_package_data=True,  # automatically include things from MANIFEST
     license='Apache License, Version 2.0',
-    description=app.__doc__.strip(),
+    description='A Django app for adding object tools to models',
     long_description=open('README.md').read(),
     classifiers=[
         "Development Status :: 3 - Alpha",
