@@ -1,4 +1,5 @@
 PROJECT=./example_project
+MANAGE=$(PROJECT)/manage.py
 
 help:
 	@echo "  make help    - this help"
@@ -17,13 +18,12 @@ test:
 #
 #   -s    don't capture stdout
 #
-	python $(PROJECT)/manage.py test -s
+	python $(MANAGE) test -s
 
 
 resetdb:
-	$(foreach db, $(wildcard $(PROJECT)/*.sqlite),\
-		rm $(db);)
-	python $(PROJECT)/manage.py syncdb --noinput
+	python $(MANAGE) reset_db --router=default --noinput
+	python $(MANAGE) syncdb --noinput
 
 
 .PHONY: help clean test resetdb
