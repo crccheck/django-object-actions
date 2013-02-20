@@ -125,9 +125,9 @@ INSTALLED_APPS = (
     # my app
     'django_object_actions',
 
-    # Uncomment the next line to get runshell_plus, shell_plus, etc
-    # 'django_extensions',
-
+    # dev helpers
+    'django_extensions',
+    # testing
     'django_nose',
 )
 
