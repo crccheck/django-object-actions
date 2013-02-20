@@ -3,7 +3,7 @@ from distutils.core import setup
 
 setup(
     name='django-object-actions',
-    version='0.0.1',
+    version='0.1.0-dev',
     author="The Texas Tribune",
     author_email="cchang@texastribune.org",
     maintainer="Chris Chang",
