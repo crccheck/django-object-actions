@@ -3,54 +3,82 @@ Django Object Actions
 
 If you've ever tried making your own admin object tools and you were like me,
 you immediately gave up. Why can't they be as easy as making Django Admin
-Actions? Well now they can!
+Actions? Well now they can be.
 
-This is very similar to [django-object-tools], but does not require messing with
-your urls.py, does not do anything special with permissions, and uses a subset
-of the language you already know from making [django admin actions].
+### Similar Packages
+
+Django Object Actions is very similar to [django-object-tools], but does not
+require messing with your urls.py, does not do anything special with
+permissions, and uses the same patterns as making [admin actions] in Django.
 
   [django-object-tools]: https://github.com/praekelt/django-object-tools
-  [django admin actions]: https://docs.djangoproject.com/en/dev/ref/contrib/admin/actions/#actions-as-modeladmin-methods
+  [admin actions]: https://docs.djangoproject.com/en/dev/ref/contrib/admin/actions/#actions-as-modeladmin-methods
 
 
-Installation
-------------
+## Installation
+
+Install Django Object Actions. Currently, this has to be done manually.
 
 Add `django_object_actions` to your `INSTALLED_APPS`.
 
-Or just put the template some place Django can find it.
+### Alternate Installation
 
-Example Usage
--------------
+Install Django Object Actions. Currently, this has to be done manually.
 
-Tools are defined just like defining actions as modeladmin methods, see: [django
-admin actions] for examples and detailed syntax. The major difference being
-the functions you write will take an object instead of a queryset:
+Copy the templates some place Django's template loader [will find it].
+
+[will find it]: https://docs.djangoproject.com/en/dev/ref/settings/#template-dirs
+
+## Usage
+
+Tools are defined just like defining actions as modeladmin methods, see: [admin
+actions] for examples and detailed syntax. You can return nothing or an http
+response. The major difference being the functions you write will take an object
+instance instead of a queryset:
 
     def toolfunc(self, request, obj)
 
-They are exposed by putting them in a `objectactions` attribute in your
+Tools are exposed by putting them in an `objectactions` attribute in your
 modeladmin like:
 
     class MyModelAdmin(DjangoObjectActions, admin.ModelAdmin):
         def toolfunc(self, request, obj):
             pass
-        toolfunc.short_description = "This will be the tooltip of the button"
+        toolfunc.label = "This will be the label of the button"  # optional
+        toolfunc.short_description = "This will be the tooltip of the button"  # optional
 
-        objectactions = ('toolfunc',)
+        objectactions = ('toolfunc', )
 
 Just like actions, you can send a message with `self.message_user`. Normally,
 you would do something to the object and go back to the same place, but if you
 return a HttpResponse, it will follow it (hey, just like actions!).
 
-Limitations: django-object-actions expects these functions to be methods of the
-model admin.
+### Limitations
+django-object-actions expects these functions to be methods of the model admin.
 
-Development
------------
+If you provide your own custom change_form.html, you'll also need to manually
+copy in the relevant bits of [our change form].
 
-Getting started:
+[our change form]: https://github.com/texastribune/django-object-actions/blob/master/django_object_actions/templates/django_object_actions/change_form.html
 
+## Development
+
+Getting started _(with virtualenvwrapper)_:
+
+    # get a copy of the code
+    git clone git@github.com:texastribune/django-object-actions.git
+    cd django-object-actions
+    # set up your virtualenv
+    mkvirtualenv django-object-actions
     pip install -r requirements-dev.txt
+    export DJANGO_SETTINGS_MODULE=example_project.settings
+    add2virtualenv .
+    # start doing stuff
+    make test
+    make resetdb
+    python example_project/manage.py runserver
 
-Various helpers available as make commands.
+The fixtures will create a user, admin:admin, you can use to log in immediately.
+
+
+Various helpers are available as make commands.
