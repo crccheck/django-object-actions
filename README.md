@@ -1,6 +1,9 @@
 Django Object Actions
 =====================
 
+[![Build Status](https://travis-ci.org/texastribune/django-object-actions.png)](https://travis-ci.org/texastribune/django-object-actions)
+
+
 If you've ever tried making your own admin object tools and you were like me,
 you immediately gave up. Why can't they be as easy as making Django Admin
 Actions? Well now they can be.
