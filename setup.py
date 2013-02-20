@@ -1,4 +1,3 @@
-from setuptools import find_packages
 from distutils.core import setup
 
 
@@ -9,7 +8,7 @@ setup(
     author_email="cchang@texastribune.org",
     maintainer="Chris Chang",
     # url
-    packages=find_packages('.', exclude=('example_project*',)),
+    packages=['django_object_actions'],
     include_package_data=True,  # automatically include things from MANIFEST
     license='Apache License, Version 2.0',
     description='A Django app for adding object tools to models',
