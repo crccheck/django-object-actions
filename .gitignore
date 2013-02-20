@@ -12,7 +12,9 @@ media
 *.sublime-*
 
 
+# build
 MANIFEST
+build/*
 dist/*
 *.egg-info
 
