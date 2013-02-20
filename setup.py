@@ -5,8 +5,9 @@ from distutils.core import setup
 setup(
     name='django-object-actions',
     version='0.0.1',
-    author="Chris Chang",
-    author_email="c@crccheck.com",
+    author="The Texas Tribune",
+    author_email="cchang@texastribune.org",
+    maintainer="Chris Chang",
     # url
     packages=find_packages('.', exclude=('example_project*',)),
     include_package_data=True,  # automatically include things from MANIFEST
