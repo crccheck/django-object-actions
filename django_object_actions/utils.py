@@ -78,6 +78,9 @@ class ModelToolsView(SingleObjectMixin, View):
         back = request.path.rsplit('/', 3)[0] + '/'
         return HttpResponseRedirect(back)
 
+    # Allow POST
+    post = get
+
     def message_user(self, request, message):
         # copied from django.contrib.admin.options
         # included to mimic admin actions
