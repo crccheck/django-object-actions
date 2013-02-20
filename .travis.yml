@@ -1,0 +1,5 @@
+language: python
+env:
+    PYTHONPATH='.'
+install: "pip install -r requirements-dev.txt --use-mirrors"
+script: make test
