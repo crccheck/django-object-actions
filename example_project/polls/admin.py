@@ -14,6 +14,7 @@ class ChoiceAdmin(DjangoObjectActions, admin.ModelAdmin):
         obj.votes += 1
         obj.save()
     increment_vote.short_description = "+1"
+    increment_vote.label = "vote++"
 
     def decrement_vote(self, request, obj):
         obj.votes -= 1
