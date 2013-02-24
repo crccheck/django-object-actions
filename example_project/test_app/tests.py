@@ -38,6 +38,11 @@ class AppTests(LoggedInTestCase):
         self.assertEqual(response.status_code, 302)
         self.assertTrue(response['location'].endswith('/admin/polls/poll/1/'))
 
+    def test_can_return_template(self):
+        url = '/admin/polls/poll/1/tools/delete_all_choices/'
+        response = self.client.get(url)
+        self.assertTemplateUsed(response, "clear_choices.html")
+
     def test_intermediate_page_with_post_works(self):
         self.assertTrue(Choice.objects.filter(poll=1).count())
         url = '/admin/polls/poll/1/tools/delete_all_choices/'
