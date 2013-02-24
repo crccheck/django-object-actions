@@ -52,4 +52,14 @@ class PollAdmin(DjangoObjectActions, admin.ModelAdmin):
     search_fields = ['question']
     date_hierarchy = 'pub_date'
 
+    def delete_all_choices(self, request, obj):
+        from django.shortcuts import render_to_response
+        from django.template import RequestContext
+        return render_to_response('clear_choices.html',
+            dict(object=obj), context_instance=RequestContext(request))
+    delete_all_choices.label = "Delete All Choices"
+
+    objectactions = ('delete_all_choices', )
+
+
 admin.site.register(Poll, PollAdmin)

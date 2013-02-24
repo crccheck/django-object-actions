@@ -37,3 +37,8 @@ class AppTests(LoggedInTestCase):
         # we expect a redirect
         self.assertEqual(response.status_code, 302)
         self.assertTrue(response['location'].endswith('/admin/polls/poll/1/'))
+
+    def test_intermediate_page_with_post_works(self):
+        url = '/admin/polls/poll/1/tools/delete_all_choices/'
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, 200)
