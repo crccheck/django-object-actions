@@ -32,7 +32,7 @@ class AppTests(LoggedInTestCase):
 
     def test_tool_can_return_httpresponse(self):
         # we know this url works because of fixtures
-        url = 'http://localhost:8000/admin/polls/choice/2/tools/edit_poll/'
+        url = '/admin/polls/choice/2/tools/edit_poll/'
         response = self.client.get(url)
         # we expect a redirect
         self.assertEqual(response.status_code, 302)
