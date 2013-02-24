@@ -39,6 +39,8 @@ class AppTests(LoggedInTestCase):
         self.assertTrue(response['location'].endswith('/admin/polls/poll/1/'))
 
     def test_intermediate_page_with_post_works(self):
+        self.assertTrue(Choice.objects.filter(poll=1).count())
         url = '/admin/polls/poll/1/tools/delete_all_choices/'
         response = self.client.post(url)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(Choice.objects.filter(poll=1).count(), 0)
