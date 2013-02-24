@@ -39,6 +39,8 @@ class AppTests(LoggedInTestCase):
         self.assertTrue(response['location'].endswith('/admin/polls/poll/1/'))
 
     def test_can_return_template(self):
+        # This is more of a test of render_to_response than the app, but I think
+        # it's good to document that this is something we can do.
         url = '/admin/polls/poll/1/tools/delete_all_choices/'
         response = self.client.get(url)
         self.assertTemplateUsed(response, "clear_choices.html")
