@@ -12,7 +12,7 @@ setup(
     include_package_data=True,  # automatically include things from MANIFEST
     license='Apache License, Version 2.0',
     description='A Django app for adding object tools to models',
-    long_description=open('README.md').read(),
+    long_description=open('README.rst').read(),
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Framework :: Django",
