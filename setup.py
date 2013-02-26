@@ -7,7 +7,7 @@ setup(
     author="The Texas Tribune",
     author_email="cchang@texastribune.org",
     maintainer="Chris Chang",
-    # url
+    url="https://github.com/texastribune/django-object-actions",
     packages=['django_object_actions'],
     include_package_data=True,  # automatically include things from MANIFEST
     license='Apache License, Version 2.0',
