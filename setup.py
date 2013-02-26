@@ -3,7 +3,7 @@ from setuptools import setup
 
 setup(
     name='django-object-actions',
-    version='0.1.0',
+    version='0.1.1',
     author="The Texas Tribune",
     author_email="cchang@texastribune.org",
     maintainer="Chris Chang",
