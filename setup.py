@@ -8,7 +8,11 @@ setup(
     author_email="cchang@texastribune.org",
     maintainer="Chris Chang",
     url="https://github.com/texastribune/django-object-actions",
-    packages=['django_object_actions'],
+    packages=[
+        'django_object_actions',
+        # The following package is only to support tests.
+        'example_project',
+    ],
     include_package_data=True,  # automatically include things from MANIFEST
     license='Apache License, Version 2.0',
     description='A Django app for adding object tools to models',

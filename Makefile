@@ -10,6 +10,7 @@ help:
 
 
 clean:
+	rm -rf .tox
 	rm -rf MANIFEST
 	rm -rf build
 	rm -rf dist
