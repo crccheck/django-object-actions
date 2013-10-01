@@ -10,7 +10,8 @@ setup(
     url="https://github.com/texastribune/django-object-actions",
     packages=[
         'django_object_actions',
-        # The following package is only to support tests.
+        # The following packages are only here to support testing.
+        'django_object_actions.tests',
         'example_project',
     ],
     include_package_data=True,  # automatically include things from MANIFEST
