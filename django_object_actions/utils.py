@@ -1,5 +1,6 @@
 from django.conf.urls import patterns
 from django.contrib import messages
+from django.db.models.query import QuerySet
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.views.generic import View
 from django.views.generic.detail import SingleObjectMixin
@@ -68,3 +69,15 @@ class ModelToolsView(SingleObjectMixin, View):
         # copied from django.contrib.admin.options
         # included to mimic admin actions
         messages.info(request, message)
+
+
+class QuerySetIsh(QuerySet):
+    """Takes an instance and mimics it coming from a QuerySet."""
+    def __init__(self, instance=None, *args, **kwargs):
+        model = instance._meta.model
+        super(QuerySetIsh, self).__init__(model, *args, **kwargs)
+        self._result_cache = [instance]
+
+    def _clone(self, *args, **kwargs):
+        # don't clone me, bro
+        return self
