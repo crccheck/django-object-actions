@@ -20,17 +20,19 @@ in Django.
 Installation
 ------------
 
-Install Django Object Actions. Currently, this has to be done manually.
+Install Django Object Actions::
+
+    pip install django-object-actions
 
 Add ``django_object_actions`` to your ``INSTALLED_APPS``.
 
 Alternate Installation
 ~~~~~~~~~~~~~~~~~~~~~~
 
-Install Django Object Actions. Currently, this has to be done manually.
-
-Copy the templates some place Django's template loader `will find
-it <https://docs.djangoproject.com/en/dev/ref/settings/#template-dirs>`_.
+You don't have to add this to ``INSTALLED_APPS``, all you need to to do is copy
+the template ``django_object_actions/change_form.html`` some place Django's
+template loader `will find it
+<https://docs.djangoproject.com/en/dev/ref/settings/#template-dirs>`_.
 
 Usage
 -----
