@@ -1,8 +1,10 @@
 from django.contrib import admin
 from django.core.urlresolvers import reverse
+from django.db.models import F
 from django.http import HttpResponseRedirect
 
 from django_object_actions import DjangoObjectActions
+from django_object_actions.utils import takes_instance_or_queryset
 
 from .models import Choice, Poll
 
@@ -10,21 +12,21 @@ from .models import Choice, Poll
 class ChoiceAdmin(DjangoObjectActions, admin.ModelAdmin):
     list_display = ('poll', 'choice_text', 'votes')
 
-    def increment_vote(self, request, obj):
-        obj.votes += 1
-        obj.save()
+    @takes_instance_or_queryset
+    def increment_vote(self, request, queryset):
+        queryset.update(votes=F('votes') + 1)
     increment_vote.short_description = "+1"
     increment_vote.label = "vote++"
 
     def decrement_vote(self, request, obj):
         obj.votes -= 1
         obj.save()
-    increment_vote.short_description = "-1"
+    decrement_vote.short_description = "-1"
 
     def reset_vote(self, request, obj):
         obj.votes = 0
         obj.save()
-    increment_vote.short_description = "0"
+    reset_vote.short_description = "0"
 
     def edit_poll(self, request, obj):
         url = reverse('admin:polls_poll_change', args=(obj.poll.pk,))
@@ -32,6 +34,7 @@ class ChoiceAdmin(DjangoObjectActions, admin.ModelAdmin):
 
     objectactions = ('increment_vote', 'decrement_vote', 'reset_vote',
         'edit_poll')
+    actions = ['increment_vote']
 
 admin.site.register(Choice, ChoiceAdmin)
 
