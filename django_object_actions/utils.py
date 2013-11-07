@@ -1,3 +1,5 @@
+from functools import wraps
+
 from django.conf.urls import patterns
 from django.contrib import messages
 from django.db.models.query import QuerySet
@@ -81,3 +83,15 @@ class QuerySetIsh(QuerySet):
     def _clone(self, *args, **kwargs):
         # don't clone me, bro
         return self
+
+
+def takes_instance_or_queryset(func):
+    """Decorator that makes standard actions compatible."""
+    @wraps(func)
+    def decorated_function(self, request, queryset):
+        # func follows the prototype documented at:
+        # https://docs.djangoproject.com/en/dev/ref/contrib/admin/actions/#writing-action-functions
+        if not isinstance(queryset, QuerySet):
+            queryset = QuerySetIsh(queryset)
+        return func(self, request, queryset)
+    return decorated_function
