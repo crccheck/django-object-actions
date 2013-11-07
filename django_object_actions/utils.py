@@ -76,7 +76,12 @@ class ModelToolsView(SingleObjectMixin, View):
 class QuerySetIsh(QuerySet):
     """Takes an instance and mimics it coming from a QuerySet."""
     def __init__(self, instance=None, *args, **kwargs):
-        model = instance._meta.model
+        try:
+            model = instance._meta.model
+        except AttributeError:
+            # Django 1.5 does this instead, getting the model may be overkill
+            # we may be able to throw away all this logic
+            model = instance._meta.concrete_model
         super(QuerySetIsh, self).__init__(model, *args, **kwargs)
         self._result_cache = [instance]
 
