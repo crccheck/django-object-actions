@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import patterns
+from django.conf.urls import patterns
 from django.contrib import messages
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.views.generic import View
