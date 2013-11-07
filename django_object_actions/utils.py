@@ -6,14 +6,14 @@ from django.views.generic.detail import SingleObjectMixin
 
 
 class DjangoObjectActions(object):
-    """ ModelAdmin mixin to add object-tools just like adding admin actions """
+    """ModelAdmin mixin to add object-tools just like adding admin actions."""
     # override default change_form_template
     change_form_template = "django_object_actions/change_form.html"
     # list to hold each object action tool
     objectactions = []
 
     def get_tool_urls(self):
-        """ get the url patterns that route each tool to a special view """
+        """Gets the url patterns that route each tool to a special view."""
         tools = {}
         for tool in self.objectactions:
             tools[tool] = getattr(self, tool)
@@ -24,15 +24,15 @@ class DjangoObjectActions(object):
         return my_urls
 
     def get_urls(self):
-        """ prepend `get_urls` with our own patterns """
+        """Prepends `get_urls` with our own patterns."""
         urls = super(DjangoObjectActions, self).get_urls()
         return self.get_tool_urls() + urls
 
     def render_change_form(self, request, context, **kwargs):
-        """ put `objectactions` into the context """
+        """Puts `objectactions` into the context."""
 
         def to_dict(tool_name):
-            """ how to represent a tool callable as a dict for the context """
+            """To represents the tool func as a dict with extra meta."""
             tool = getattr(self, tool_name)
             return dict(
                 name=x,
@@ -45,7 +45,7 @@ class DjangoObjectActions(object):
 
 
 class ModelToolsView(SingleObjectMixin, View):
-    """ special view that run the tool's callable """
+    """A special view that run the tool's callable."""
     tools = {}
 
     def get(self, request, **kwargs):
