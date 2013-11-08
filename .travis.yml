@@ -1,5 +1,7 @@
 language: python
 env:
-    PYTHONPATH='.'
-install: "pip install -r requirements-dev.txt --use-mirrors"
-script: make test
+  - TOX_ENV=django14
+  - TOX_ENV=django15
+  - TOX_ENV=django16
+install: "pip install tox"
+script: tox -e $TOX_ENV
