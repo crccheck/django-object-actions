@@ -38,8 +38,8 @@ class DjangoObjectActions(object):
             """To represents the tool func as a dict with extra meta."""
             tool = getattr(self, tool_name)
             return dict(
-                name=x,
-                label=getattr(tool, 'label', x),
+                name=tool_name,
+                label=getattr(tool, 'label', tool_name),
                 short_description=getattr(tool, 'short_description', ''))
 
         context['objectactions'] = [to_dict(x) for x in self.objectactions]
