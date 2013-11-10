@@ -60,6 +60,28 @@ Normally, you would do something to the object and go back to the same
 place, but if you return a HttpResponse, it will follow it (hey, just
 like actions!).
 
+Re-using Admin Actions
+``````````````````````
+
+If you would like an admin action to also be an object tool, add the
+``takes_instance_or_queryset`` decorator like::
+
+
+    from django_object_actions import DjangoObjectActions
+    from django_object_actions.utils import takes_instance_or_queryset
+
+
+    class RobotAdmin(DjangoObjectActions, admin.ModelAdmin):
+        # ... snip ...
+
+        @takes_instance_or_queryset
+        def tighten_lug_nuts(self, request, queryset):
+            queryset.update(lugnuts=F('lugnuts') - 1)
+
+        objectactions = ['tighten_lug_nuts']
+        actions = ['tighten_lug_nuts']
+
+
 Limitations
 ~~~~~~~~~~~
 
