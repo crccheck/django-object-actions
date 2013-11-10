@@ -62,15 +62,37 @@ Normally, you would do something to the object and go back to the same
 place, but if you return a HttpResponse, it will follow it (hey, just
 like actions!).
 
+Re-using Admin Actions
+``````````````````````
+
+If you would like an admin action to also be an object tool, add the
+``takes_instance_or_queryset`` decorator like::
+
+
+    from django_object_actions import DjangoObjectActions
+    from django_object_actions.utils import takes_instance_or_queryset
+
+
+    class RobotAdmin(DjangoObjectActions, admin.ModelAdmin):
+        # ... snip ...
+
+        @takes_instance_or_queryset
+        def tighten_lug_nuts(self, request, queryset):
+            queryset.update(lugnuts=F('lugnuts') - 1)
+
+        objectactions = ['tighten_lug_nuts']
+        actions = ['tighten_lug_nuts']
+
+
 Limitations
 ~~~~~~~~~~~
 
-django-object-actions expects these functions to be methods of the model
-admin.
+1. ``django-object-actions`` expects functions to be methods of the model admin.
 
-If you provide your own custom change\_form.html, you'll also need to
-manually copy in the relevant bits of `our change
-form <https://github.com/texastribune/django-object-actions/blob/master/django_object_actions/templates/django_object_actions/change_form.html>`_.
+2. If you provide your own custom ``change_form.html``, you'll also need to
+   manually copy in the relevant bits of `our change form
+   <https://github.com/texastribune/django-object-actions/blob/master/django_obj
+   ect_actions/templates/django_object_actions/change_form.html>`_.
 
 Development
 -----------
