@@ -3,10 +3,11 @@ from setuptools import setup
 
 setup(
     name='django-object-actions',
-    version='0.1.1',
+    version='0.2.0',
     author="The Texas Tribune",
     author_email="cchang@texastribune.org",
     maintainer="Chris Chang",
+    maintainer_email='c@crccheck.com',
     url="https://github.com/texastribune/django-object-actions",
     packages=[
         'django_object_actions',
