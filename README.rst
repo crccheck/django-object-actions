@@ -85,12 +85,12 @@ If you would like an admin action to also be an object tool, add the
 Limitations
 ~~~~~~~~~~~
 
-django-object-actions expects these functions to be methods of the model
-admin.
+1. ``django-object-actions`` expects functions to be methods of the model admin.
 
-If you provide your own custom change\_form.html, you'll also need to
-manually copy in the relevant bits of `our change
-form <https://github.com/texastribune/django-object-actions/blob/master/django_object_actions/templates/django_object_actions/change_form.html>`_.
+2. If you provide your own custom ``change_form.html``, you'll also need to
+   manually copy in the relevant bits of `our change form
+   <https://github.com/texastribune/django-object-actions/blob/master/django_obj
+   ect_actions/templates/django_object_actions/change_form.html>`_.
 
 Development
 -----------
