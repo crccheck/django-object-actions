@@ -30,7 +30,10 @@ class DjangoObjectActions(object):
 	#Some people (and tox test units) use type instead, so to keep backward copatybility 
 	#I cast them to list.
         for tool in list(self.objectactions) + list(self.modelactions):
-            tools[tool] = getattr(self, tool)
+	    #TODO - check if this is enought to have tools splited over different instances
+	    # in case where DjangoObjectActions mixin is used with few ModelAdmin subclasses.
+	    if hasattr(self, tool):
+                tools[tool] = getattr(self, tool)
 
         my_urls = []
         if self.objectactions:
@@ -54,10 +57,12 @@ class DjangoObjectActions(object):
 
 	ret = []
         for tool_name in tool_list:
-	    tool = getattr(self, tool_name)
-	    ret.append(dict(name = tool_name,
-	                    label=getattr(tool, 'label', tool_name.replace('_', ' ')),
-			    short_description=getattr(tool, 'short_description', tool.__doc__ or '')))
+	    # TODO - The same issue with get_tool_urls - make sure that this enought.
+	    if hasattr(self, tool_name):
+                tool = getattr(self, tool_name)
+                ret.append(dict(name = tool_name,
+                                label=getattr(tool, 'label', tool_name.replace('_', ' ')),
+                                short_description=getattr(tool, 'short_description', tool.__doc__ or '')))
         return ret
 
     def render_change_form(self, request, context, **kwargs):
