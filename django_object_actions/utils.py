@@ -7,6 +7,8 @@ from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.views.generic import View
 from django.views.generic.detail import SingleObjectMixin
 
+import types
+
 
 class DjangoObjectActions(object):
     """ModelAdmin mixin to add object-tools just like adding admin actions."""
@@ -54,8 +56,8 @@ class DjangoObjectActions(object):
         for tool_name in tool_list:
 	    tool = getattr(self, tool_name)
 	    ret.append(dict(name = tool_name,
-	                    label=getattr(tool, 'label', tool_name),
-			    short_description=getattr(tool, 'short_description', '')))
+	                    label=getattr(tool, 'label', tool_name.replace('_', ' ')),
+			    short_description=getattr(tool, 'short_description', tool.__doc__ or '')))
         return ret
 
     def render_change_form(self, request, context, **kwargs):
@@ -146,3 +148,22 @@ def takes_instance_or_queryset(func):
             queryset = QuerySetIsh(queryset)
         return func(self, request, queryset)
     return decorated_function
+
+
+def with_prefixed_action(cls):
+    """Class decorator that allow use prefixes for action methods.
+       It can be used to fill proper 'actions', 'modelactions', 'objectactions' lists.
+       If short_description is None then __doc__ is used instead.
+       For label (if empty) the function name is used without prefix and '_' replaced by empty space.
+    """
+    p = [('acts_', 'actions'), ('actm_', 'modelactions'), ('acto_', 'objectactions')]
+    # Allow override prefixes by class 'action_prefixes' list.
+    p = getattr(cls, 'action_prefixes', p)
+    for name, func in vars(cls).items():
+        if isinstance(func, types.FunctionType):
+            for prefix, attr in p:
+                if name.startswith(prefix):
+                    func.short_description = getattr(func, 'short_description', func.__doc__ or '')
+                    func.label = getattr(func, 'label', name.partition(prefix)[2].replace('_',' '))
+                    getattr(cls, attr, []).append(name)
+    return cls
