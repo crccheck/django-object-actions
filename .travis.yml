@@ -1,7 +1,10 @@
 language: python
 env:
-  - TOX_ENV=django14
-  - TOX_ENV=django15
-  - TOX_ENV=django16
+  - TOX_ENV=py26django14
+  - TOX_ENV=py26django15
+  - TOX_ENV=py27django14
+  - TOX_ENV=py27django15
+  - TOX_ENV=py27django16
+  - TOX_ENV=py33django16
 install: "pip install tox"
 script: tox -e $TOX_ENV

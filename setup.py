@@ -20,11 +20,15 @@ setup(
     description='A Django app for adding object tools to models',
     long_description=open('README.rst').read(),
     classifiers=[
-        "Development Status :: 3 - Alpha",
+        'Development Status :: 4 - Beta',
         "Framework :: Django",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: Apache Software License",
         "Operating System :: OS Independent",
         "Programming Language :: Python :: 2",
+        'Programming Language :: Python :: 2.6',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.3',
     ],
 )
