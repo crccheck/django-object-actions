@@ -3,8 +3,8 @@ from django.core.urlresolvers import reverse
 from django.db.models import F
 from django.http import HttpResponseRedirect
 
-from django_object_actions import DjangoObjectActions
-from django_object_actions.utils import takes_instance_or_queryset
+from django_object_actions import (DjangoObjectActions,
+        takes_instance_or_queryset)
 
 from .models import Choice, Poll
 
