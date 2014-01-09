@@ -17,7 +17,7 @@ setup(
     ],
     include_package_data=True,  # automatically include things from MANIFEST
     license='Apache License, Version 2.0',
-    description='A Django app for adding object tools to models',
+    description='A Django app for adding object tools for models in the admin',
     long_description=open('README.rst').read(),
     classifiers=[
         'Development Status :: 4 - Beta',
