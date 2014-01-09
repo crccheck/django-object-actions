@@ -7,18 +7,8 @@ If you've ever tried making your own admin object tools and you were
 like me, you immediately gave up. Why can't they be as easy as making
 Django Admin Actions? Well now they can be.
 
-Similar Packages
-~~~~~~~~~~~~~~~~
-
-Django Object Actions is very similar to
-`django-object-tools <https://github.com/praekelt/django-object-tools>`_,
-but does not require messing with your urls.py, does not do anything
-special with permissions, and uses the same patterns as making `admin
-actions <https://docs.djangoproject.com/en/dev/ref/contrib/admin/actions/#actions-as-modeladmin-methods>`_
-in Django.
-
-Installation
-------------
+Quick-Start Guide
+-----------------
 
 Install Django Object Actions::
 
@@ -26,13 +16,19 @@ Install Django Object Actions::
 
 Add ``django_object_actions`` to your ``INSTALLED_APPS``.
 
-Alternate Installation
-~~~~~~~~~~~~~~~~~~~~~~
+In your admin.py::
 
-You don't have to add this to ``INSTALLED_APPS``, all you need to to do is copy
-the template ``django_object_actions/change_form.html`` some place Django's
-template loader `will find it
-<https://docs.djangoproject.com/en/dev/ref/settings/#template-dirs>`_.
+    from django_object_actions import DjangoObjectActions
+
+
+    class ArticleAdmin(DjangoObjectActions, admin.ModelAdmin):
+        def publish_this(self, request, obj):
+            publish_obj(obj)
+        publish_this.label = "Publish"  # optional
+        publish_this.short_description = "Submit this article to The Texas Tribune"  # optional
+
+        objectactions = ('publish_this', )
+
 
 Usage
 -----
@@ -42,12 +38,13 @@ Tools are defined just like defining actions as modeladmin methods, see:
 actions <https://docs.djangoproject.com/en/dev/ref/contrib/admin/actions/#actions-as-modeladmin-methods>`_
 for examples and detailed syntax. You can return nothing or an http
 response. The major difference being the functions you write will take
-an object instance instead of a queryset::
-
-    def toolfunc(self, request, obj)
+an object instance instead of a queryset (see *Re-using Admin Actions* below).
 
 Tools are exposed by putting them in an ``objectactions`` attribute in
 your modeladmin like::
+
+    from django_object_actions import DjangoObjectActions
+
 
     class MyModelAdmin(DjangoObjectActions, admin.ModelAdmin):
         def toolfunc(self, request, obj):
@@ -62,6 +59,9 @@ Normally, you would do something to the object and go back to the same
 place, but if you return a HttpResponse, it will follow it (hey, just
 like actions!).
 
+If your admin modifies ``get_urls``, ``render_change_form``, or
+``change_form_template``, you'll need to take extra care.
+
 Re-using Admin Actions
 ``````````````````````
 
@@ -69,8 +69,8 @@ If you would like an admin action to also be an object tool, add the
 ``takes_instance_or_queryset`` decorator like::
 
 
-    from django_object_actions import DjangoObjectActions
-    from django_object_actions.utils import takes_instance_or_queryset
+    from django_object_actions import (DjangoObjectActions,
+            takes_instance_or_queryset)
 
 
     class RobotAdmin(DjangoObjectActions, admin.ModelAdmin):
@@ -83,16 +83,30 @@ If you would like an admin action to also be an object tool, add the
         objectactions = ['tighten_lug_nuts']
         actions = ['tighten_lug_nuts']
 
+Alternate Installation
+``````````````````````
+
+You don't have to add this to ``INSTALLED_APPS``, all you need to to do is copy
+the template ``django_object_actions/change_form.html`` some place Django's
+template loader `will find it
+<https://docs.djangoproject.com/en/dev/ref/settings/#template-dirs>`_.
+
+If you don't intend to use the template customizations at all, don't add
+``django_object_actions`` to your ``INSTALLED_APPS`` at all and use
+``BaseDjangoObjectActions`` instead of ``DjangoObjectActions``.
+
 
 Limitations
-~~~~~~~~~~~
+-----------
 
 1. ``django-object-actions`` expects functions to be methods of the model admin.
+   While Django gives you a lot more options for their admin actions.
 
 2. If you provide your own custom ``change_form.html``, you'll also need to
    manually copy in the relevant bits of `our change form
    <https://github.com/texastribune/django-object-actions/blob/master/django_obj
-   ect_actions/templates/django_object_actions/change_form.html>`_.
+   ect_actions/templates/django_object_actions/change_form.html>`_. You can also
+   use ``from django_object_actions import BaseDjangoObjectActions`` instead.
 
 Development
 -----------
@@ -107,12 +121,23 @@ Getting started *(with virtualenvwrapper)*::
     pip install -r requirements-dev.txt
     export DJANGO_SETTINGS_MODULE=example_project.settings
     add2virtualenv .
-    # start doing stuff
-    make test
-    make resetdb
-    python example_project/manage.py runserver
+    make test  # run test suite
+    tox  # run full test suite, requires more setup
+    make resetdb  # reset the example db
+    python example_project/manage.py runserver  # run debug server
 
-The fixtures will create a user, admin:admin, you can use to log in
-immediately.
+The fixtures will create a user, admin:admin, you can use to log in immediately.
 
 Various helpers are available as make commands.
+
+
+Similar Packages
+----------------
+
+Django Object Actions is very similar to
+`django-object-tools <https://github.com/praekelt/django-object-tools>`_,
+but does not require messing with your urls.py, does not do anything
+special with permissions, and uses the same patterns as making `admin
+actions <https://docs.djangoproject.com/en/dev/ref/contrib/admin/actions/#actions-as-modeladmin-methods>`_
+in Django.
+
