@@ -8,10 +8,8 @@ from django.views.generic import View
 from django.views.generic.detail import SingleObjectMixin
 
 
-class DjangoObjectActions(object):
+class BaseDjangoObjectActions(object):
     """ModelAdmin mixin to add object-tools just like adding admin actions."""
-    # override default change_form_template
-    change_form_template = "django_object_actions/change_form.html"
     # list to hold each object action tool
     objectactions = []
 
@@ -26,9 +24,13 @@ class DjangoObjectActions(object):
         )
         return my_urls
 
+    ###################################
+    # EXISTING ADMIN METHODS MODIFIED #
+    ###################################
+
     def get_urls(self):
         """Prepends `get_urls` with our own patterns."""
-        urls = super(DjangoObjectActions, self).get_urls()
+        urls = super(BaseDjangoObjectActions, self).get_urls()
         return self.get_tool_urls() + urls
 
     def render_change_form(self, request, context, **kwargs):
@@ -43,8 +45,13 @@ class DjangoObjectActions(object):
                 short_description=getattr(tool, 'short_description', ''))
 
         context['objectactions'] = [to_dict(x) for x in self.objectactions]
-        return super(DjangoObjectActions, self).render_change_form(request,
+        return super(BaseDjangoObjectActions, self).render_change_form(request,
             context, **kwargs)
+
+
+class DjangoObjectActions(BaseDjangoObjectActions):
+    # override default change_form_template
+    change_form_template = "django_object_actions/change_form.html"
 
 
 class ModelToolsView(SingleObjectMixin, View):
