@@ -42,12 +42,24 @@ class BaseDjangoObjectActions(object):
             return dict(
                 name=tool_name,
                 label=getattr(tool, 'label', tool_name),
-                attrs=getattr(tool, 'attrs', None),
-                short_description=getattr(tool, 'short_description', ''))
+                attrs=self.get_djoa_button_attrs(tool),
+            )
 
         context['objectactions'] = [to_dict(x) for x in self.objectactions]
         return super(BaseDjangoObjectActions, self).render_change_form(request,
             context, **kwargs)
+
+    ##################
+    # CUSTOM METHODS #
+    ##################
+
+    def get_djoa_button_attrs(self, tool):
+        attrs = getattr(tool, 'attrs', {})
+        default_attrs = {
+            'class': getattr(tool, 'class', ''),
+            'title': getattr(tool, 'short_description', ''),
+        }
+        return dict(default_attrs, **attrs)
 
 
 class DjangoObjectActions(BaseDjangoObjectActions):

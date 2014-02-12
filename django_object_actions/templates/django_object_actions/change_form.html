@@ -5,7 +5,7 @@
   {% for tool in objectactions %}
     <li class="objectaction-item" data-tool-name="{{ tool.name }}">
       {# DELETEME #} {{ tool.attrs }}
-      <a href='tools/{{ tool.name }}/' title="{{ tool.short_description }}">
+      <a href='tools/{{ tool.name }}/' title="{{ tool.attrs.title }}" class="{{ tool.attrs.class }}">
       {{ tool.label|capfirst }}
       </a>
     </li>

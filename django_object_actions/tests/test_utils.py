@@ -3,7 +3,31 @@ from django.test import TestCase
 
 from example_project.polls.models import Poll
 
-from ..utils import QuerySetIsh, takes_instance_or_queryset
+from ..utils import (
+    BaseDjangoObjectActions,
+    QuerySetIsh,
+    takes_instance_or_queryset,
+)
+
+
+class BaseDjangoObjectActionsTest(TestCase):
+    def setUp(self):
+        self.instance = BaseDjangoObjectActions()
+
+    def test_get_djoa_button_attrs_returns_defaults(self):
+        mock_tool = type('mock_tool', (object, ), {})
+        attrs = self.instance.get_djoa_button_attrs(mock_tool)
+        self.assertEqual(attrs['class'], '')
+        self.assertEqual(attrs['title'], '')
+
+    def test_get_djoa_button_attrs_gets_set(self):
+        mock_tool = type('mock_tool', (object, ), {
+            'class': 'class',
+            'short_description': 'description'
+        })
+        attrs = self.instance.get_djoa_button_attrs(mock_tool)
+        self.assertEqual(attrs['class'], 'class')
+        self.assertEqual(attrs['title'], 'description')
 
 
 class QuerySetIshTest(TestCase):

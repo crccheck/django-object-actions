@@ -19,6 +19,7 @@ class ChoiceAdmin(DjangoObjectActions, admin.ModelAdmin):
     increment_vote.label = "vote++"
     increment_vote.attrs = {
         'test': 'foo',
+        'class': 'addlink',
     }
 
     def decrement_vote(self, request, obj):
