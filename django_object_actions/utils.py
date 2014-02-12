@@ -39,10 +39,12 @@ class BaseDjangoObjectActions(object):
         def to_dict(tool_name):
             """To represents the tool func as a dict with extra meta."""
             tool = getattr(self, tool_name)
+            standard_attrs, custom_attrs = self.get_djoa_button_attrs(tool)
             return dict(
                 name=tool_name,
                 label=getattr(tool, 'label', tool_name),
-                attrs=self.get_djoa_button_attrs(tool),
+                standard_attrs=standard_attrs,
+                custom_attrs=custom_attrs,
             )
 
         context['objectactions'] = [to_dict(x) for x in self.objectactions]
@@ -62,7 +64,14 @@ class BaseDjangoObjectActions(object):
             'class': getattr(tool, 'class', ''),
             'title': getattr(tool, 'short_description', ''),
         }
-        return dict(default_attrs, **attrs)
+        standard_attrs = {}
+        custom_attrs = {}
+        for k, v in dict(default_attrs, **attrs).items():
+            if k in default_attrs:
+                standard_attrs[k] = v
+            else:
+                custom_attrs[k] = v
+        return standard_attrs, custom_attrs
 
 
 class DjangoObjectActions(BaseDjangoObjectActions):
