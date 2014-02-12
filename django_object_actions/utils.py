@@ -42,6 +42,7 @@ class BaseDjangoObjectActions(object):
             return dict(
                 name=tool_name,
                 label=getattr(tool, 'label', tool_name),
+                attrs=getattr(tool, 'attrs', None),
                 short_description=getattr(tool, 'short_description', ''))
 
         context['objectactions'] = [to_dict(x) for x in self.objectactions]
