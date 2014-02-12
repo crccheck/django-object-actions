@@ -18,7 +18,8 @@ class ChoiceAdmin(DjangoObjectActions, admin.ModelAdmin):
     increment_vote.short_description = "+1"
     increment_vote.label = "vote++"
     increment_vote.attrs = {
-        'test': 'foo',
+        'test': '"foo&bar"',
+        'Robert': '"); DROP TABLE Students; ',  # 327
         'class': 'addlink',
     }
 
