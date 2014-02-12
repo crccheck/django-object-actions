@@ -20,6 +20,13 @@ class BaseDjangoObjectActionsTest(TestCase):
         self.assertEqual(attrs['class'], '')
         self.assertEqual(attrs['title'], '')
 
+    def test_get_djoa_button_attrs_disallows_href(self):
+        mock_tool = type('mock_tool', (object, ), {
+            'href': 'hreeeeef',
+        })
+        attrs = self.instance.get_djoa_button_attrs(mock_tool)
+        self.assertNotIn('href', attrs)
+
     def test_get_djoa_button_attrs_gets_set(self):
         mock_tool = type('mock_tool', (object, ), {
             'class': 'class',

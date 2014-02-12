@@ -55,6 +55,9 @@ class BaseDjangoObjectActions(object):
 
     def get_djoa_button_attrs(self, tool):
         attrs = getattr(tool, 'attrs', {})
+        # href is not allowed to be set. should an exception be raised instead?
+        if 'href' in attrs:
+            attrs.pop('href')
         default_attrs = {
             'class': getattr(tool, 'class', ''),
             'title': getattr(tool, 'short_description', ''),
