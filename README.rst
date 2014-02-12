@@ -2,6 +2,7 @@ Django Object Actions
 =====================
 
 .. image:: https://travis-ci.org/texastribune/django-object-actions.png
+   :target: https://travis-ci.org/texastribune/django-object-actions
 
 If you've ever tried making your own admin object tools and you were
 like me, you immediately gave up. Why can't they be as easy as making
@@ -82,6 +83,36 @@ If you would like an admin action to also be an object tool, add the
 
         objectactions = ['tighten_lug_nuts']
         actions = ['tighten_lug_nuts']
+
+Customizing Admin Actions
+`````````````````````````
+
+To give the action some a helpful title tooltip, add a ``short_description``
+attribute, similar to how admin actions work::
+
+    def increment_vote(self, request, obj):
+        obj.votes = obj.votes + 1
+        obj.save()
+    increment_vote.short_description = "Increment the vote count by one"
+
+By default, Django Object Actions will guess what to label the button based on
+the name of the function. You can override this with a ``label`` attribute::
+
+    def increment_vote(self, request, obj):
+        obj.votes = obj.votes + 1
+        obj.save()
+    increment_vote.label = "Vote++"
+
+If you need even more control, you can add arbitrary attributes to the buttons
+by adding a Django widget style `attrs` attribute::
+
+    def increment_vote(self, request, obj):
+        obj.votes = obj.votes + 1
+        obj.save()
+    increment_vote.attrs = {
+        'class': 'addlink',
+    }
+
 
 Alternate Installation
 ``````````````````````

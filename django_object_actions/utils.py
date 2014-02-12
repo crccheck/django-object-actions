@@ -39,14 +39,44 @@ class BaseDjangoObjectActions(object):
         def to_dict(tool_name):
             """To represents the tool func as a dict with extra meta."""
             tool = getattr(self, tool_name)
+            standard_attrs, custom_attrs = self.get_djoa_button_attrs(tool)
             return dict(
                 name=tool_name,
                 label=getattr(tool, 'label', tool_name),
-                short_description=getattr(tool, 'short_description', ''))
+                standard_attrs=standard_attrs,
+                custom_attrs=custom_attrs,
+            )
 
         context['objectactions'] = [to_dict(x) for x in self.objectactions]
         return super(BaseDjangoObjectActions, self).render_change_form(request,
             context, **kwargs)
+
+    ##################
+    # CUSTOM METHODS #
+    ##################
+
+    def get_djoa_button_attrs(self, tool):
+        attrs = getattr(tool, 'attrs', {})
+        # href is not allowed to be set. should an exception be raised instead?
+        if 'href' in attrs:
+            attrs.pop('href')
+        # title is not allowed to be set. should an exception be raised instead?
+        # `short_description` should be set instead to parallel django admin
+        # actions
+        if 'title' in attrs:
+            attrs.pop('title')
+        default_attrs = {
+            'class': attrs.get('class', ''),
+            'title': getattr(tool, 'short_description', ''),
+        }
+        standard_attrs = {}
+        custom_attrs = {}
+        for k, v in dict(default_attrs, **attrs).items():
+            if k in default_attrs:
+                standard_attrs[k] = v
+            else:
+                custom_attrs[k] = v
+        return standard_attrs, custom_attrs
 
 
 class DjangoObjectActions(BaseDjangoObjectActions):

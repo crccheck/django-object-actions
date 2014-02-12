@@ -3,7 +3,54 @@ from django.test import TestCase
 
 from example_project.polls.models import Poll
 
-from ..utils import QuerySetIsh, takes_instance_or_queryset
+from ..utils import (
+    BaseDjangoObjectActions,
+    QuerySetIsh,
+    takes_instance_or_queryset,
+)
+
+
+class BaseDjangoObjectActionsTest(TestCase):
+    def setUp(self):
+        self.instance = BaseDjangoObjectActions()
+
+    def test_get_djoa_button_attrs_returns_defaults(self):
+        mock_tool = type('mock_tool', (object, ), {})
+        attrs, __ = self.instance.get_djoa_button_attrs(mock_tool)
+        self.assertEqual(attrs['class'], '')
+        self.assertEqual(attrs['title'], '')
+
+    def test_get_djoa_button_attrs_disallows_href(self):
+        mock_tool = type('mock_tool', (object, ), {
+            'attrs': {'href': 'hreeeeef'},
+        })
+        attrs, __ = self.instance.get_djoa_button_attrs(mock_tool)
+        self.assertNotIn('href', attrs)
+
+    def test_get_djoa_button_attrs_disallows_title(self):
+        mock_tool = type('mock_tool', (object, ), {
+            'attrs': {'title': 'i wanna be a title'},
+            'short_description': 'real title',
+        })
+        attrs, __ = self.instance.get_djoa_button_attrs(mock_tool)
+        self.assertEqual(attrs['title'], 'real title')
+
+
+    def test_get_djoa_button_attrs_gets_set(self):
+        mock_tool = type('mock_tool', (object, ), {
+            'attrs': {'class': 'class'},
+            'short_description': 'description',
+        })
+        attrs, __ = self.instance.get_djoa_button_attrs(mock_tool)
+        self.assertEqual(attrs['class'], 'class')
+        self.assertEqual(attrs['title'], 'description')
+
+    def test_get_djoa_button_attrs_custom_attrs_get_partitioned(self):
+        mock_tool = type('mock_tool', (object, ), {
+            'attrs': {'nonstandard': 'wombat'},
+        })
+        attrs, custom = self.instance.get_djoa_button_attrs(mock_tool)
+        self.assertEqual(custom['nonstandard'], 'wombat')
 
 
 class QuerySetIshTest(TestCase):

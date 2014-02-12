@@ -17,6 +17,11 @@ class ChoiceAdmin(DjangoObjectActions, admin.ModelAdmin):
         queryset.update(votes=F('votes') + 1)
     increment_vote.short_description = "+1"
     increment_vote.label = "vote++"
+    increment_vote.attrs = {
+        'test': '"foo&bar"',
+        'Robert': '"); DROP TABLE Students; ',  # 327
+        'class': 'addlink',
+    }
 
     def decrement_vote(self, request, obj):
         obj.votes -= 1
