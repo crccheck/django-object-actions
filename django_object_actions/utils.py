@@ -61,7 +61,7 @@ class BaseDjangoObjectActions(object):
         if 'href' in attrs:
             attrs.pop('href')
         default_attrs = {
-            'class': getattr(tool, 'class', ''),
+            'class': attrs.get('class', ''),
             'title': getattr(tool, 'short_description', ''),
         }
         standard_attrs = {}

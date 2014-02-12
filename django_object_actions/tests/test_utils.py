@@ -22,14 +22,14 @@ class BaseDjangoObjectActionsTest(TestCase):
 
     def test_get_djoa_button_attrs_disallows_href(self):
         mock_tool = type('mock_tool', (object, ), {
-            'href': 'hreeeeef',
+            'attrs': {'href': 'hreeeeef'},
         })
         attrs, __ = self.instance.get_djoa_button_attrs(mock_tool)
         self.assertNotIn('href', attrs)
 
     def test_get_djoa_button_attrs_gets_set(self):
         mock_tool = type('mock_tool', (object, ), {
-            'class': 'class',
+            'attrs': {'class': 'class'},
             'short_description': 'description',
         })
         attrs, __ = self.instance.get_djoa_button_attrs(mock_tool)
@@ -38,7 +38,7 @@ class BaseDjangoObjectActionsTest(TestCase):
 
     def test_get_djoa_button_attrs_custom_attrs_get_partitioned(self):
         mock_tool = type('mock_tool', (object, ), {
-            'attrs': {'nonstandard': 'wombat',}
+            'attrs': {'nonstandard': 'wombat'},
         })
         attrs, custom = self.instance.get_djoa_button_attrs(mock_tool)
         self.assertEqual(custom['nonstandard'], 'wombat')
