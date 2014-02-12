@@ -27,6 +27,15 @@ class BaseDjangoObjectActionsTest(TestCase):
         attrs, __ = self.instance.get_djoa_button_attrs(mock_tool)
         self.assertNotIn('href', attrs)
 
+    def test_get_djoa_button_attrs_disallows_title(self):
+        mock_tool = type('mock_tool', (object, ), {
+            'attrs': {'title': 'i wanna be a title'},
+            'short_description': 'real title',
+        })
+        attrs, __ = self.instance.get_djoa_button_attrs(mock_tool)
+        self.assertEqual(attrs['title'], 'real title')
+
+
     def test_get_djoa_button_attrs_gets_set(self):
         mock_tool = type('mock_tool', (object, ), {
             'attrs': {'class': 'class'},

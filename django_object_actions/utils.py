@@ -60,6 +60,11 @@ class BaseDjangoObjectActions(object):
         # href is not allowed to be set. should an exception be raised instead?
         if 'href' in attrs:
             attrs.pop('href')
+        # title is not allowed to be set. should an exception be raised instead?
+        # `short_description` should be set instead to parallel django admin
+        # actions
+        if 'title' in attrs:
+            attrs.pop('title')
         default_attrs = {
             'class': attrs.get('class', ''),
             'title': getattr(tool, 'short_description', ''),
