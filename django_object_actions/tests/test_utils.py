@@ -80,6 +80,17 @@ class QuerySetIshTest(TestCase):
         self.assertEqual(qs.filter().get(), self.obj)
         self.assertEqual(qs.latest('bar'), self.obj)
 
+    def test_queryset_supports_delete(self):
+        qs = QuerySetIsh(self.obj)
+        qs.delete()
+        with self.assertRaises(Poll.DoesNotExist):
+            Poll.objects.get(pk=1)
+
+    def test_queryset_supports_update(self):
+        qs = QuerySetIsh(self.obj)
+        qs.update(question='mooo')
+        self.assertEqual(Poll.objects.get(pk=1).question, 'mooo')
+
 
 class DecoratorTest(TestCase):
     def setUp(self):
