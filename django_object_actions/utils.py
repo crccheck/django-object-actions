@@ -125,12 +125,19 @@ class QuerySetIsh(QuerySet):
             # Django 1.5 does this instead, getting the model may be overkill
             # we may be able to throw away all this logic
             model = instance._meta.concrete_model
+        self._doa_instance = instance
         super(QuerySetIsh, self).__init__(model, *args, **kwargs)
         self._result_cache = [instance]
 
     def _clone(self, *args, **kwargs):
         # don't clone me, bro
         return self
+
+    def get(self, *args, **kwargs):
+        # Starting in Django 1.7, `QuerySet.get` started slicing to
+        # `MAX_GET_RESULTS`, so to avoid messing with `__getslice__`, override
+        # `.get`.
+        return self._doa_instance
 
 
 def takes_instance_or_queryset(func):
