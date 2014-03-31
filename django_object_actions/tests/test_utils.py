@@ -14,6 +14,19 @@ class BaseDjangoObjectActionsTest(TestCase):
     def setUp(self):
         self.instance = BaseDjangoObjectActions()
 
+    def test_get_object_actions_gets_attribute(self):
+        mock_objectactions = []  # set to something mutable
+        mock_request = 'request'
+        mock_context = 'context'
+        mock_kwargs = {}
+        self.instance.objectactions = mock_objectactions
+        returned_value = self.instance.get_object_actions(
+            mock_request, mock_context, **mock_kwargs
+        )
+        # assert that `mock_objectactions` was returned
+        self.assertEqual(id(mock_objectactions), id(returned_value))
+        # WISHLIST assert get_object_actions was called with right args
+
     def test_get_djoa_button_attrs_returns_defaults(self):
         mock_tool = type('mock_tool', (object, ), {})
         attrs, __ = self.instance.get_djoa_button_attrs(mock_tool)
@@ -34,7 +47,6 @@ class BaseDjangoObjectActionsTest(TestCase):
         })
         attrs, __ = self.instance.get_djoa_button_attrs(mock_tool)
         self.assertEqual(attrs['title'], 'real title')
-
 
     def test_get_djoa_button_attrs_gets_set(self):
         mock_tool = type('mock_tool', (object, ), {
