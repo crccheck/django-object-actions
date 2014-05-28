@@ -1,5 +1,6 @@
 from django.db.models.query import QuerySet
 from django.test import TestCase
+from django.utils.unittest import expectedFailure
 
 from example_project.polls.models import Poll
 
@@ -79,6 +80,25 @@ class QuerySetIshTest(TestCase):
         self.assertEqual(qs.all().get(), self.obj)
         self.assertEqual(qs.filter().get(), self.obj)
         self.assertEqual(qs.latest('bar'), self.obj)
+
+    def test_queryset_supports_delete(self):
+        qs = QuerySetIsh(self.obj)
+        qs.delete()
+        with self.assertRaises(Poll.DoesNotExist):
+            Poll.objects.get(pk=1)
+
+    @expectedFailure
+    def test_queryset_supports_filter(self):
+        # yeah, we don't actually support doing this, but it would be nice.
+        qs = QuerySetIsh(self.obj)
+        with self.assertRaises(Poll.DoesNotExist):
+            # this should be empty because the question is just `"hi"`
+            qs.filter(question='abra cadabra').get()
+
+    def test_queryset_supports_update(self):
+        qs = QuerySetIsh(self.obj)
+        qs.update(question='mooo')
+        self.assertEqual(Poll.objects.get(pk=1).question, 'mooo')
 
 
 class DecoratorTest(TestCase):

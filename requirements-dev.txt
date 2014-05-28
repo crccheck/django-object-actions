@@ -6,4 +6,4 @@ django-nose
 ipython
 ipdb
 ipdbplugin
-tox==1.6.1
+tox==1.7.1
