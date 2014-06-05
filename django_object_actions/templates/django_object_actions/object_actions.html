@@ -1,0 +1,11 @@
+{% for tool in objectactions %}
+  <li class="objectaction-item" data-tool-name="{{ tool.name }}">
+    <a href='tools/{{ tool.name }}/' title="{{ tool.standard_attrs.title }}"
+       {% for k, v in tool.custom_attrs.items %}
+         {{ k }}="{{ v }}"
+       {% endfor %}
+       class="{{ tool.standard_attrs.class }}">
+    {{ tool.label|capfirst }}
+    </a>
+  </li>
+{% endfor %}
