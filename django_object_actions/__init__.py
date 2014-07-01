@@ -1,5 +1,5 @@
 """ A Django app for adding object tools to models """
-__version__ = '0.3.0'
+__version__ = '0.5.0'
 
 
 # kind of like __all__, make these available for public
