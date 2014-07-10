@@ -116,7 +116,7 @@ by adding a Django widget style `attrs` attribute::
 Programmatically Enabling Object Admin Actions
 ``````````````````````````````````````````````
 
-You can programatically enabled and disable registered object actions by defining
+You can programatically enable and disable registered object actions by defining
 your own custom ``get_object_actions()`` method. In this example, certain actions 
 only apply to certain object states (i.e. You should not be able to close an company
 account if the account is already closed)::
