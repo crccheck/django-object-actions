@@ -117,7 +117,7 @@ Programmatically Enabling Object Admin Actions
 ``````````````````````````````````````````````
 
 You can programatically enable and disable registered object actions by defining
-your own custom ``get_object_actions()`` method. In this example, certain actions 
+your own custom ``get_object_actions()`` method. In this example, certain actions
 only apply to certain object states (i.e. You should not be able to close an company
 account if the account is already closed)::
 
@@ -142,7 +142,7 @@ account if the account is already closed)::
                 objectactions.extend(['reactivate_company_account_action', ])
 
         return objectactions
-   
+
 
 
 Alternate Installation
@@ -181,16 +181,13 @@ Getting started *(with virtualenvwrapper)*::
     # set up your virtualenv
     mkvirtualenv django-object-actions
     pip install -r requirements.txt
-    export DJANGO_SETTINGS_MODULE=example_project.settings
+    # hack your path so that we can reference packages starting from the root
     add2virtualenv .
     make test  # run test suite
-    tox  # run full test suite, requires more setup
-    make resetdb  # reset the example db
-    python example_project/manage.py runserver  # run debug server
+    make quickstart  # runs 'make resetdb' and some extra steps
 
-The fixtures will create a user, admin:admin, you can use to log in immediately.
-
-Various helpers are available as make commands.
+Various helpers are available as make commands. View ``Makefile`` to see what
+other utilities you can do.
 
 
 Similar Packages
