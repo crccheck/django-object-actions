@@ -19,10 +19,7 @@ clean:
 
 
 test:
-#
-#   -s    don't capture stdout
-#
-	python -W ignore::RuntimeWarning $(MANAGE) test django_object_actions -s
+	python -W ignore::RuntimeWarning $(MANAGE) test django_object_actions
 
 
 # destroy and then recreate your database
