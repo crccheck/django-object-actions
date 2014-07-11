@@ -1,15 +1,20 @@
 from django.test import TestCase
 
 from example_project.polls.models import Choice
+from ..factories import UserFactory
 
 
 class LoggedInTestCase(TestCase):
     def setUp(self):
         super(LoggedInTestCase, self).setUp()
+        UserFactory.create(
+            is_staff=True, username='admin', password='password')
         self.client.login(username='admin', password='admin')
 
 
 class AppTests(LoggedInTestCase):
+    fixtures = ['sample_data']
+
     def test_bare_mixin_works(self):
         # hit admin that doesn't have any tools defined, just the mixin
         response = self.client.get('/admin/polls/poll/add/')
