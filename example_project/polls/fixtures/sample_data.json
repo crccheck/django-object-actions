@@ -3,7 +3,7 @@
     "pk": 1,
     "model": "polls.poll",
     "fields": {
-      "pub_date": "2012-10-20T18:20:35Z",
+      "pub_date": "2012-10-20T18:20:35",
       "question": "Do you like me?"
     }
   },
