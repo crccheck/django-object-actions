@@ -1,9 +1,0 @@
--r requirements.txt
-
-Werkzeug>=0.8.3
-django-extensions>=0.9
-django-nose
-ipython
-ipdb
-ipdbplugin
-tox==1.7.1

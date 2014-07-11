@@ -2,3 +2,9 @@ Django>=1.4.2
 
 dj-database-url>=0.2.1
 psycopg2>=2.4.5
+
+Werkzeug>=0.8.3
+django-extensions>=0.9
+django-nose
+tox==1.7.1
+factory-boy==2.4.1

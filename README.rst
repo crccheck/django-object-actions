@@ -149,7 +149,7 @@ Getting started *(with virtualenvwrapper)*::
     cd django-object-actions
     # set up your virtualenv
     mkvirtualenv django-object-actions
-    pip install -r requirements-dev.txt
+    pip install -r requirements.txt
     export DJANGO_SETTINGS_MODULE=example_project.settings
     add2virtualenv .
     make test  # run test suite
