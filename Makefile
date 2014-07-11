@@ -21,7 +21,7 @@ test:
 #
 #   -s    don't capture stdout
 #
-	python $(MANAGE) test -s
+	python -W ignore::RuntimeWarning $(MANAGE) test django_object_actions -s
 
 
 resetdb:
