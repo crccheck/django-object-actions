@@ -67,8 +67,9 @@ class BaseDjangoObjectActionsTest(TestCase):
 
 
 class QuerySetIshTest(TestCase):
+    fixtures = ['sample_data']
+
     def setUp(self):
-        # as defined in initial_data fixture
         # WISHLIST don't depend on fixture
         self.obj = Poll.objects.get(pk=1)
 
@@ -102,8 +103,9 @@ class QuerySetIshTest(TestCase):
 
 
 class DecoratorTest(TestCase):
+    fixtures = ['sample_data']
+
     def setUp(self):
-        # as defined in initial_data fixture
         # WISHLIST don't depend on fixture
         self.obj = Poll.objects.get(pk=1)
         self.queryset = Poll.objects.all()

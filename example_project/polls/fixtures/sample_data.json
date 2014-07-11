@@ -1,0 +1,28 @@
+[
+  {
+    "pk": 1,
+    "model": "polls.poll",
+    "fields": {
+      "pub_date": "2012-10-20T18:20:35Z",
+      "question": "Do you like me?"
+    }
+  },
+  {
+    "pk": 1,
+    "model": "polls.choice",
+    "fields": {
+      "choice_text": "Yes",
+      "poll": 1,
+      "votes": 0
+    }
+  },
+  {
+    "pk": 2,
+    "model": "polls.choice",
+    "fields": {
+      "choice_text": "No",
+      "poll": 1,
+      "votes": 100
+    }
+  }
+]
