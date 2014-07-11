@@ -74,6 +74,7 @@ TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
 
 # STFU, Django 1.7
+# To be deleted once Django 1.8 testing begins
 SILENCED_SYSTEM_CHECKS = [
     '1_7.W001',
 ]
