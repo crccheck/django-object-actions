@@ -8,3 +8,4 @@ django-extensions>=0.9
 django-nose
 tox==1.7.1
 factory-boy==2.4.1
+coverage==3.7.1

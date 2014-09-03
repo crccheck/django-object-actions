@@ -4,6 +4,7 @@ media
 *.pot
 *.pyc
 .DS_Store
+.coverage
 .sass-cache
 
 
