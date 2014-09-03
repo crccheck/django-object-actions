@@ -66,11 +66,7 @@ INSTALLED_APPS = (
 
     # dev helpers
     'django_extensions',
-    # testing
-    'django_nose',
 )
-
-TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
 
 # STFU, Django 1.7
