@@ -7,3 +7,4 @@ psycopg2>=2.4.5
 django-extensions>=0.9
 tox==1.7.1
 factory-boy==2.4.1
+coverage==3.7.1
