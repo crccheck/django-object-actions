@@ -8,6 +8,7 @@ help:
 	@echo "  make test     - run test suite"
 	@echo "  make coverage - run coverage"
 	@echo "  make resetdb  - delete and recreate the sqlite database"
+	@echo "  make quickstart - setup a dev environment the first time"
 
 
 clean:
@@ -27,6 +28,13 @@ coverage:
 	coverage run $(MANAGE) test django_object_actions
 	coverage report --show-missing
 
+# destroy and then recreate your database
 resetdb:
 	python $(MANAGE) reset_db --router=default --noinput
 	python $(MANAGE) syncdb --noinput
+	python $(MANAGE) loaddata sample_data
+
+# just a demo of how to get up and running quickly
+quickstart: resetdb
+	python $(MANAGE) createsuperuser
+	python $(MANAGE) runserver
