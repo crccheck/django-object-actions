@@ -32,6 +32,7 @@ coverage:
 resetdb:
 	python $(MANAGE) reset_db --router=default --noinput
 	python $(MANAGE) syncdb --noinput
+	python $(MANAGE) migrate --noinput
 	python $(MANAGE) loaddata sample_data
 
 # just a demo of how to get up and running quickly

@@ -10,9 +10,7 @@ media
 
 .env
 .tox/
-*.sqlite
-.codeintel
-*.sublime-*
+*.db
 
 
 # build
