@@ -68,6 +68,7 @@ class PollAdmin(DjangoObjectActions, admin.ModelAdmin):
             obj.choice_set.all().delete()
             return
 
+        self.message_user(request, 'All choices deleted')
         return render_to_response('clear_choices.html',
             dict(object=obj), context_instance=RequestContext(request))
     delete_all_choices.label = "Delete All Choices"

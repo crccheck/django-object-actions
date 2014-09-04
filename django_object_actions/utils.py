@@ -116,10 +116,16 @@ class ModelToolsView(SingleObjectMixin, View):
         back = request.path.rsplit('/', 3)[0] + '/'
         return HttpResponseRedirect(back)
 
-    # Allow POST
+    # HACK to allow POST requests too easily
     post = get
 
     def message_user(self, request, message):
+        """
+        Mimic Django admin actions's `message_user`.
+
+        Like the second example:
+        https://docs.djangoproject.com/en/1.7/ref/contrib/admin/actions/#custom-admin-action
+        """
         # copied from django.contrib.admin.options
         # included to mimic admin actions
         messages.info(request, message)
