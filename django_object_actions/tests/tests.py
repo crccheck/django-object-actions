@@ -50,9 +50,19 @@ class AppTests(LoggedInTestCase):
         response = self.client.get(url)
         self.assertTemplateUsed(response, "clear_choices.html")
 
+    def test_message_user_sends_message(self):
+        url = '/admin/polls/poll/1/tools/delete_all_choices/'
+        self.assertNotIn('messages', self.client.cookies)
+        self.client.get(url)
+        self.assertIn('messages', self.client.cookies)
+
     def test_intermediate_page_with_post_works(self):
         self.assertTrue(Choice.objects.filter(poll=1).count())
         url = '/admin/polls/poll/1/tools/delete_all_choices/'
         response = self.client.post(url)
         self.assertEqual(response.status_code, 302)
         self.assertEqual(Choice.objects.filter(poll=1).count(), 0)
+
+    def test_undefined_tool_404s(self):
+        response = self.client.get('/admin/polls/choice/1/tools/weeeewoooooo/')
+        self.assertEqual(response.status_code, 404)

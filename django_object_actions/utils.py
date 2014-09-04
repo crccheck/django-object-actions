@@ -47,10 +47,10 @@ class BaseDjangoObjectActions(object):
                 custom_attrs=custom_attrs,
             )
 
-        context['objectactions'] = [
-            to_dict(x) for x in
+        context['objectactions'] = map(
+            to_dict,
             self.get_object_actions(request, context, **kwargs)
-        ]
+        )
         return super(BaseDjangoObjectActions, self).render_change_form(
             request, context, **kwargs)
 
@@ -59,9 +59,18 @@ class BaseDjangoObjectActions(object):
     ##################
 
     def get_object_actions(self, request, context, **kwargs):
+        """Override this to customize what actions get sent."""
         return self.objectactions
 
     def get_djoa_button_attrs(self, tool):
+        """
+        Get the HTML attributes associated with a tool.
+
+        There are some standard attributes (class and title) that the template
+        will always want. Any number of additional attributes can be specified
+        and passed on. This is kinda awkward and due for a refactor for
+        readability.
+        """
         attrs = getattr(tool, 'attrs', {})
         # href is not allowed to be set. should an exception be raised instead?
         if 'href' in attrs:
@@ -101,23 +110,35 @@ class ModelToolsView(SingleObjectMixin, View):
         try:
             ret = self.tools[kwargs['tool']](request, obj)
         except KeyError:
-            raise Http404
+            raise Http404(u'Tool does not exist')
         if isinstance(ret, HttpResponse):
             return ret
         back = request.path.rsplit('/', 3)[0] + '/'
         return HttpResponseRedirect(back)
 
-    # Allow POST
+    # HACK to allow POST requests too easily
     post = get
 
     def message_user(self, request, message):
+        """
+        Mimic Django admin actions's `message_user`.
+
+        Like the second example:
+        https://docs.djangoproject.com/en/1.7/ref/contrib/admin/actions/#custom-admin-action
+        """
         # copied from django.contrib.admin.options
         # included to mimic admin actions
         messages.info(request, message)
 
 
 class QuerySetIsh(QuerySet):
-    """Takes an instance and mimics it coming from a QuerySet."""
+    """
+    Takes an instance and mimics it coming from a QuerySet.
+
+    This is a hack to support the `takes_instance_or_queryset` decorator so
+    that you can re-use functions written for standard Django admin actions and
+    use them for Object Tools too.
+    """
     def __init__(self, instance=None, *args, **kwargs):
         try:
             model = instance._meta.model
@@ -141,7 +162,7 @@ class QuerySetIsh(QuerySet):
 
 
 def takes_instance_or_queryset(func):
-    """Decorator that makes standard actions compatible."""
+    """Decorator that makes standard Django admin actions compatible."""
     @wraps(func)
     def decorated_function(self, request, queryset):
         # func follows the prototype documented at:
