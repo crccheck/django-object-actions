@@ -1,7 +1,7 @@
 from django.test import TestCase
 
+from example_project.polls.factories import UserFactory
 from example_project.polls.models import Choice
-from ..factories import UserFactory
 
 
 class LoggedInTestCase(TestCase):
