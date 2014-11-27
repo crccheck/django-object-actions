@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 from django.contrib import admin
 from django.core.urlresolvers import reverse
 from django.db.models import F
@@ -51,7 +53,7 @@ class ChoiceInline(admin.StackedInline):
 
 class PollAdmin(DjangoObjectActions, admin.ModelAdmin):
     fieldsets = [
-        (None,               {'fields': ['question']}),
+        (None, {'fields': ['question']}),
         ('Date information', {'fields': ['pub_date'], 'classes': ['collapse']}),
     ]
     inlines = [ChoiceInline]
@@ -82,8 +84,7 @@ class CommentAdmin(DjangoObjectActions, admin.ModelAdmin):
         if not obj.comment:
             # bail because we need a comment
             return
-        obj.comment = u' '.join(['hodor' for x in obj.comment.split()])
+        obj.comment = ' '.join(['hodor' for x in obj.comment.split()])
         obj.save()
     objectactions = ('hodor', )
-
 admin.site.register(Comment, CommentAdmin)

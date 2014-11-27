@@ -13,6 +13,7 @@ class LoggedInTestCase(TestCase):
 
 
 # TODO move most of these to test_admin.py after I sit down and re-read these
+# and don't need the fixtures
 class AppTests(LoggedInTestCase):
     fixtures = ['sample_data']
 
