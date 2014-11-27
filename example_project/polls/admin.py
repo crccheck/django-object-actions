@@ -6,7 +6,7 @@ from django.http import HttpResponseRedirect
 from django_object_actions import (DjangoObjectActions,
         takes_instance_or_queryset)
 
-from .models import Choice, Poll
+from .models import Choice, Poll, Comment
 
 
 class ChoiceAdmin(DjangoObjectActions, admin.ModelAdmin):
@@ -74,6 +74,9 @@ class PollAdmin(DjangoObjectActions, admin.ModelAdmin):
     delete_all_choices.label = "Delete All Choices"
 
     objectactions = ('delete_all_choices', )
-
-
 admin.site.register(Poll, PollAdmin)
+
+
+class CommentAdmin(DjangoObjectActions, admin.ModelAdmin):
+    pass
+admin.site.register(Comment, CommentAdmin)

@@ -2,6 +2,7 @@ import datetime
 
 from django.db import models
 from django.utils import timezone
+from django_extensions.db.fields import UUIDField
 
 
 class Poll(models.Model):
@@ -25,3 +26,11 @@ class Choice(models.Model):
 
     def __unicode__(self):
         return self.choice_text
+
+
+class Comment(models.Model):
+    uuid = UUIDField(primary_key=True)
+    comment = models.TextField(null=True, blank=True)
+
+    def __unicode__(self):
+        return self.comment
