@@ -1,10 +1,9 @@
-Django==1.7
-
+Django==1.7.1
 dj-database-url==0.3.0
-# for heroku support
-psycopg2==2.5.4
-
-django-extensions==1.3.11
-tox==1.7.2
+django-extensions==1.4.6
+tox==1.8.1
 factory-boy==2.4.1
 coverage==3.7.1
+
+# for heroku support
+psycopg2==2.5.4
