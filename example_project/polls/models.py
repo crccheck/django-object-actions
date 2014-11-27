@@ -33,4 +33,4 @@ class Comment(models.Model):
     comment = models.TextField(null=True, blank=True)
 
     def __unicode__(self):
-        return self.comment
+        return self.comment or ''

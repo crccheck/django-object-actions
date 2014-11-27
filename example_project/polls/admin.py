@@ -78,5 +78,12 @@ admin.site.register(Poll, PollAdmin)
 
 
 class CommentAdmin(DjangoObjectActions, admin.ModelAdmin):
-    pass
+    def hodor(self, request, obj):
+        if not obj.comment:
+            # bail because we need a comment
+            return
+        obj.comment = u' '.join(['hodor' for x in obj.comment.split()])
+        obj.save()
+    objectactions = ('hodor', )
+
 admin.site.register(Comment, CommentAdmin)

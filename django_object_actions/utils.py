@@ -19,8 +19,10 @@ class BaseDjangoObjectActions(object):
         for tool in self.objectactions:
             tools[tool] = getattr(self, tool)
         my_urls = patterns('',
-            (r'^(?P<pk>\d+)/tools/(?P<tool>\w+)/$', self.admin_site.admin_view(
-                ModelToolsView.as_view(model=self.model, tools=tools)))
+            # supports pks that are numbers or uuids
+            (r'^(?P<pk>[0-9a-f\-]+)/tools/(?P<tool>\w+)/$',
+                self.admin_site.admin_view(
+                    ModelToolsView.as_view(model=self.model, tools=tools)))
         )
         return my_urls
 

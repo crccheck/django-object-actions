@@ -12,6 +12,7 @@ class LoggedInTestCase(TestCase):
         self.assertTrue(self.client.login(username='admin', password='admin'))
 
 
+# TODO move most of these to test_admin.py after I sit down and re-read these
 class AppTests(LoggedInTestCase):
     fixtures = ['sample_data']
 
