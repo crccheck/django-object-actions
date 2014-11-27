@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 
 from functools import wraps
 
-from django.conf.urls import patterns
+from django.conf.urls import patterns, url
 from django.contrib import messages
 from django.db.models.query import QuerySet
 from django.http import Http404, HttpResponse, HttpResponseRedirect
@@ -22,7 +22,7 @@ class BaseDjangoObjectActions(object):
             tools[tool] = getattr(self, tool)
         my_urls = patterns('',
             # supports pks that are numbers or uuids
-            (r'^(?P<pk>[0-9a-f\-]+)/tools/(?P<tool>\w+)/$',
+            url(r'^(?P<pk>[0-9a-f\-]+)/tools/(?P<tool>\w+)/$',
                 self.admin_site.admin_view(
                     ModelToolsView.as_view(model=self.model, tools=tools)))
         )
