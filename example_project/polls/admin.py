@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 from django.contrib import admin
 from django.core.urlresolvers import reverse
 from django.db.models import F
@@ -6,7 +8,7 @@ from django.http import HttpResponseRedirect
 from django_object_actions import (DjangoObjectActions,
         takes_instance_or_queryset)
 
-from .models import Choice, Poll
+from .models import Choice, Poll, Comment
 
 
 class ChoiceAdmin(DjangoObjectActions, admin.ModelAdmin):
@@ -51,7 +53,7 @@ class ChoiceInline(admin.StackedInline):
 
 class PollAdmin(DjangoObjectActions, admin.ModelAdmin):
     fieldsets = [
-        (None,               {'fields': ['question']}),
+        (None, {'fields': ['question']}),
         ('Date information', {'fields': ['pub_date'], 'classes': ['collapse']}),
     ]
     inlines = [ChoiceInline]
@@ -74,6 +76,15 @@ class PollAdmin(DjangoObjectActions, admin.ModelAdmin):
     delete_all_choices.label = "Delete All Choices"
 
     objectactions = ('delete_all_choices', )
-
-
 admin.site.register(Poll, PollAdmin)
+
+
+class CommentAdmin(DjangoObjectActions, admin.ModelAdmin):
+    def hodor(self, request, obj):
+        if not obj.comment:
+            # bail because we need a comment
+            return
+        obj.comment = ' '.join(['hodor' for x in obj.comment.split()])
+        obj.save()
+    objectactions = ('hodor', )
+admin.site.register(Comment, CommentAdmin)

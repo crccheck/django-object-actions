@@ -7,6 +7,8 @@ except ImportError:  # pragma: no cover
 
 import factory
 
+from . import models
+
 
 class UserFactory(factory.DjangoModelFactory):
     FACTORY_FOR = get_user_model()
@@ -17,3 +19,7 @@ class UserFactory(factory.DjangoModelFactory):
     email = factory.LazyAttribute(lambda x: '{0}@{1}.com'.format(
         x.first_name.lower(), x.last_name.lower()))
     password = factory.PostGenerationMethodCall('set_password', 'password')
+
+
+class CommentFactory(factory.DjangoModelFactory):
+    FACTORY_FOR = models.Comment

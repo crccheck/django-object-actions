@@ -1,7 +1,7 @@
 from django.test import TestCase
 
+from example_project.polls.factories import UserFactory
 from example_project.polls.models import Choice
-from ..factories import UserFactory
 
 
 class LoggedInTestCase(TestCase):
@@ -12,6 +12,8 @@ class LoggedInTestCase(TestCase):
         self.assertTrue(self.client.login(username='admin', password='admin'))
 
 
+# TODO move most of these to test_admin.py after I sit down and re-read these
+# and don't need the fixtures
 class AppTests(LoggedInTestCase):
     fixtures = ['sample_data']
 
