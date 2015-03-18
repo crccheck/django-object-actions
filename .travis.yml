@@ -10,5 +10,9 @@ env:
   - TOX_ENV=py33django17
   - TOX_ENV=py34django16
   - TOX_ENV=py34django17
+  - TOX_ENV=py27django18
+  - TOX_ENV=py33django18
+  - TOX_ENV=py34django18
 install: "pip install tox"
 script: tox -e $TOX_ENV
+sudo: false
