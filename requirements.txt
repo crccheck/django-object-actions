@@ -1,7 +1,7 @@
 Django==1.7.1
 dj-database-url==0.3.0
 django-extensions==1.4.6
-tox==1.8.1
+tox==1.9.0
 factory-boy==2.4.1
 coverage==3.7.1
 
