@@ -4,11 +4,9 @@ from setuptools import setup
 setup(
     name='django-object-actions',
     version='0.5.1',
-    author="The Texas Tribune",
-    author_email="cchang@texastribune.org",
-    maintainer="Chris Chang",
-    maintainer_email='c@crccheck.com',
-    url="https://github.com/texastribune/django-object-actions",
+    author="Chris Chang",
+    author_email='c@crccheck.com',
+    url="https://github.com/crccheck/django-object-actions",
     packages=[
         'django_object_actions',
     ],

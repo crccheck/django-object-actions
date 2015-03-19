@@ -1,14 +1,22 @@
 language: python
+# Generate this env list with:
+# tox -l | awk '{ print "  - TOX_ENV="$0}
 env:
-  - TOX_ENV=py26django14
-  - TOX_ENV=py26django15
-  - TOX_ENV=py27django14
-  - TOX_ENV=py27django15
-  - TOX_ENV=py27django16
-  - TOX_ENV=py33django16
-  - TOX_ENV=py27django17
-  - TOX_ENV=py33django17
-  - TOX_ENV=py34django16
-  - TOX_ENV=py34django17
-install: "pip install tox"
+  - TOX_ENV=django14-py26
+  - TOX_ENV=django14-py27
+  - TOX_ENV=django15-py26
+  - TOX_ENV=django15-py27
+  - TOX_ENV=django16-py26
+  - TOX_ENV=django16-py27
+  - TOX_ENV=django16-py33
+  - TOX_ENV=django17-py27
+  - TOX_ENV=django17-py33
+  - TOX_ENV=django17-py34
+  - TOX_ENV=django18-py27
+  - TOX_ENV=django18-py33
+  - TOX_ENV=django18-py34
+  - TOX_ENV=coveralls-django17-py27
+install: pip install tox coveralls
 script: tox -e $TOX_ENV
+after_success: coveralls
+sudo: false
