@@ -1,8 +1,11 @@
 Django Object Actions
 =====================
 
-.. image:: https://travis-ci.org/texastribune/django-object-actions.png
-   :target: https://travis-ci.org/texastribune/django-object-actions
+.. image:: https://travis-ci.org/crccheck/django-object-actions.png
+   :target: https://travis-ci.org/crccheck/django-object-actions
+
+.. image:: https://coveralls.io/repos/crccheck/django-object-actions/badge.png
+    :target: https://coveralls.io/r/crccheck/django-object-actions
 
 If you've ever tried making your own admin object tools and you were
 like me, you immediately gave up. Why can't they be as easy as making
@@ -166,7 +169,7 @@ Limitations
 
 2. If you provide your own custom ``change_form.html``, you'll also need to
    manually copy in the relevant bits of `our change form
-   <https://github.com/texastribune/django-object-actions/blob/master/django_obj
+   <https://github.com/crccheck/django-object-actions/blob/master/django_obj
    ect_actions/templates/django_object_actions/change_form.html>`_. You can also
    use ``from django_object_actions import BaseDjangoObjectActions`` instead.
 
@@ -176,7 +179,7 @@ Development
 Getting started *(with virtualenvwrapper)*::
 
     # get a copy of the code
-    git clone git@github.com:texastribune/django-object-actions.git
+    git clone git@github.com:crccheck/django-object-actions.git
     cd django-object-actions
     # set up your virtualenv
     mkvirtualenv django-object-actions
