@@ -196,6 +196,8 @@ other utilities you can do.
 Similar Packages
 ----------------
 
+If you want more UI, check out `Django Admin Row Actions <https://github.com/DjangoAdminHackers/django-admin-row-actions>`_.
+
 Django Object Actions is very similar to
 `django-object-tools <https://github.com/praekelt/django-object-tools>`_,
 but does not require messing with your urls.py, does not do anything
