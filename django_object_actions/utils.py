@@ -112,9 +112,10 @@ class ModelToolsView(SingleObjectMixin, View):
         #   is instantiated with `model` and the urlpattern has `pk`.
         obj = self.get_object()
         try:
-            ret = self.tools[kwargs['tool']](request, obj)
+            tool = self.tools[kwargs['tool']]
         except KeyError:
             raise Http404(u'Tool does not exist')
+        ret = tool(request, obj)
         if isinstance(ret, HttpResponse):
             return ret
         back = request.path.rsplit('/', 3)[0] + '/'
