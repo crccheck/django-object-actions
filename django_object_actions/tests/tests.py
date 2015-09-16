@@ -68,3 +68,7 @@ class AppTests(LoggedInTestCase):
     def test_undefined_tool_404s(self):
         response = self.client.get('/admin/polls/choice/1/tools/weeeewoooooo/')
         self.assertEqual(response.status_code, 404)
+
+    def test_key_error_tool_500s(self):
+        self.assertRaises(KeyError, self.client.get,
+                          '/admin/polls/choice/1/tools/raise_key_error/')

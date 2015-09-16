@@ -39,8 +39,11 @@ class ChoiceAdmin(DjangoObjectActions, admin.ModelAdmin):
         url = reverse('admin:polls_poll_change', args=(obj.poll.pk,))
         return HttpResponseRedirect(url)
 
+    def raise_key_error(self, request, obj):
+        raise KeyError
+
     objectactions = ('increment_vote', 'decrement_vote', 'reset_vote',
-        'edit_poll')
+        'edit_poll', 'raise_key_error')
     actions = ['increment_vote']
 
 admin.site.register(Choice, ChoiceAdmin)
