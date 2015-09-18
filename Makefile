@@ -23,7 +23,10 @@ clean:
 	rm -rf MANIFEST
 	rm -rf build
 	rm -rf dist
+	rm -rf *.egg
 	rm -rf *.egg-info
+	find . -name "*.pyc" -delete
+	find . -name ".DS_Store" -delete
 
 test:
 	python -W ignore::RuntimeWarning $(MANAGE) test django_object_actions
