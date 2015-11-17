@@ -100,6 +100,7 @@ class QuerySetIshTest(TestCase):
         qs = QuerySetIsh(self.obj)
         qs.update(question='mooo')
         self.assertEqual(Poll.objects.get(pk=1).question, 'mooo')
+        self.assertEqual(Poll.objects.get(pk=2).question, 'wut?')
 
 
 class DecoratorTest(TestCase):
