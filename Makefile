@@ -23,7 +23,10 @@ clean:
 	rm -rf MANIFEST
 	rm -rf build
 	rm -rf dist
+	rm -rf *.egg
 	rm -rf *.egg-info
+	find . -name "*.pyc" -delete
+	find . -name ".DS_Store" -delete
 
 test:
 	python -W ignore::RuntimeWarning $(MANAGE) test django_object_actions
@@ -40,17 +43,18 @@ resetdb:
 	python $(MANAGE) migrate --noinput
 	python $(MANAGE) loaddata sample_data
 
-# Release Instructions:
-#
-# 1. bump version number above
-# 2. `make release`
-# 3. git push origin master --tags
-#
-# If this doesn't work, make sure you have wheels installed:
-#     pip install wheel
-release:
+# Set the version. Done this way to avoid fancy, brittle Python import magic
+version:
 	@sed -i -r /version/s/[0-9.]+/$(VERSION)/ setup.py
 	@sed -i -r /version/s/[0-9.]+/$(VERSION)/ django_object_actions/__init__.py
+
+# Release instructions
+# 1. bump VERSION above
+# 2. run `make release`
+# 3. `git push --tags origin master`
+# 4. update release notes
+release: clean version
 	@git commit -am "bump version to v$(VERSION)"
 	@git tag v$(VERSION)
+	@-pip install wheel > /dev/null
 	python setup.py sdist bdist_wheel upload
