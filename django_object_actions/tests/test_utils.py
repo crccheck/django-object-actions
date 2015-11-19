@@ -1,12 +1,9 @@
-from django.db.models.query import QuerySet
 from django.test import TestCase
-from django.utils.unittest import expectedFailure
 
 from example_project.polls.models import Poll
 
 from ..utils import (
     BaseDjangoObjectActions,
-    QuerySetIsh,
     takes_instance_or_queryset,
 )
 
@@ -66,42 +63,6 @@ class BaseDjangoObjectActionsTest(TestCase):
         self.assertEqual(custom['nonstandard'], 'wombat')
 
 
-class QuerySetIshTest(TestCase):
-    fixtures = ['sample_data']
-
-    def setUp(self):
-        # WISHLIST don't depend on fixture
-        self.obj = Poll.objects.get(pk=1)
-
-    def test_can_turn_object_into_queryset(self):
-        qs = QuerySetIsh(self.obj)
-        self.assertEqual(qs.count(), 1)
-        self.assertEqual(qs.get(), self.obj)
-        self.assertEqual(qs.order_by('foo').get(), self.obj)
-        self.assertEqual(qs.all().get(), self.obj)
-        self.assertEqual(qs.filter().get(), self.obj)
-        self.assertEqual(qs.latest('bar'), self.obj)
-
-    def test_queryset_supports_delete(self):
-        qs = QuerySetIsh(self.obj)
-        qs.delete()
-        with self.assertRaises(Poll.DoesNotExist):
-            Poll.objects.get(pk=1)
-
-    @expectedFailure
-    def test_queryset_supports_filter(self):
-        # yeah, we don't actually support doing this, but it would be nice.
-        qs = QuerySetIsh(self.obj)
-        with self.assertRaises(Poll.DoesNotExist):
-            # this should be empty because the question is just `"hi"`
-            qs.filter(question='abra cadabra').get()
-
-    def test_queryset_supports_update(self):
-        qs = QuerySetIsh(self.obj)
-        qs.update(question='mooo')
-        self.assertEqual(Poll.objects.get(pk=1).question, 'mooo')
-
-
 class DecoratorTest(TestCase):
     fixtures = ['sample_data']
 
@@ -128,17 +89,14 @@ class DecoratorTest(TestCase):
 
         # passing in an instance yields a queryset (using positional args)
         queryset = myfunc(None, None, self.obj)
-        self.assertIsInstance(queryset, QuerySet)
         # the resulting queryset only has one item and it's self.obj
         self.assertEqual(queryset.get(), self.obj)
 
         # passing in a queryset yields the same queryset
         queryset = myfunc(None, None, self.queryset)
-        self.assertIsInstance(queryset, QuerySet)
         self.assertEqual(queryset, self.queryset)
 
         # passing in an instance yields a queryset (using keyword args)
         queryset = myfunc(None, None, queryset=self.obj)
-        self.assertIsInstance(queryset, QuerySet)
         # the resulting queryset only has one item and it's self.obj
         self.assertEqual(queryset.get(), self.obj)
