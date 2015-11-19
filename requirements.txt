@@ -1,9 +1,9 @@
-Django==1.8.4
+Django==1.8.6
 dj-database-url==0.3.0
 django-extensions==1.5.9
-tox==2.1.1
-factory-boy==2.5.2
-coverage==3.7.1
+tox==2.2.1
+factory-boy==2.6.0
+coverage==4.0.2
 
 # for heroku support
 psycopg2==2.6.1
