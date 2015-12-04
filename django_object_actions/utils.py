@@ -24,7 +24,7 @@ class BaseDjangoObjectActions(object):
             # supports pks that are numbers or uuids
             url(r'^(?P<pk>[0-9a-f\-]+)/tools/(?P<tool>\w+)/$',
                 self.admin_site.admin_view(
-                    ModelToolsView.as_view(model=self.model, tools=tools)))
+                    ModelToolsView.as_view(model=self.model, tools=tools)), name='object-actions')
         )
         return my_urls
 
