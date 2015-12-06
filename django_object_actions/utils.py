@@ -22,10 +22,10 @@ class BaseDjangoObjectActions(object):
         tools = {}
 
         end = '_change'
-        for u in urls:
-            if u.name.endswith(end):
-                tools_view = u.name[:-len(end)] + '_tools'
-                change_view = 'admin:' + u.name
+        for url_pattern in urls:
+            if url_pattern.name.endswith(end):
+                tools_view = url_pattern.name[:-len(end)] + '_tools'
+                change_view = 'admin:' + url_pattern.name
                 self.tools_view_name = 'admin:' + tools_view
                 break
 
