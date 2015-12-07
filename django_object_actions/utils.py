@@ -6,7 +6,8 @@ from django.conf.urls import patterns, url
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.db.models.query import QuerySet
-from django.http import Http404, HttpResponse, HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect
+from django.http.response import HttpResponseBase
 from django.views.generic import View
 from django.views.generic.detail import SingleObjectMixin
 
@@ -130,7 +131,7 @@ class ModelToolsView(SingleObjectMixin, View):
         except KeyError:
             raise Http404(u'Tool does not exist')
         ret = tool(request, obj)
-        if isinstance(ret, HttpResponse):
+        if isinstance(ret, HttpResponseBase):
             return ret
         back = reverse(self.back, args=(kwargs['pk'],))
         return HttpResponseRedirect(back)
