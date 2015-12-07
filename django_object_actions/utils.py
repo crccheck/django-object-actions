@@ -4,6 +4,7 @@ from functools import wraps
 
 from django.conf.urls import patterns, url
 from django.contrib import messages
+from django.core.urlresolvers import reverse
 from django.db.models.query import QuerySet
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.views.generic import View
@@ -14,17 +15,28 @@ class BaseDjangoObjectActions(object):
     """ModelAdmin mixin to add object-tools just like adding admin actions."""
     # list to hold each object action tool
     objectactions = []
+    tools_view_name = None
 
-    def get_tool_urls(self):
+    def get_tool_urls(self, urls):
         """Gets the url patterns that route each tool to a special view."""
         tools = {}
+
+        end = '_change'
+        for url_pattern in urls:
+            if url_pattern.name.endswith(end):
+                tools_view = url_pattern.name[:-len(end)] + '_tools'
+                change_view = 'admin:' + url_pattern.name
+                self.tools_view_name = 'admin:' + tools_view
+                break
+
         for tool in self.objectactions:
             tools[tool] = getattr(self, tool)
         my_urls = patterns('',
             # supports pks that are numbers or uuids
             url(r'^(?P<pk>[0-9a-f\-]+)/tools/(?P<tool>\w+)/$',
                 self.admin_site.admin_view(
-                    ModelToolsView.as_view(model=self.model, tools=tools)))
+                        ModelToolsView.as_view(model=self.model, tools=tools, back=change_view)),
+                name=tools_view)
         )
         return my_urls
 
@@ -35,7 +47,7 @@ class BaseDjangoObjectActions(object):
     def get_urls(self):
         """Prepends `get_urls` with our own patterns."""
         urls = super(BaseDjangoObjectActions, self).get_urls()
-        return self.get_tool_urls() + urls
+        return self.get_tool_urls(urls) + urls
 
     def render_change_form(self, request, context, **kwargs):
         """Puts `objectactions` into the context."""
@@ -55,6 +67,7 @@ class BaseDjangoObjectActions(object):
             to_dict,
             self.get_object_actions(request, context, **kwargs)
         )
+        context['tools_view_name'] = self.tools_view_name
         return super(BaseDjangoObjectActions, self).render_change_form(
             request, context, **kwargs)
 
@@ -106,6 +119,7 @@ class DjangoObjectActions(BaseDjangoObjectActions):
 class ModelToolsView(SingleObjectMixin, View):
     """A special view that run the tool's callable."""
     tools = {}
+    back = None
 
     def get(self, request, **kwargs):
         # SingleOjectMixin's `get_object`. Works because the view
@@ -118,7 +132,7 @@ class ModelToolsView(SingleObjectMixin, View):
         ret = tool(request, obj)
         if isinstance(ret, HttpResponse):
             return ret
-        back = request.path.rsplit('/', 3)[0] + '/'
+        back = reverse(self.back, args=(kwargs['pk'],))
         return HttpResponseRedirect(back)
 
     # HACK to allow POST requests too easily
