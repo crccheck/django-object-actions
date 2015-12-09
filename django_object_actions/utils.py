@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 
 from functools import wraps
 
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.db.models.query import QuerySet
@@ -31,13 +31,13 @@ class BaseDjangoObjectActions(object):
 
         for tool in self.objectactions:
             tools[tool] = getattr(self, tool)
-        my_urls = patterns('',
+        my_urls = [
             # supports pks that are numbers or uuids
             url(r'^(?P<pk>[0-9a-f\-]+)/tools/(?P<tool>\w+)/$',
                 self.admin_site.admin_view(
                         ModelToolsView.as_view(model=self.model, tools=tools, back=change_view)),
                 name=tools_view)
-        )
+        ]
         return my_urls
 
     ###################################
