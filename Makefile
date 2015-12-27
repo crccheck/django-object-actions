@@ -1,4 +1,4 @@
-VERSION=0.6.0
+VERSION = $(shell cat VERSION)
 PROJECT=./example_project
 MANAGE=$(PROJECT)/manage.py
 
