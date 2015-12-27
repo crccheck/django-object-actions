@@ -35,6 +35,24 @@ resetdb: ## Delete and then recreate the dev sqlite database
 	python $(MANAGE) migrate --noinput
 	python $(MANAGE) loaddata sample_data
 
+IMAGE = crccheck/django-object-actions
+
+.PHONY: build
+build: ## Build a full set of Docker images
+build: build/1.9 build/1.8.7 build/1.7.11 build/1.6.11 build/1.5.12
+
+build/%:
+	docker build --build-arg DJANGO_VERSION=$* \
+	  -t $(IMAGE):$$(echo "$*" | cut -f 1-2 -d.) .
+
+run: run/1.9
+
+run/%:
+	docker run --rm -p 8000:8000 --sig-proxy=false $(IMAGE):$*
+
+bash:
+	docker run --rm -it $(IMAGE):1.9 /bin/bash
+
 version:
 	@sed -i -r /version/s/[0-9.]+/$(VERSION)/ setup.py
 	@sed -i -r /version/s/[0-9.]+/$(VERSION)/ django_object_actions/__init__.py
