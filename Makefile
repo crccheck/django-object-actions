@@ -21,6 +21,10 @@ clean: ## Remove generated files
 	find . -name "*.pyc" -delete
 	find . -name ".DS_Store" -delete
 
+install: ## Install development requirements
+	pip install -r requirements.txt
+	pip install Django tox
+
 test: ## Run test suite
 	python -W ignore::RuntimeWarning $(MANAGE) test django_object_actions
 

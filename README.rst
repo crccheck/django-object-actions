@@ -181,16 +181,20 @@ Getting started *(with virtualenvwrapper)*::
     # get a copy of the code
     git clone git@github.com:crccheck/django-object-actions.git
     cd django-object-actions
-    # set up your virtualenv
+    # set up your virtualenv (with virtualenvwrapper)
     mkvirtualenv django-object-actions
-    pip install -r requirements.txt
-    # hack your path so that we can reference packages starting from the root
+    # Install requirements
+    make install
+    # Hack your path so that we can reference packages starting from the root
     add2virtualenv .
     make test  # run test suite
     make quickstart  # runs 'make resetdb' and some extra steps
 
-Various helpers are available as make commands. View ``Makefile`` to see what
-other utilities you can do.
+This will install whatever the latest stable version of Django is. You can also
+install a specific version of Django and ``pip install -r requirements.txt``.
+
+Various helpers are available as make commands. Type ``make help`` and view the
+``Makefile`` to see what other things you can do.
 
 
 Similar Packages
@@ -204,4 +208,3 @@ but does not require messing with your urls.py, does not do anything
 special with permissions, and uses the same patterns as making `admin
 actions <https://docs.djangoproject.com/en/dev/ref/contrib/admin/actions/#actions-as-modeladmin-methods>`_
 in Django.
-
