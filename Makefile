@@ -1,6 +1,7 @@
 VERSION = $(shell cat VERSION)
 PROJECT = ./example_project
 MANAGE = $(PROJECT)/manage.py
+IMAGE = crccheck/django-object-actions
 
 help: ## Shows this help
 	@echo "$$(grep -h '#\{2\}' $(MAKEFILE_LIST) | sed 's/: #\{2\} /	/' | column -t -s '	')"
@@ -39,8 +40,6 @@ resetdb: ## Delete and then recreate the dev sqlite database
 	python $(MANAGE) migrate --noinput
 	python $(MANAGE) loaddata sample_data
 
-IMAGE = crccheck/django-object-actions
-
 .PHONY: build
 build: ## Build a full set of Docker images
 build: build/1.9 build/1.8.7 build/1.7.11 build/1.6.11 build/1.5.12
@@ -54,6 +53,9 @@ run: run/1.9
 run/%:
 	docker run --rm -p 8000:8000 --sig-proxy=false $(IMAGE):$*
 
+test/%:
+	docker run --rm -p 8000:8000 --sig-proxy=false $(IMAGE):$* make test
+
 bash:
 	docker run --rm -it $(IMAGE):1.9 /bin/bash
 
@@ -62,11 +64,10 @@ version:
 	@sed -i -r /version/s/[0-9.]+/$(VERSION)/ django_object_actions/__init__.py
 
 # Release instructions
-# 1. bump VERSION above
+# 1. bump VERSION
 # 2. run `make release`
 # 3. `git push --tags origin master`
 # 4. update release notes
-release: Publish a release to PyPI
 release: clean version
 	@git commit -am "bump version to v$(VERSION)"
 	@git tag v$(VERSION)
