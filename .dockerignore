@@ -1,0 +1,11 @@
+*.pyc
+.coverage
+
+.env
+.tox/
+*.db
+
+
+build/
+dist/
+*.egg-info
