@@ -12,17 +12,16 @@ from ..utils import (
 class BaseDjangoObjectActionsTest(TestCase):
     def setUp(self):
         self.instance = BaseDjangoObjectActions()
+        self.instance.model = mock.Mock(
+            **{'_meta.app_label': 'app', '_meta.model_name': 'model'})
 
     @mock.patch('django_object_actions.utils.BaseDjangoObjectActions'
                 '.admin_site', create=True)
     def test_get_tool_urls_trivial_case(self, mock_site):
-        self.instance.model = mock.Mock(
-            **{'_meta.app_label': 'app', '_meta.model_name': 'model'})
-
-        urls = self.instance.get_tool_urls([])
+        urls = self.instance.get_tool_urls()
 
         self.assertEqual(len(urls), 1)
-        self.assertEqual(urls[0].name, 'app_model_change_tools')
+        self.assertEqual(urls[0].name, 'app_model_tools')
 
     def test_get_object_actions_gets_attribute(self):
         mock_objectactions = []  # set to something mutable

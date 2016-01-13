@@ -29,26 +29,19 @@ class BaseDjangoObjectActions(object):
     objectactions = []
     tools_view_name = None
 
-    def get_tool_urls(self, urls):
+    def get_tool_urls(self):
         """Get the url patterns that route each tool to a special view."""
         tools = {}
 
         # Look for the default change view url and use that as a template
-        change_view = None
-        end = '_change'
-        for url_pattern in urls:
-            if url_pattern.name.endswith(end):
-                model_tools_url_name = url_pattern.name[:-len(end)] + '_tools'
-                change_view = 'admin:' + url_pattern.name
-                break
-        if not change_view:
-            # Should this just replace the above?
-            base_url_name = '%s_%s_change' % (
-                self.model._meta.app_label,
-                self.model._meta.model_name,
-            )
-            model_tools_url_name = '%s_tools' % base_url_name
-            change_view = 'admin:%s' % base_url_name
+        try:
+            model_name = self.model._meta.model_name
+        except AttributeError:
+            # DJANGO15
+            model_name = self.model._meta.module_name
+        base_url_name = '%s_%s' % (self.model._meta.app_label, model_name)
+        model_tools_url_name = '%s_tools' % base_url_name
+        change_view = 'admin:%s_change' % base_url_name
 
         self.tools_view_name = 'admin:' + model_tools_url_name
 
@@ -69,7 +62,7 @@ class BaseDjangoObjectActions(object):
     def get_urls(self):
         """Prepend `get_urls` with our own patterns."""
         urls = super(BaseDjangoObjectActions, self).get_urls()
-        return self.get_tool_urls(urls) + urls
+        return self.get_tool_urls() + urls
 
     def render_change_form(self, request, context, **kwargs):
         """Put `objectactions` into the context."""
