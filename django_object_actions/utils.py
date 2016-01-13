@@ -47,14 +47,18 @@ class BaseDjangoObjectActions(object):
 
         for tool in self.objectactions:
             tools[tool] = getattr(self, tool)
-        my_urls = [
+        return [
             # supports pks that are numbers or uuids
             url(r'^(?P<pk>[0-9a-f\-]+)/tools/(?P<tool>\w+)/$',
                 self.admin_site.admin_view(
-                        ModelToolsView.as_view(model=self.model, tools=tools, back=change_view)),
+                    ModelToolsView.as_view(
+                        model=self.model,
+                        tools=tools,
+                        back=change_view,
+                    )
+                ),
                 name=model_tools_url_name)
         ]
-        return my_urls
 
     # EXISTING ADMIN METHODS MODIFIED
     #################################
