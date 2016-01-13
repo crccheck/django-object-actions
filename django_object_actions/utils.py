@@ -18,7 +18,7 @@ class BaseDjangoObjectActions(object):
     tools_view_name = None
 
     def get_tool_urls(self, urls):
-        """Gets the url patterns that route each tool to a special view."""
+        """Get the url patterns that route each tool to a special view."""
         tools = {}
 
         end = '_change'
@@ -40,17 +40,16 @@ class BaseDjangoObjectActions(object):
         ]
         return my_urls
 
-    ###################################
-    # EXISTING ADMIN METHODS MODIFIED #
-    ###################################
+    # EXISTING ADMIN METHODS MODIFIED
+    #################################
 
     def get_urls(self):
-        """Prepends `get_urls` with our own patterns."""
+        """Prepend `get_urls` with our own patterns."""
         urls = super(BaseDjangoObjectActions, self).get_urls()
         return self.get_tool_urls(urls) + urls
 
     def render_change_form(self, request, context, **kwargs):
-        """Puts `objectactions` into the context."""
+        """Put `objectactions` into the context."""
 
         def to_dict(tool_name):
             """To represents the tool func as a dict with extra meta."""
@@ -71,9 +70,8 @@ class BaseDjangoObjectActions(object):
         return super(BaseDjangoObjectActions, self).render_change_form(
             request, context, **kwargs)
 
-    ##################
-    # CUSTOM METHODS #
-    ##################
+    # CUSTOM METHODS
+    ################
 
     def get_object_actions(self, request, context, **kwargs):
         """Override this to customize what actions get sent."""
@@ -112,14 +110,25 @@ class BaseDjangoObjectActions(object):
 
 
 class DjangoObjectActions(BaseDjangoObjectActions):
-    # override default change_form_template
     change_form_template = "django_object_actions/change_form.html"
 
 
 class ModelToolsView(SingleObjectMixin, View):
-    """A special view that run the tool's callable."""
-    tools = {}
+    """
+    The view that runs the tool's callable.
+
+    Attributes
+    ----------
+    back : str
+        The urlpattern name to send users back to. Defaults to the change view.
+    model : django.db.model.Model
+        The model this tool operates on
+    tools : dict
+        A mapping of tool names to views
+    """
     back = None
+    model = None
+    tools = None
 
     def get(self, request, **kwargs):
         # SingleOjectMixin's `get_object`. Works because the view
@@ -129,9 +138,11 @@ class ModelToolsView(SingleObjectMixin, View):
             tool = self.tools[kwargs['tool']]
         except KeyError:
             raise Http404(u'Tool does not exist')
+
         ret = tool(request, obj)
         if isinstance(ret, HttpResponse):
             return ret
+
         back = reverse(self.back, args=(kwargs['pk'],))
         return HttpResponseRedirect(back)
 
@@ -159,7 +170,7 @@ def takes_instance_or_queryset(func):
         if not isinstance(queryset, QuerySet):
             try:
                 # Django >=1.8
-                queryset =  self.get_queryset(request).filter(pk=queryset.pk)
+                queryset = self.get_queryset(request).filter(pk=queryset.pk)
             except AttributeError:
                 try:
                     # Django >=1.6,<1.8
