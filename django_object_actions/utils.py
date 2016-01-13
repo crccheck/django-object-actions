@@ -23,8 +23,8 @@ class BaseDjangoObjectActions(object):
         Write the names of the callable attributes (methods) of the model admin
         that can be used as tools.
     tools_view_name : str
-        The name of the Django Object Actions admin view. Populated by
-        `get_tool_urls`.
+        The name of the Django Object Actions admin view, including the 'admin'
+        namespace. Populated by `get_tool_urls`.
     """
     objectactions = []
     tools_view_name = None
@@ -50,7 +50,7 @@ class BaseDjangoObjectActions(object):
         return [
             # supports pks that are numbers or uuids
             url(r'^(?P<pk>[0-9a-f\-]+)/tools/(?P<tool>\w+)/$',
-                self.admin_site.admin_view(
+                self.admin_site.admin_view(  # checks permissions
                     ModelToolsView.as_view(
                         model=self.model,
                         tools=tools,
@@ -94,7 +94,19 @@ class BaseDjangoObjectActions(object):
     ################
 
     def get_object_actions(self, request, context, **kwargs):
-        """Override this to customize what actions get sent."""
+        """
+        Override this method to customize what actions get sent.
+
+        For example, to restrict actions to superusers, you could do:
+
+            class ChoiceAdmin(DjangoObjectActions, admin.ModelAdmin):
+                def get_object_actions(self, request, context, **kwargs):
+                    if request.user.is_superuser:
+                        return super(ChoiceAdmin, self).get_object_actions(
+                            request, context, **kwargs
+                        )
+                    return []
+        """
         return self.objectactions
 
     def get_djoa_button_attrs(self, tool):
