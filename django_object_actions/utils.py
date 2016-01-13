@@ -12,8 +12,20 @@ from django.views.generic.detail import SingleObjectMixin
 
 
 class BaseDjangoObjectActions(object):
-    """ModelAdmin mixin to add object-tools just like adding admin actions."""
-    # list to hold each object action tool
+    """
+    ModelAdmin mixin to add object-tools just like adding admin actions.
+
+    Attributes
+    ----------
+    model : django.db.models.Model
+        The Django Model these tools work on. This is populated by Django.
+    objectactions : list
+        Write the names of the callable attributes (methods) of the model admin
+        that can be used as tools.
+    tools_view_name : str
+        The name of the Django Object Actions admin view. Populated by
+        `get_tool_urls`.
+    """
     objectactions = []
     tools_view_name = None
 
@@ -21,13 +33,24 @@ class BaseDjangoObjectActions(object):
         """Get the url patterns that route each tool to a special view."""
         tools = {}
 
+        # Look for the default change view url and use that as a template
+        change_view = None
         end = '_change'
         for url_pattern in urls:
             if url_pattern.name.endswith(end):
-                tools_view = url_pattern.name[:-len(end)] + '_tools'
+                model_tools_url_name = url_pattern.name[:-len(end)] + '_tools'
                 change_view = 'admin:' + url_pattern.name
-                self.tools_view_name = 'admin:' + tools_view
                 break
+        if not change_view:
+            # Should this just replace the above?
+            base_url_name = '%s_%s_change' % (
+                self.model._meta.app_label,
+                self.model._meta.model_name,
+            )
+            model_tools_url_name = '%s_tools' % base_url_name
+            change_view = 'admin:%s' % base_url_name
+
+        self.tools_view_name = 'admin:' + model_tools_url_name
 
         for tool in self.objectactions:
             tools[tool] = getattr(self, tool)
@@ -36,7 +59,7 @@ class BaseDjangoObjectActions(object):
             url(r'^(?P<pk>[0-9a-f\-]+)/tools/(?P<tool>\w+)/$',
                 self.admin_site.admin_view(
                         ModelToolsView.as_view(model=self.model, tools=tools, back=change_view)),
-                name=tools_view)
+                name=model_tools_url_name)
         ]
         return my_urls
 
@@ -122,9 +145,9 @@ class ModelToolsView(SingleObjectMixin, View):
     back : str
         The urlpattern name to send users back to. Defaults to the change view.
     model : django.db.model.Model
-        The model this tool operates on
+        The model this tool operates on.
     tools : dict
-        A mapping of tool names to views
+        A mapping of tool names to tool callables.
     """
     back = None
     model = None

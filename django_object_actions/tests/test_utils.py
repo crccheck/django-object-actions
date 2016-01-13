@@ -1,3 +1,4 @@
+import mock
 from django.test import TestCase
 
 from example_project.polls.models import Poll
@@ -11,6 +12,17 @@ from ..utils import (
 class BaseDjangoObjectActionsTest(TestCase):
     def setUp(self):
         self.instance = BaseDjangoObjectActions()
+
+    @mock.patch('django_object_actions.utils.BaseDjangoObjectActions'
+                '.admin_site', create=True)
+    def test_get_tool_urls_trivial_case(self, mock_site):
+        self.instance.model = mock.Mock(
+            **{'_meta.app_label': 'app', '_meta.model_name': 'model'})
+
+        urls = self.instance.get_tool_urls([])
+
+        self.assertEqual(len(urls), 1)
+        self.assertEqual(urls[0].name, 'app_model_change_tools')
 
     def test_get_object_actions_gets_attribute(self):
         mock_objectactions = []  # set to something mutable
@@ -26,6 +38,7 @@ class BaseDjangoObjectActionsTest(TestCase):
         # WISHLIST assert get_object_actions was called with right args
 
     def test_get_djoa_button_attrs_returns_defaults(self):
+        # TODO: use `mock`
         mock_tool = type('mock_tool', (object, ), {})
         attrs, __ = self.instance.get_djoa_button_attrs(mock_tool)
         self.assertEqual(attrs['class'], '')
