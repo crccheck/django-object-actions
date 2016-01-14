@@ -6,7 +6,8 @@ from django.conf.urls import url
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.db.models.query import QuerySet
-from django.http import Http404, HttpResponse, HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect
+from django.http.response import HttpResponseBase
 from django.views.generic import View
 from django.views.generic.detail import SingleObjectMixin
 
@@ -172,7 +173,7 @@ class ModelToolsView(SingleObjectMixin, View):
             raise Http404(u'Tool does not exist')
 
         ret = tool(request, obj)
-        if isinstance(ret, HttpResponse):
+        if isinstance(ret, HttpResponseBase):
             return ret
 
         back = reverse(self.back, args=(kwargs['pk'],))
@@ -186,10 +187,8 @@ class ModelToolsView(SingleObjectMixin, View):
         Mimic Django admin actions's `message_user`.
 
         Like the second example:
-        https://docs.djangoproject.com/en/1.7/ref/contrib/admin/actions/#custom-admin-action
+        https://docs.djangoproject.com/en/1.9/ref/contrib/admin/actions/#custom-admin-action
         """
-        # copied from django.contrib.admin.options
-        # included to mimic admin actions
         messages.info(request, message)
 
 
