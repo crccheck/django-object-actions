@@ -12,45 +12,64 @@ from django.views.generic.detail import SingleObjectMixin
 
 
 class BaseDjangoObjectActions(object):
-    """ModelAdmin mixin to add object-tools just like adding admin actions."""
-    # list to hold each object action tool
+    """
+    ModelAdmin mixin to add object-tools just like adding admin actions.
+
+    Attributes
+    ----------
+    model : django.db.models.Model
+        The Django Model these tools work on. This is populated by Django.
+    objectactions : list
+        Write the names of the callable attributes (methods) of the model admin
+        that can be used as tools.
+    tools_view_name : str
+        The name of the Django Object Actions admin view, including the 'admin'
+        namespace. Populated by `get_tool_urls`.
+    """
     objectactions = []
     tools_view_name = None
 
-    def get_tool_urls(self, urls):
-        """Gets the url patterns that route each tool to a special view."""
+    def get_tool_urls(self):
+        """Get the url patterns that route each tool to a special view."""
         tools = {}
 
-        end = '_change'
-        for url_pattern in urls:
-            if url_pattern.name.endswith(end):
-                tools_view = url_pattern.name[:-len(end)] + '_tools'
-                change_view = 'admin:' + url_pattern.name
-                self.tools_view_name = 'admin:' + tools_view
-                break
+        # Look for the default change view url and use that as a template
+        try:
+            model_name = self.model._meta.model_name
+        except AttributeError:
+            # DJANGO15
+            model_name = self.model._meta.module_name
+        base_url_name = '%s_%s' % (self.model._meta.app_label, model_name)
+        model_tools_url_name = '%s_tools' % base_url_name
+        change_view = 'admin:%s_change' % base_url_name
+
+        self.tools_view_name = 'admin:' + model_tools_url_name
 
         for tool in self.objectactions:
             tools[tool] = getattr(self, tool)
-        my_urls = [
+        return [
             # supports pks that are numbers or uuids
             url(r'^(?P<pk>[0-9a-f\-]+)/tools/(?P<tool>\w+)/$',
-                self.admin_site.admin_view(
-                        ModelToolsView.as_view(model=self.model, tools=tools, back=change_view)),
-                name=tools_view)
+                self.admin_site.admin_view(  # checks permissions
+                    ModelToolsView.as_view(
+                        model=self.model,
+                        tools=tools,
+                        back=change_view,
+                    )
+                ),
+                name=model_tools_url_name)
         ]
-        return my_urls
 
-    ###################################
-    # EXISTING ADMIN METHODS MODIFIED #
-    ###################################
+    # EXISTING ADMIN METHODS MODIFIED
+    #################################
 
     def get_urls(self):
-        """Prepends `get_urls` with our own patterns."""
+        """Prepend `get_urls` with our own patterns."""
         urls = super(BaseDjangoObjectActions, self).get_urls()
-        return self.get_tool_urls(urls) + urls
+        return self.get_tool_urls() + urls
 
     def render_change_form(self, request, context, **kwargs):
-        """Puts `objectactions` into the context."""
+        """Put `objectactions` into the context."""
 
         def to_dict(tool_name):
             """To represents the tool func as a dict with extra meta."""
@@ -71,12 +90,23 @@ class BaseDjangoObjectActions(object):
         return super(BaseDjangoObjectActions, self).render_change_form(
             request, context, **kwargs)
 
-    ##################
-    # CUSTOM METHODS #
-    ##################
+    # CUSTOM METHODS
+    ################
 
     def get_object_actions(self, request, context, **kwargs):
-        """Override this to customize what actions get sent."""
+        """
+        Override this method to customize what actions get sent.
+
+        For example, to restrict actions to superusers, you could do:
+
+            class ChoiceAdmin(DjangoObjectActions, admin.ModelAdmin):
+                def get_object_actions(self, request, context, **kwargs):
+                    if request.user.is_superuser:
+                        return super(ChoiceAdmin, self).get_object_actions(
+                            request, context, **kwargs
+                        )
+                    return []
+        """
         return self.objectactions
 
     def get_djoa_button_attrs(self, tool):
@@ -112,14 +142,25 @@ class BaseDjangoObjectActions(object):
 
 
 class DjangoObjectActions(BaseDjangoObjectActions):
-    # override default change_form_template
     change_form_template = "django_object_actions/change_form.html"
 
 
 class ModelToolsView(SingleObjectMixin, View):
-    """A special view that run the tool's callable."""
-    tools = {}
+    """
+    The view that runs the tool's callable.
+
+    Attributes
+    ----------
+    back : str
+        The urlpattern name to send users back to. Defaults to the change view.
+    model : django.db.model.Model
+        The model this tool operates on.
+    tools : dict
+        A mapping of tool names to tool callables.
+    """
     back = None
+    model = None
+    tools = None
 
     def get(self, request, **kwargs):
         # SingleOjectMixin's `get_object`. Works because the view
@@ -129,9 +170,11 @@ class ModelToolsView(SingleObjectMixin, View):
             tool = self.tools[kwargs['tool']]
         except KeyError:
             raise Http404(u'Tool does not exist')
+
         ret = tool(request, obj)
         if isinstance(ret, HttpResponse):
             return ret
+
         back = reverse(self.back, args=(kwargs['pk'],))
         return HttpResponseRedirect(back)
 
@@ -159,7 +202,7 @@ def takes_instance_or_queryset(func):
         if not isinstance(queryset, QuerySet):
             try:
                 # Django >=1.8
-                queryset =  self.get_queryset(request).filter(pk=queryset.pk)
+                queryset = self.get_queryset(request).filter(pk=queryset.pk)
             except AttributeError:
                 try:
                     # Django >=1.6,<1.8
