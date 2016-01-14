@@ -69,8 +69,16 @@ class BaseDjangoObjectActions(object):
         urls = super(BaseDjangoObjectActions, self).get_urls()
         return self.get_tool_urls() + urls
 
-    def render_change_form(self, request, context, **kwargs):
+    def changelist_view(self, request, extra_context=None):
         """Put `objectactions` into the context."""
+        extra_context = {
+            'objectactions': [],
+        }
+        return super(BaseDjangoObjectActions, self).changelist_view(
+            request, extra_context)
+
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        """Add `objectactions` into the context."""
 
         def to_dict(tool_name):
             """To represents the tool func as a dict with extra meta."""
@@ -83,27 +91,29 @@ class BaseDjangoObjectActions(object):
                 custom_attrs=custom_attrs,
             )
 
-        context['objectactions'] = map(
-            to_dict,
-            self.get_object_actions(request, context, **kwargs)
-        )
-        context['tools_view_name'] = self.tools_view_name
-        return super(BaseDjangoObjectActions, self).render_change_form(
-            request, context, **kwargs)
+        extra_context = {
+            'objectactions': [
+                to_dict(action) for action in
+                self.get_objectactions(request, object_id, form_url)
+            ],
+            'tools_view_name': self.tools_view_name,
+        }
+        return super(BaseDjangoObjectActions, self).change_view(
+            request, object_id, form_url, extra_context)
 
     # CUSTOM METHODS
     ################
 
-    def get_object_actions(self, request, context, **kwargs):
+    def get_objectactions(self, request, object_id, form_url):
         """
         Override this method to customize what actions get sent.
 
         For example, to restrict actions to superusers, you could do:
 
             class ChoiceAdmin(DjangoObjectActions, admin.ModelAdmin):
-                def get_object_actions(self, request, context, **kwargs):
+                def get_objectactions(self, request, context, **kwargs):
                     if request.user.is_superuser:
-                        return super(ChoiceAdmin, self).get_object_actions(
+                        return super(ChoiceAdmin, self).get_objectactions(
                             request, context, **kwargs
                         )
                     return []
@@ -144,6 +154,7 @@ class BaseDjangoObjectActions(object):
 
 class DjangoObjectActions(BaseDjangoObjectActions):
     change_form_template = "django_object_actions/change_form.html"
+    change_list_template = "django_object_actions/change_list.html"
 
 
 class ModelToolsView(SingleObjectMixin, View):
