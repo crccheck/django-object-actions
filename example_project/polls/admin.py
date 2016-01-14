@@ -5,8 +5,8 @@ from django.core.urlresolvers import reverse
 from django.db.models import F
 from django.http import HttpResponseRedirect
 
-from django_object_actions import (DjangoObjectActions,
-        takes_instance_or_queryset)
+from django_object_actions import (
+    DjangoObjectActions, takes_instance_or_queryset)
 
 from .models import Choice, Poll, Comment
 
@@ -42,8 +42,10 @@ class ChoiceAdmin(DjangoObjectActions, admin.ModelAdmin):
     def raise_key_error(self, request, obj):
         raise KeyError
 
-    objectactions = ('increment_vote', 'decrement_vote', 'reset_vote',
-        'edit_poll', 'raise_key_error')
+    objectactions = (
+        'increment_vote', 'decrement_vote', 'reset_vote', 'edit_poll',
+        'raise_key_error',
+    )
     actions = ['increment_vote']
 
 admin.site.register(Choice, ChoiceAdmin)
@@ -57,7 +59,8 @@ class ChoiceInline(admin.StackedInline):
 class PollAdmin(DjangoObjectActions, admin.ModelAdmin):
     fieldsets = [
         (None, {'fields': ['question']}),
-        ('Date information', {'fields': ['pub_date'], 'classes': ['collapse']}),
+        ('Date information',
+         {'fields': ['pub_date'], 'classes': ['collapse']}),
     ]
     inlines = [ChoiceInline]
     list_display = ('question', 'pub_date', 'was_published_recently')
@@ -74,7 +77,8 @@ class PollAdmin(DjangoObjectActions, admin.ModelAdmin):
             return
 
         self.message_user(request, 'All choices deleted')
-        return render_to_response('clear_choices.html',
+        return render_to_response(
+            'clear_choices.html',
             dict(object=obj), context_instance=RequestContext(request))
     delete_all_choices.label = "Delete All Choices"
 
