@@ -128,7 +128,7 @@ account if the account is already closed)::
         objectactions = []
 
         # Actions cannot be applied to new objects (i.e. Using "add" new obj)
-        if 'original' in context and context['original'] is not None:
+        if context.get('original') is not None:
             # The obj to perform checks against to determine object actions you want to support
             obj = context['original']
 
