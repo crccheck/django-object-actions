@@ -30,8 +30,8 @@ class ChoiceAdmin(DjangoObjectActions, admin.ModelAdmin):
         obj.save()
     decrement_vote.short_description = "-1"
 
-    def delete_all(self):
-        pass
+    def delete_all(self, request, queryset):
+        self.message_user(request, 'just kidding!')
 
     def reset_vote(self, request, obj):
         obj.votes = 0

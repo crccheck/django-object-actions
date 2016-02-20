@@ -5,6 +5,7 @@ from example_project.polls.models import Poll
 
 from ..utils import (
     BaseDjangoObjectActions,
+    BaseActionView,
     takes_instance_or_queryset,
 )
 
@@ -75,6 +76,17 @@ class BaseDjangoObjectActionsTest(TestCase):
         })
         attrs, custom = self.instance.get_djoa_button_attrs(mock_tool)
         self.assertEqual(custom['nonstandard'], 'wombat')
+
+
+class BaseActionViewTests(TestCase):
+    def setUp(self):
+        super(BaseActionViewTests, self).setUp()
+        self.view = BaseActionView()
+
+    @mock.patch('django_object_actions.utils.messages')
+    def test_message_user_proxies_messages(self, mock_messages):
+        self.view.message_user('request', 'message')
+        mock_messages.info.assert_called_once_with('request', 'message')
 
 
 class DecoratorTest(TestCase):

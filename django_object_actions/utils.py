@@ -11,6 +11,7 @@ from django.http import Http404, HttpResponseRedirect
 from django.http.response import HttpResponseBase
 from django.views.generic import View
 from django.views.generic.detail import SingleObjectMixin
+from django.views.generic.list import MultipleObjectMixin
 
 
 class BaseDjangoObjectActions(object):
@@ -47,7 +48,6 @@ class BaseDjangoObjectActions(object):
             model_name = self.model._meta.module_name
         base_url_name = '%s_%s' % (self.model._meta.app_label, model_name)
         model_tools_url_name = '%s_tools' % base_url_name
-        change_view_url_name = 'admin:%s_change' % base_url_name
 
         self.tools_view_name = 'admin:' + model_tools_url_name
 
@@ -57,20 +57,20 @@ class BaseDjangoObjectActions(object):
             # change, supports pks that are numbers or uuids
             url(r'^(?P<pk>[0-9a-f\-]+)/tools/(?P<tool>\w+)/$',
                 self.admin_site.admin_view(  # checks permissions
-                    ModelToolsView.as_view(
+                    ChangeActionView.as_view(
                         model=self.model,
                         tools=tools,
-                        back=change_view_url_name,
+                        back='admin:%s_change' % base_url_name,
                     )
                 ),
                 name=model_tools_url_name),
             # changelist
             url(r'^tools/(?P<tool>\w+)/$',
                 self.admin_site.admin_view(  # checks permissions
-                    ModelToolsView.as_view(
+                    ChangeListActionView.as_view(
                         model=self.model,
                         tools=tools,
-                        back=change_view_url_name,
+                        back='admin:%s_changelist' % base_url_name,
                     )
                 ),
                 name=model_tools_url_name),  # FIXME
@@ -195,14 +195,15 @@ class DjangoObjectActions(BaseDjangoObjectActions):
     change_list_template = "django_object_actions/change_list.html"
 
 
-class ModelToolsView(SingleObjectMixin, View):
+class BaseActionView(View):
     """
-    The view that runs the tool's callable.
+    The view that runs a change action tool's callable.
 
     Attributes
     ----------
     back : str
-        The urlpattern name to send users back to. Defaults to the change view.
+        The urlpattern name to send users back to. This is set in
+        `get_tool_urls`.
     model : django.db.model.Model
         The model this tool operates on.
     tools : dict
@@ -212,25 +213,6 @@ class ModelToolsView(SingleObjectMixin, View):
     model = None
     tools = None
 
-    def get(self, request, **kwargs):
-        # SingleOjectMixin's `get_object`. Works because the view
-        #   is instantiated with `model` and the urlpattern has `pk`.
-        obj = self.get_object()
-        try:
-            tool = self.tools[kwargs['tool']]
-        except KeyError:
-            raise Http404(u'Tool does not exist')
-
-        ret = tool(request, obj)
-        if isinstance(ret, HttpResponseBase):
-            return ret
-
-        back = reverse(self.back, args=(kwargs['pk'],))
-        return HttpResponseRedirect(back)
-
-    # HACK to allow POST requests too easily
-    post = get
-
     def message_user(self, request, message):
         """
         Mimic Django admin actions's `message_user`.
@@ -239,6 +221,44 @@ class ModelToolsView(SingleObjectMixin, View):
         https://docs.djangoproject.com/en/1.9/ref/contrib/admin/actions/#custom-admin-action
         """
         messages.info(request, message)
+
+
+class ChangeActionView(SingleObjectMixin, BaseActionView):
+    def get(self, request, **kwargs):
+        obj = self.get_object()
+        try:
+            view = self.tools[kwargs['tool']]
+        except KeyError:
+            raise Http404('Tool does not exist')
+
+        ret = view(request, obj)
+        if isinstance(ret, HttpResponseBase):
+            return ret
+
+        back = reverse(self.back, args=(kwargs['pk'],))
+        return HttpResponseRedirect(back)
+
+    # HACK to allow POST requests too
+    post = get
+
+
+class ChangeListActionView(MultipleObjectMixin, BaseActionView):
+    def get(self, request, **kwargs):
+        queryset = self.get_queryset()
+        try:
+            view = self.tools[kwargs['tool']]
+        except KeyError:
+            raise Http404('Tool does not exist')
+
+        ret = view(request, queryset)
+        if isinstance(ret, HttpResponseBase):
+            return ret
+
+        back = reverse(self.back)
+        return HttpResponseRedirect(back)
+
+    # HACK to allow POST requests too
+    post = get
 
 
 def takes_instance_or_queryset(func):
