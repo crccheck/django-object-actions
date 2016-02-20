@@ -24,17 +24,19 @@ class BaseDjangoObjectActionsTest(TestCase):
         self.assertEqual(urls[0].name, 'app_model_tools')
 
     def test_get_object_actions_gets_attribute(self):
-        mock_objectactions = []  # set to something mutable
-        mock_request = 'request'
-        mock_context = 'context'
-        mock_kwargs = {}
+        # Set up
+        mock_objectactions = mock.Mock()
         self.instance.objectactions = mock_objectactions
+
+        # Test
         returned_value = self.instance.get_object_actions(
-            mock_request, mock_context, **mock_kwargs
+            request=mock.Mock(),
+            object_id=mock.Mock(),
+            form_url=mock.Mock(),
         )
-        # assert that `mock_objectactions` was returned
+
+        # Assert
         self.assertEqual(id(mock_objectactions), id(returned_value))
-        # WISHLIST assert get_object_actions was called with right args
 
     def test_get_djoa_button_attrs_returns_defaults(self):
         # TODO: use `mock`

@@ -119,30 +119,28 @@ by adding a Django widget style `attrs` attribute::
 Programmatically Enabling Object Admin Actions
 ``````````````````````````````````````````````
 
-You can programatically enable and disable registered object actions by defining
-your own custom ``get_object_actions()`` method. In this example, certain actions
-only apply to certain object states (i.e. You should not be able to close an company
-account if the account is already closed)::
+You can programmatically enable and disable registered object actions by
+defining your own custom ``get_object_actions()`` method. In this example,
+certain actions only apply to certain object states (i.e. You should not be
+able to close an company account if the account is already closed)::
 
-   def get_object_actions(self, request, context, **kwargs):
-        objectactions = []
+   def get_object_actions(self, request, object_id, **kwargs):
+        objectactions = super().get_object_actions(request, object_id, **kwargs)
 
-        # Actions cannot be applied to new objects (i.e. Using "add" new obj)
-        if context.get('original') is not None:
-            # The obj to perform checks against to determine object actions you want to support
-            obj = context['original']
+        # The obj to perform checks against to determine object actions you want to support
+        obj = self.model.get(pk=object_id)
 
-            if not obj.verified:
-                objectactions.extend(['verify_company_account_action', ])
+        if not obj.verified:
+            objectactions.append('verify_company_account_action')
 
-            status_code = obj.status_code
+        status_code = obj.status_code
 
-            if status_code == 'Active':
-                objectactions.extend(['suspend_company_account_action', 'close_company_account_action', ])
-            elif status_code == 'Suspended':
-                objectactions.extend(['close_company_account_action', 'reactivate_company_account_action', ])
-            elif status_code == 'Closed':
-                objectactions.extend(['reactivate_company_account_action', ])
+        if status_code == 'Active':
+            objectactions.extend(['suspend_company_account_action', 'close_company_account_action'])
+        elif status_code == 'Suspended':
+            objectactions.extend(['close_company_account_action', 'reactivate_company_account_action'])
+        elif status_code == 'Closed':
+            objectactions.append('reactivate_company_account_action')
 
         return objectactions
 

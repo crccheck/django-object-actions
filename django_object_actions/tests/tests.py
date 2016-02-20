@@ -18,17 +18,6 @@ class LoggedInTestCase(TestCase):
 class AppTests(LoggedInTestCase):
     fixtures = ['sample_data']
 
-    def test_bare_mixin_works(self):
-        # hit admin that doesn't have any tools defined, just the mixin
-        response = self.client.get(reverse('admin:polls_poll_add'))
-        self.assertEqual(response.status_code, 200)
-
-    def test_configured_mixin_works(self):
-        # hit admin that does have any tools defined
-        response = self.client.get(reverse('admin:polls_choice_add'))
-        self.assertEqual(response.status_code, 200)
-        self.assertIn('objectactions', response.context_data)
-
     def test_tool_func_gets_executed(self):
         c = Choice.objects.get(pk=1)
         votes = c.votes
