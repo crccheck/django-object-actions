@@ -40,13 +40,14 @@ class BaseDjangoObjectActions(object):
         """Get the url patterns that route each tool to a special view."""
         tools = {}
 
-        # Look for the default change view url and use that as a template
         try:
             model_name = self.model._meta.model_name
-        except AttributeError:
+        except AttributeError:  # pragma: no cover
             # DJANGO15
             model_name = self.model._meta.module_name
+        # e.g.: polls_poll
         base_url_name = '%s_%s' % (self.model._meta.app_label, model_name)
+        # e.g.: polls_poll_tools
         model_tools_url_name = '%s_tools' % base_url_name
 
         self.tools_view_name = 'admin:' + model_tools_url_name
@@ -73,7 +74,8 @@ class BaseDjangoObjectActions(object):
                         back='admin:%s_changelist' % base_url_name,
                     )
                 ),
-                name=model_tools_url_name),  # FIXME
+                # Dupe name is fine. https://code.djangoproject.com/ticket/14259
+                name=model_tools_url_name),
         ]
 
     # EXISTING ADMIN METHODS MODIFIED
@@ -85,10 +87,9 @@ class BaseDjangoObjectActions(object):
         return self.get_tool_urls() + urls
 
     def change_view(self, request, object_id, form_url='', extra_context=None):
-        """Add `objectactions` into the change context."""
         extra_context = {
             'objectactions': [
-                self.to_dict(action) for action in
+                self._get_tool_dict(action) for action in
                 self.get_object_actions(request, object_id, form_url)
             ],
             'tools_view_name': self.tools_view_name,
@@ -97,10 +98,9 @@ class BaseDjangoObjectActions(object):
             request, object_id, form_url, extra_context)
 
     def changelist_view(self, request, extra_context=None):
-        """Put `objectactions` into the changelist context."""
         extra_context = {
             'objectactions': [
-                self.to_dict(action) for action in
+                self._get_tool_dict(action) for action in
                 self.get_changelist_actions(request)
             ],
             'tools_view_name': self.tools_view_name,
@@ -111,10 +111,10 @@ class BaseDjangoObjectActions(object):
     # CUSTOM METHODS
     ################
 
-    def to_dict(self, tool_name):
-        """To represents the tool func as a dict with extra meta."""
+    def _get_tool_dict(self, tool_name):
+        """Represents the tool as a dict with extra meta."""
         tool = getattr(self, tool_name)
-        standard_attrs, custom_attrs = self.get_djoa_button_attrs(tool)
+        standard_attrs, custom_attrs = self._get_tool_button_attrs(tool)
         return dict(
             name=tool_name,
             label=getattr(tool, 'label', tool_name),
@@ -146,7 +146,7 @@ class BaseDjangoObjectActions(object):
         """
         return self.changelist_actions
 
-    def get_djoa_button_attrs(self, tool):
+    def _get_tool_button_attrs(self, tool):
         """
         Get the HTML attributes associated with a tool.
 
@@ -191,7 +191,7 @@ class BaseActionView(View):
     ----------
     back : str
         The urlpattern name to send users back to. This is set in
-        `get_tool_urls`.
+        `get_tool_urls` and turned into a url with the `back_url` property.
     model : django.db.model.Model
         The model this tool operates on.
     tools : dict
@@ -200,6 +200,26 @@ class BaseActionView(View):
     back = None
     model = None
     tools = None
+
+    @property
+    def view_args(self):
+        """
+        tuple: The argument(s) to send to the action (excluding `request`).
+
+        Change actions are called with `(request, obj)` while changelist
+        actions are called with `(request, queryset)`.
+        """
+        raise NotImplementedError
+
+    @property
+    def back_url(self):
+        """
+        str: The url path the action should send the user back to.
+
+        If an action does not return a http response, we automagically send
+        users back to either the change or the changelist page.
+        """
+        raise NotImplementedError
 
     def get(self, request, **kwargs):
         try:
@@ -260,7 +280,7 @@ def takes_instance_or_queryset(func):
                 try:
                     # Django >=1.6,<1.8
                     model = queryset._meta.model
-                except AttributeError:
+                except AttributeError:  # pragma: no cover
                     # Django <1.6
                     model = queryset._meta.concrete_model
                 queryset = model.objects.filter(pk=queryset.pk)

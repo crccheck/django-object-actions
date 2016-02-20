@@ -39,42 +39,42 @@ class BaseDjangoObjectActionsTest(TestCase):
         # Assert
         self.assertEqual(id(mock_objectactions), id(returned_value))
 
-    def test_get_djoa_button_attrs_returns_defaults(self):
+    def test__get_tool_button_attrs_returns_defaults(self):
         # TODO: use `mock`
         mock_tool = type('mock_tool', (object, ), {})
-        attrs, __ = self.instance.get_djoa_button_attrs(mock_tool)
+        attrs, __ = self.instance._get_tool_button_attrs(mock_tool)
         self.assertEqual(attrs['class'], '')
         self.assertEqual(attrs['title'], '')
 
-    def test_get_djoa_button_attrs_disallows_href(self):
+    def test__get_tool_button_attrs_disallows_href(self):
         mock_tool = type('mock_tool', (object, ), {
             'attrs': {'href': 'hreeeeef'},
         })
-        attrs, __ = self.instance.get_djoa_button_attrs(mock_tool)
+        attrs, __ = self.instance._get_tool_button_attrs(mock_tool)
         self.assertNotIn('href', attrs)
 
-    def test_get_djoa_button_attrs_disallows_title(self):
+    def test__get_tool_button_attrs_disallows_title(self):
         mock_tool = type('mock_tool', (object, ), {
             'attrs': {'title': 'i wanna be a title'},
             'short_description': 'real title',
         })
-        attrs, __ = self.instance.get_djoa_button_attrs(mock_tool)
+        attrs, __ = self.instance._get_tool_button_attrs(mock_tool)
         self.assertEqual(attrs['title'], 'real title')
 
-    def test_get_djoa_button_attrs_gets_set(self):
+    def test__get_tool_button_attrs_gets_set(self):
         mock_tool = type('mock_tool', (object, ), {
             'attrs': {'class': 'class'},
             'short_description': 'description',
         })
-        attrs, __ = self.instance.get_djoa_button_attrs(mock_tool)
+        attrs, __ = self.instance._get_tool_button_attrs(mock_tool)
         self.assertEqual(attrs['class'], 'class')
         self.assertEqual(attrs['title'], 'description')
 
-    def test_get_djoa_button_attrs_custom_attrs_get_partitioned(self):
+    def test__get_tool_button_attrs_custom_attrs_get_partitioned(self):
         mock_tool = type('mock_tool', (object, ), {
             'attrs': {'nonstandard': 'wombat'},
         })
-        attrs, custom = self.instance.get_djoa_button_attrs(mock_tool)
+        attrs, custom = self.instance._get_tool_button_attrs(mock_tool)
         self.assertEqual(custom['nonstandard'], 'wombat')
 
 
