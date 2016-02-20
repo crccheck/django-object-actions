@@ -116,34 +116,32 @@ by adding a Django widget style `attrs` attribute::
         'class': 'addlink',
     }
 
-Programmatically Enabling Object Admin Actions
+Programmatically Disabling Object Admin Actions
 ``````````````````````````````````````````````
 
-You can programmatically enable and disable registered object actions by
-defining your own custom ``get_object_actions()`` method. In this example,
-certain actions only apply to certain object states (i.e. You should not be
-able to close an company account if the account is already closed)::
+You can programmatically disable registered actions by defining your own custom
+``get_object_actions()`` method. In this example, certain actions only apply to
+certain object states (i.e. You should not be able to close an company account
+if the account is already closed)::
 
    def get_object_actions(self, request, object_id, **kwargs):
-        objectactions = super().get_object_actions(request, object_id, **kwargs)
+        actions = super().get_object_actions(request, object_id, **kwargs)
 
-        # The obj to perform checks against to determine object actions you want to support
         obj = self.model.get(pk=object_id)
 
-        if not obj.verified:
-            objectactions.append('verify_company_account_action')
+        if obj.verified:
+            actions.remove('verify_company_account_action')
 
         status_code = obj.status_code
 
         if status_code == 'Active':
-            objectactions.extend(['suspend_company_account_action', 'close_company_account_action'])
-        elif status_code == 'Suspended':
-            objectactions.extend(['close_company_account_action', 'reactivate_company_account_action'])
-        elif status_code == 'Closed':
-            objectactions.append('reactivate_company_account_action')
+            actions.remove('enable_account')
+        else:
+            actions.remove('disable_account')
 
-        return objectactions
+        return actions
 
+The same is true for changelist actions with ``get_changelist_actions``.
 
 
 Alternate Installation

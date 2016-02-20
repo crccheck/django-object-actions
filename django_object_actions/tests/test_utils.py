@@ -20,7 +20,7 @@ class BaseDjangoObjectActionsTest(TestCase):
     def test_get_tool_urls_trivial_case(self, mock_site):
         urls = self.instance.get_tool_urls()
 
-        self.assertEqual(len(urls), 1)
+        self.assertEqual(len(urls), 2)
         self.assertEqual(urls[0].name, 'app_model_tools')
 
     def test_get_object_actions_gets_attribute(self):

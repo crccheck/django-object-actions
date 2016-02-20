@@ -30,6 +30,9 @@ class ChoiceAdmin(DjangoObjectActions, admin.ModelAdmin):
         obj.save()
     decrement_vote.short_description = "-1"
 
+    def delete_all(self):
+        pass
+
     def reset_vote(self, request, obj):
         obj.votes = 0
         obj.save()
@@ -46,6 +49,7 @@ class ChoiceAdmin(DjangoObjectActions, admin.ModelAdmin):
         'increment_vote', 'decrement_vote', 'reset_vote', 'edit_poll',
         'raise_key_error',
     )
+    changelist_actions = ('delete_all',)
     actions = ['increment_vote']
 
 admin.site.register(Choice, ChoiceAdmin)

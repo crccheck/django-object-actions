@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 from functools import wraps
+from itertools import chain
 
 from django.conf.urls import url
 from django.contrib import messages
@@ -46,23 +47,33 @@ class BaseDjangoObjectActions(object):
             model_name = self.model._meta.module_name
         base_url_name = '%s_%s' % (self.model._meta.app_label, model_name)
         model_tools_url_name = '%s_tools' % base_url_name
-        change_view = 'admin:%s_change' % base_url_name
+        change_view_url_name = 'admin:%s_change' % base_url_name
 
         self.tools_view_name = 'admin:' + model_tools_url_name
 
-        for tool in self.objectactions:
+        for tool in chain(self.objectactions, self.changelist_actions):
             tools[tool] = getattr(self, tool)
         return [
-            # supports pks that are numbers or uuids
+            # change, supports pks that are numbers or uuids
             url(r'^(?P<pk>[0-9a-f\-]+)/tools/(?P<tool>\w+)/$',
                 self.admin_site.admin_view(  # checks permissions
                     ModelToolsView.as_view(
                         model=self.model,
                         tools=tools,
-                        back=change_view,
+                        back=change_view_url_name,
                     )
                 ),
-                name=model_tools_url_name)
+                name=model_tools_url_name),
+            # changelist
+            url(r'^tools/(?P<tool>\w+)/$',
+                self.admin_site.admin_view(  # checks permissions
+                    ModelToolsView.as_view(
+                        model=self.model,
+                        tools=tools,
+                        back=change_view_url_name,
+                    )
+                ),
+                name=model_tools_url_name),  # FIXME
         ]
 
     # EXISTING ADMIN METHODS MODIFIED
