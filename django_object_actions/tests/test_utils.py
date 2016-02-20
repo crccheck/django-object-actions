@@ -24,20 +24,19 @@ class BaseDjangoObjectActionsTest(TestCase):
         self.assertEqual(len(urls), 2)
         self.assertEqual(urls[0].name, 'app_model_tools')
 
-    def test_get_object_actions_gets_attribute(self):
+    def test_get_change_actions_gets_attribute(self):
         # Set up
-        mock_objectactions = mock.Mock()
-        self.instance.objectactions = mock_objectactions
+        self.instance.change_actions = mock.Mock()
 
         # Test
-        returned_value = self.instance.get_object_actions(
+        returned_value = self.instance.get_change_actions(
             request=mock.Mock(),
             object_id=mock.Mock(),
             form_url=mock.Mock(),
         )
 
         # Assert
-        self.assertEqual(id(mock_objectactions), id(returned_value))
+        self.assertEqual(id(self.instance.change_actions), id(returned_value))
 
     def test__get_tool_button_attrs_returns_defaults(self):
         # TODO: use `mock`

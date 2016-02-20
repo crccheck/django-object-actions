@@ -22,17 +22,17 @@ class BaseDjangoObjectActions(object):
     ----------
     model : django.db.models.Model
         The Django Model these tools work on. This is populated by Django.
-    objectactions : list of str
-        Write the names of the callable attributes (methods) of the model admin
-        that can be used as tools in the change view.
+    change_actions : list of str
+        Write the names of the methods of the model admin that can be used as
+        tools in the change view.
     changelist_actions : list of str
-        Write the names of the callable attributes (methods) of the model admin
-        that can be used as tools in the changelist view.
+        Write the names of the methods of the model admin that can be used as
+        tools in the changelist view.
     tools_view_name : str
         The name of the Django Object Actions admin view, including the 'admin'
         namespace. Populated by `get_tool_urls`.
     """
-    objectactions = []
+    change_actions = []
     changelist_actions = []
     tools_view_name = None
 
@@ -52,7 +52,7 @@ class BaseDjangoObjectActions(object):
 
         self.tools_view_name = 'admin:' + model_tools_url_name
 
-        for tool in chain(self.objectactions, self.changelist_actions):
+        for tool in chain(self.change_actions, self.changelist_actions):
             tools[tool] = getattr(self, tool)
         return [
             # change, supports pks that are numbers or uuids
@@ -90,7 +90,7 @@ class BaseDjangoObjectActions(object):
         extra_context = {
             'objectactions': [
                 self._get_tool_dict(action) for action in
-                self.get_object_actions(request, object_id, form_url)
+                self.get_change_actions(request, object_id, form_url)
             ],
             'tools_view_name': self.tools_view_name,
         }
@@ -122,7 +122,7 @@ class BaseDjangoObjectActions(object):
             custom_attrs=custom_attrs,
         )
 
-    def get_object_actions(self, request, object_id, form_url):
+    def get_change_actions(self, request, object_id, form_url):
         """
         Override this to customize what actions get to the change view.
 
@@ -131,14 +131,14 @@ class BaseDjangoObjectActions(object):
         For example, to restrict actions to superusers, you could do:
 
             class ChoiceAdmin(DjangoObjectActions, admin.ModelAdmin):
-                def get_object_actions(self, request, **kwargs):
+                def get_change_actions(self, request, **kwargs):
                     if request.user.is_superuser:
-                        return super(ChoiceAdmin, self).get_object_actions(
+                        return super(ChoiceAdmin, self).get_change_actions(
                             request, **kwargs
                         )
                     return []
         """
-        return self.objectactions
+        return self.change_actions
 
     def get_changelist_actions(self, request):
         """

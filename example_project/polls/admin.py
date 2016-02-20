@@ -45,7 +45,7 @@ class ChoiceAdmin(DjangoObjectActions, admin.ModelAdmin):
     def raise_key_error(self, request, obj):
         raise KeyError
 
-    objectactions = (
+    change_actions = (
         'increment_vote', 'decrement_vote', 'reset_vote', 'edit_poll',
         'raise_key_error',
     )
@@ -86,7 +86,13 @@ class PollAdmin(DjangoObjectActions, admin.ModelAdmin):
             dict(object=obj), context_instance=RequestContext(request))
     delete_all_choices.label = "Delete All Choices"
 
-    objectactions = ('delete_all_choices', )
+    change_actions = ('delete_all_choices', )
+
+    def get_change_actions(self, request, object_id, form_url):
+        actions = super(PollAdmin, self).get_change_actions(request, object_id, form_url)
+        import ipdb; ipdb.set_trace()
+        return actions
+
 admin.site.register(Poll, PollAdmin)
 
 
@@ -97,5 +103,5 @@ class CommentAdmin(DjangoObjectActions, admin.ModelAdmin):
             return
         obj.comment = ' '.join(['hodor' for x in obj.comment.split()])
         obj.save()
-    objectactions = ('hodor', )
+    change_actions = ('hodor', )
 admin.site.register(Comment, CommentAdmin)
