@@ -22,12 +22,16 @@ class BaseDjangoObjectActions(object):
         The Django Model these tools work on. This is populated by Django.
     objectactions : list of str
         Write the names of the callable attributes (methods) of the model admin
-        that can be used as tools.
+        that can be used as tools in the change view.
+    changelist_actions : list of str
+        Write the names of the callable attributes (methods) of the model admin
+        that can be used as tools in the changelist view.
     tools_view_name : str
         The name of the Django Object Actions admin view, including the 'admin'
         namespace. Populated by `get_tool_urls`.
     """
     objectactions = []
+    changelist_actions = []
     tools_view_name = None
 
     def get_tool_urls(self):
@@ -69,17 +73,8 @@ class BaseDjangoObjectActions(object):
         urls = super(BaseDjangoObjectActions, self).get_urls()
         return self.get_tool_urls() + urls
 
-    def changelist_view(self, request, extra_context=None):
-        """Put `objectactions` into the changelist context."""
-        extra_context = {
-            'objectactions': [],
-        }
-        return super(BaseDjangoObjectActions, self).changelist_view(
-            request, extra_context)
-
     def change_view(self, request, object_id, form_url='', extra_context=None):
         """Add `objectactions` into the change context."""
-
         def to_dict(tool_name):
             """To represents the tool func as a dict with extra meta."""
             tool = getattr(self, tool_name)
@@ -101,12 +96,36 @@ class BaseDjangoObjectActions(object):
         return super(BaseDjangoObjectActions, self).change_view(
             request, object_id, form_url, extra_context)
 
+    def changelist_view(self, request, extra_context=None):
+        """Put `objectactions` into the changelist context."""
+        # FIXME DRY
+        def to_dict(tool_name):
+            """To represents the tool func as a dict with extra meta."""
+            tool = getattr(self, tool_name)
+            standard_attrs, custom_attrs = self.get_djoa_button_attrs(tool)
+            return dict(
+                name=tool_name,
+                label=getattr(tool, 'label', tool_name),
+                standard_attrs=standard_attrs,
+                custom_attrs=custom_attrs,
+            )
+
+        extra_context = {
+            'objectactions': [
+                to_dict(action) for action in
+                self.get_changelist_actions(request)
+            ],
+            'tools_view_name': self.tools_view_name,
+        }
+        return super(BaseDjangoObjectActions, self).changelist_view(
+            request, extra_context)
+
     # CUSTOM METHODS
     ################
 
     def get_object_actions(self, request, object_id, form_url):
         """
-        Override this method to customize what actions get sent.
+        Override this to customize what actions get to the change view.
 
         This takes the same parameters as `change_view`.
 
@@ -121,6 +140,12 @@ class BaseDjangoObjectActions(object):
                     return []
         """
         return self.objectactions
+
+    def get_changelist_actions(self, request):
+        """
+        Override this to customize what actions get to the changelist view.
+        """
+        return self.changelist_actions
 
     def get_djoa_button_attrs(self, tool):
         """
