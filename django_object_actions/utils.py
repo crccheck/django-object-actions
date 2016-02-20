@@ -86,20 +86,9 @@ class BaseDjangoObjectActions(object):
 
     def change_view(self, request, object_id, form_url='', extra_context=None):
         """Add `objectactions` into the change context."""
-        def to_dict(tool_name):
-            """To represents the tool func as a dict with extra meta."""
-            tool = getattr(self, tool_name)
-            standard_attrs, custom_attrs = self.get_djoa_button_attrs(tool)
-            return dict(
-                name=tool_name,
-                label=getattr(tool, 'label', tool_name),
-                standard_attrs=standard_attrs,
-                custom_attrs=custom_attrs,
-            )
-
         extra_context = {
             'objectactions': [
-                to_dict(action) for action in
+                self.to_dict(action) for action in
                 self.get_object_actions(request, object_id, form_url)
             ],
             'tools_view_name': self.tools_view_name,
@@ -109,21 +98,9 @@ class BaseDjangoObjectActions(object):
 
     def changelist_view(self, request, extra_context=None):
         """Put `objectactions` into the changelist context."""
-        # FIXME DRY
-        def to_dict(tool_name):
-            """To represents the tool func as a dict with extra meta."""
-            tool = getattr(self, tool_name)
-            standard_attrs, custom_attrs = self.get_djoa_button_attrs(tool)
-            return dict(
-                name=tool_name,
-                label=getattr(tool, 'label', tool_name),
-                standard_attrs=standard_attrs,
-                custom_attrs=custom_attrs,
-            )
-
         extra_context = {
             'objectactions': [
-                to_dict(action) for action in
+                self.to_dict(action) for action in
                 self.get_changelist_actions(request)
             ],
             'tools_view_name': self.tools_view_name,
@@ -133,6 +110,17 @@ class BaseDjangoObjectActions(object):
 
     # CUSTOM METHODS
     ################
+
+    def to_dict(self, tool_name):
+        """To represents the tool func as a dict with extra meta."""
+        tool = getattr(self, tool_name)
+        standard_attrs, custom_attrs = self.get_djoa_button_attrs(tool)
+        return dict(
+            name=tool_name,
+            label=getattr(tool, 'label', tool_name),
+            standard_attrs=standard_attrs,
+            custom_attrs=custom_attrs,
+        )
 
     def get_object_actions(self, request, object_id, form_url):
         """
@@ -213,6 +201,21 @@ class BaseActionView(View):
     model = None
     tools = None
 
+    def get(self, request, **kwargs):
+        try:
+            view = self.tools[kwargs['tool']]
+        except KeyError:
+            raise Http404('Tool does not exist')
+
+        ret = view(request, *self.view_args)
+        if isinstance(ret, HttpResponseBase):
+            return ret
+
+        return HttpResponseRedirect(self.back_url)
+
+    # HACK to allow POST requests too
+    post = get
+
     def message_user(self, request, message):
         """
         Mimic Django admin actions's `message_user`.
@@ -224,41 +227,23 @@ class BaseActionView(View):
 
 
 class ChangeActionView(SingleObjectMixin, BaseActionView):
-    def get(self, request, **kwargs):
-        obj = self.get_object()
-        try:
-            view = self.tools[kwargs['tool']]
-        except KeyError:
-            raise Http404('Tool does not exist')
+    @property
+    def view_args(self):
+        return (self.get_object(), )
 
-        ret = view(request, obj)
-        if isinstance(ret, HttpResponseBase):
-            return ret
-
-        back = reverse(self.back, args=(kwargs['pk'],))
-        return HttpResponseRedirect(back)
-
-    # HACK to allow POST requests too
-    post = get
+    @property
+    def back_url(self):
+        return reverse(self.back, args=(self.kwargs['pk'],))
 
 
 class ChangeListActionView(MultipleObjectMixin, BaseActionView):
-    def get(self, request, **kwargs):
-        queryset = self.get_queryset()
-        try:
-            view = self.tools[kwargs['tool']]
-        except KeyError:
-            raise Http404('Tool does not exist')
+    @property
+    def view_args(self):
+        return (self.get_queryset(), )
 
-        ret = view(request, queryset)
-        if isinstance(ret, HttpResponseBase):
-            return ret
-
-        back = reverse(self.back)
-        return HttpResponseRedirect(back)
-
-    # HACK to allow POST requests too
-    post = get
+    @property
+    def back_url(self):
+        return reverse(self.back)
 
 
 def takes_instance_or_queryset(func):
