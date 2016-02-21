@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 from functools import wraps
+from itertools import chain
 
 from django.conf.urls import url
 from django.contrib import messages
@@ -10,56 +11,30 @@ from django.http import Http404, HttpResponseRedirect
 from django.http.response import HttpResponseBase
 from django.views.generic import View
 from django.views.generic.detail import SingleObjectMixin
+from django.views.generic.list import MultipleObjectMixin
 
 
 class BaseDjangoObjectActions(object):
     """
-    ModelAdmin mixin to add object-tools just like adding admin actions.
+    ModelAdmin mixin to add new actions just like adding admin actions.
 
     Attributes
     ----------
     model : django.db.models.Model
-        The Django Model these tools work on. This is populated by Django.
-    objectactions : list
-        Write the names of the callable attributes (methods) of the model admin
-        that can be used as tools.
+        The Django Model these actions work on. This is populated by Django.
+    change_actions : list of str
+        Write the names of the methods of the model admin that can be used as
+        tools in the change view.
+    changelist_actions : list of str
+        Write the names of the methods of the model admin that can be used as
+        tools in the changelist view.
     tools_view_name : str
         The name of the Django Object Actions admin view, including the 'admin'
-        namespace. Populated by `get_tool_urls`.
+        namespace. Populated by `_get_action_urls`.
     """
-    objectactions = []
+    change_actions = []
+    changelist_actions = []
     tools_view_name = None
-
-    def get_tool_urls(self):
-        """Get the url patterns that route each tool to a special view."""
-        tools = {}
-
-        # Look for the default change view url and use that as a template
-        try:
-            model_name = self.model._meta.model_name
-        except AttributeError:
-            # DJANGO15
-            model_name = self.model._meta.module_name
-        base_url_name = '%s_%s' % (self.model._meta.app_label, model_name)
-        model_tools_url_name = '%s_tools' % base_url_name
-        change_view = 'admin:%s_change' % base_url_name
-
-        self.tools_view_name = 'admin:' + model_tools_url_name
-
-        for tool in self.objectactions:
-            tools[tool] = getattr(self, tool)
-        return [
-            # supports pks that are numbers or uuids
-            url(r'^(?P<pk>[0-9a-f\-]+)/tools/(?P<tool>\w+)/$',
-                self.admin_site.admin_view(  # checks permissions
-                    ModelToolsView.as_view(
-                        model=self.model,
-                        tools=tools,
-                        back=change_view,
-                    )
-                ),
-                name=model_tools_url_name)
-        ]
 
     # EXISTING ADMIN METHODS MODIFIED
     #################################
@@ -67,50 +42,116 @@ class BaseDjangoObjectActions(object):
     def get_urls(self):
         """Prepend `get_urls` with our own patterns."""
         urls = super(BaseDjangoObjectActions, self).get_urls()
-        return self.get_tool_urls() + urls
+        return self._get_action_urls() + urls
 
-    def render_change_form(self, request, context, **kwargs):
-        """Put `objectactions` into the context."""
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        extra_context = {
+            'objectactions': [
+                self._get_tool_dict(action) for action in
+                self.get_change_actions(request, object_id, form_url)
+            ],
+            'tools_view_name': self.tools_view_name,
+        }
+        return super(BaseDjangoObjectActions, self).change_view(
+            request, object_id, form_url, extra_context)
 
-        def to_dict(tool_name):
-            """To represents the tool func as a dict with extra meta."""
-            tool = getattr(self, tool_name)
-            standard_attrs, custom_attrs = self.get_djoa_button_attrs(tool)
-            return dict(
-                name=tool_name,
-                label=getattr(tool, 'label', tool_name),
-                standard_attrs=standard_attrs,
-                custom_attrs=custom_attrs,
-            )
+    def changelist_view(self, request, extra_context=None):
+        extra_context = {
+            'objectactions': [
+                self._get_tool_dict(action) for action in
+                self.get_changelist_actions(request)
+            ],
+            'tools_view_name': self.tools_view_name,
+        }
+        return super(BaseDjangoObjectActions, self).changelist_view(
+            request, extra_context)
 
-        context['objectactions'] = map(
-            to_dict,
-            self.get_object_actions(request, context, **kwargs)
-        )
-        context['tools_view_name'] = self.tools_view_name
-        return super(BaseDjangoObjectActions, self).render_change_form(
-            request, context, **kwargs)
+    # USER OVERRIDABLE
+    ##################
 
-    # CUSTOM METHODS
-    ################
-
-    def get_object_actions(self, request, context, **kwargs):
+    def get_change_actions(self, request, object_id, form_url):
         """
-        Override this method to customize what actions get sent.
+        Override this to customize what actions get to the change view.
+
+        This takes the same parameters as `change_view`.
 
         For example, to restrict actions to superusers, you could do:
 
             class ChoiceAdmin(DjangoObjectActions, admin.ModelAdmin):
-                def get_object_actions(self, request, context, **kwargs):
+                def get_change_actions(self, request, **kwargs):
                     if request.user.is_superuser:
-                        return super(ChoiceAdmin, self).get_object_actions(
-                            request, context, **kwargs
+                        return super(ChoiceAdmin, self).get_change_actions(
+                            request, **kwargs
                         )
                     return []
         """
-        return self.objectactions
+        return self.change_actions
 
-    def get_djoa_button_attrs(self, tool):
+    def get_changelist_actions(self, request):
+        """
+        Override this to customize what actions get to the changelist view.
+        """
+        return self.changelist_actions
+
+    # INTERNAL METHODS
+    ##################
+
+    def _get_action_urls(self):
+        """Get the url patterns that route each action to a view."""
+        actions = {}
+
+        try:
+            model_name = self.model._meta.model_name
+        except AttributeError:  # pragma: no cover
+            # DJANGO15
+            model_name = self.model._meta.module_name
+        # e.g.: polls_poll
+        base_url_name = '%s_%s' % (self.model._meta.app_label, model_name)
+        # e.g.: polls_poll_actions
+        model_actions_url_name = '%s_actions' % base_url_name
+
+        self.tools_view_name = 'admin:' + model_actions_url_name
+
+        # WISHLIST use get_change_actions and get_changelist_actions
+        # TODO separate change and changelist actions
+        for action in chain(self.change_actions, self.changelist_actions):
+            actions[action] = getattr(self, action)
+        return [
+            # change, supports pks that are numbers or uuids
+            url(r'^(?P<pk>[0-9a-f\-]+)/actions/(?P<tool>\w+)/$',
+                self.admin_site.admin_view(  # checks permissions
+                    ChangeActionView.as_view(
+                        model=self.model,
+                        actions=actions,
+                        back='admin:%s_change' % base_url_name,
+                    )
+                ),
+                name=model_actions_url_name),
+            # changelist
+            url(r'^actions/(?P<tool>\w+)/$',
+                self.admin_site.admin_view(  # checks permissions
+                    ChangeListActionView.as_view(
+                        model=self.model,
+                        actions=actions,
+                        back='admin:%s_changelist' % base_url_name,
+                    )
+                ),
+                # Dupe name is fine. https://code.djangoproject.com/ticket/14259
+                name=model_actions_url_name),
+        ]
+
+    def _get_tool_dict(self, tool_name):
+        """Represents the tool as a dict with extra meta."""
+        tool = getattr(self, tool_name)
+        standard_attrs, custom_attrs = self._get_button_attrs(tool)
+        return dict(
+            name=tool_name,
+            label=getattr(tool, 'label', tool_name),
+            standard_attrs=standard_attrs,
+            custom_attrs=custom_attrs,
+        )
+
+    def _get_button_attrs(self, tool):
         """
         Get the HTML attributes associated with a tool.
 
@@ -144,42 +185,60 @@ class BaseDjangoObjectActions(object):
 
 class DjangoObjectActions(BaseDjangoObjectActions):
     change_form_template = "django_object_actions/change_form.html"
+    change_list_template = "django_object_actions/change_list.html"
 
 
-class ModelToolsView(SingleObjectMixin, View):
+class BaseActionView(View):
     """
-    The view that runs the tool's callable.
+    The view that runs a change/changelist action callable.
 
     Attributes
     ----------
     back : str
-        The urlpattern name to send users back to. Defaults to the change view.
+        The urlpattern name to send users back to. This is set in
+        `_get_action_urls` and turned into a url with the `back_url` property.
     model : django.db.model.Model
         The model this tool operates on.
-    tools : dict
-        A mapping of tool names to tool callables.
+    actions : dict
+        A mapping of action names to callables.
     """
     back = None
     model = None
-    tools = None
+    actions = None
 
-    def get(self, request, **kwargs):
-        # SingleOjectMixin's `get_object`. Works because the view
-        #   is instantiated with `model` and the urlpattern has `pk`.
-        obj = self.get_object()
+    @property
+    def view_args(self):
+        """
+        tuple: The argument(s) to send to the action (excluding `request`).
+
+        Change actions are called with `(request, obj)` while changelist
+        actions are called with `(request, queryset)`.
+        """
+        raise NotImplementedError
+
+    @property
+    def back_url(self):
+        """
+        str: The url path the action should send the user back to.
+
+        If an action does not return a http response, we automagically send
+        users back to either the change or the changelist page.
+        """
+        raise NotImplementedError
+
+    def get(self, request, tool, **kwargs):
         try:
-            tool = self.tools[kwargs['tool']]
+            view = self.actions[tool]
         except KeyError:
-            raise Http404(u'Tool does not exist')
+            raise Http404('Action does not exist')
 
-        ret = tool(request, obj)
+        ret = view(request, *self.view_args)
         if isinstance(ret, HttpResponseBase):
             return ret
 
-        back = reverse(self.back, args=(kwargs['pk'],))
-        return HttpResponseRedirect(back)
+        return HttpResponseRedirect(self.back_url)
 
-    # HACK to allow POST requests too easily
+    # HACK to allow POST requests too
     post = get
 
     def message_user(self, request, message):
@@ -190,6 +249,26 @@ class ModelToolsView(SingleObjectMixin, View):
         https://docs.djangoproject.com/en/1.9/ref/contrib/admin/actions/#custom-admin-action
         """
         messages.info(request, message)
+
+
+class ChangeActionView(SingleObjectMixin, BaseActionView):
+    @property
+    def view_args(self):
+        return (self.get_object(), )
+
+    @property
+    def back_url(self):
+        return reverse(self.back, args=(self.kwargs['pk'],))
+
+
+class ChangeListActionView(MultipleObjectMixin, BaseActionView):
+    @property
+    def view_args(self):
+        return (self.get_queryset(), )
+
+    @property
+    def back_url(self):
+        return reverse(self.back)
 
 
 def takes_instance_or_queryset(func):
@@ -206,7 +285,7 @@ def takes_instance_or_queryset(func):
                 try:
                     # Django >=1.6,<1.8
                     model = queryset._meta.model
-                except AttributeError:
+                except AttributeError:  # pragma: no cover
                     # Django <1.6
                     model = queryset._meta.concrete_model
                 queryset = model.objects.filter(pk=queryset.pk)

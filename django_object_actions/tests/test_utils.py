@@ -5,6 +5,7 @@ from example_project.polls.models import Poll
 
 from ..utils import (
     BaseDjangoObjectActions,
+    BaseActionView,
     takes_instance_or_queryset,
 )
 
@@ -17,62 +18,74 @@ class BaseDjangoObjectActionsTest(TestCase):
 
     @mock.patch('django_object_actions.utils.BaseDjangoObjectActions'
                 '.admin_site', create=True)
-    def test_get_tool_urls_trivial_case(self, mock_site):
-        urls = self.instance.get_tool_urls()
+    def test_get_action_urls_trivial_case(self, mock_site):
+        urls = self.instance._get_action_urls()
 
-        self.assertEqual(len(urls), 1)
-        self.assertEqual(urls[0].name, 'app_model_tools')
+        self.assertEqual(len(urls), 2)
+        self.assertEqual(urls[0].name, 'app_model_actions')
 
-    def test_get_object_actions_gets_attribute(self):
-        mock_objectactions = []  # set to something mutable
-        mock_request = 'request'
-        mock_context = 'context'
-        mock_kwargs = {}
-        self.instance.objectactions = mock_objectactions
-        returned_value = self.instance.get_object_actions(
-            mock_request, mock_context, **mock_kwargs
+    def test_get_change_actions_gets_attribute(self):
+        # Set up
+        self.instance.change_actions = mock.Mock()
+
+        # Test
+        returned_value = self.instance.get_change_actions(
+            request=mock.Mock(),
+            object_id=mock.Mock(),
+            form_url=mock.Mock(),
         )
-        # assert that `mock_objectactions` was returned
-        self.assertEqual(id(mock_objectactions), id(returned_value))
-        # WISHLIST assert get_object_actions was called with right args
 
-    def test_get_djoa_button_attrs_returns_defaults(self):
+        # Assert
+        self.assertEqual(id(self.instance.change_actions), id(returned_value))
+
+    def test_get_button_attrs_returns_defaults(self):
         # TODO: use `mock`
         mock_tool = type('mock_tool', (object, ), {})
-        attrs, __ = self.instance.get_djoa_button_attrs(mock_tool)
+        attrs, __ = self.instance._get_button_attrs(mock_tool)
         self.assertEqual(attrs['class'], '')
         self.assertEqual(attrs['title'], '')
 
-    def test_get_djoa_button_attrs_disallows_href(self):
+    def test_get_button_attrs_disallows_href(self):
         mock_tool = type('mock_tool', (object, ), {
             'attrs': {'href': 'hreeeeef'},
         })
-        attrs, __ = self.instance.get_djoa_button_attrs(mock_tool)
+        attrs, __ = self.instance._get_button_attrs(mock_tool)
         self.assertNotIn('href', attrs)
 
-    def test_get_djoa_button_attrs_disallows_title(self):
+    def test_get_button_attrs_disallows_title(self):
         mock_tool = type('mock_tool', (object, ), {
             'attrs': {'title': 'i wanna be a title'},
             'short_description': 'real title',
         })
-        attrs, __ = self.instance.get_djoa_button_attrs(mock_tool)
+        attrs, __ = self.instance._get_button_attrs(mock_tool)
         self.assertEqual(attrs['title'], 'real title')
 
-    def test_get_djoa_button_attrs_gets_set(self):
+    def test_get_button_attrs_gets_set(self):
         mock_tool = type('mock_tool', (object, ), {
             'attrs': {'class': 'class'},
             'short_description': 'description',
         })
-        attrs, __ = self.instance.get_djoa_button_attrs(mock_tool)
+        attrs, __ = self.instance._get_button_attrs(mock_tool)
         self.assertEqual(attrs['class'], 'class')
         self.assertEqual(attrs['title'], 'description')
 
-    def test_get_djoa_button_attrs_custom_attrs_get_partitioned(self):
+    def test_get_button_attrs_custom_attrs_get_partitioned(self):
         mock_tool = type('mock_tool', (object, ), {
             'attrs': {'nonstandard': 'wombat'},
         })
-        attrs, custom = self.instance.get_djoa_button_attrs(mock_tool)
+        attrs, custom = self.instance._get_button_attrs(mock_tool)
         self.assertEqual(custom['nonstandard'], 'wombat')
+
+
+class BaseActionViewTests(TestCase):
+    def setUp(self):
+        super(BaseActionViewTests, self).setUp()
+        self.view = BaseActionView()
+
+    @mock.patch('django_object_actions.utils.messages')
+    def test_message_user_proxies_messages(self, mock_messages):
+        self.view.message_user('request', 'message')
+        mock_messages.info.assert_called_once_with('request', 'message')
 
 
 class DecoratorTest(TestCase):

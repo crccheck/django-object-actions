@@ -11,6 +11,7 @@ If you've ever tried making your own admin object tools and you were
 like me, you immediately gave up. Why can't they be as easy as making
 Django Admin Actions? Well now they can be.
 
+
 Quick-Start Guide
 -----------------
 
@@ -31,24 +32,22 @@ In your admin.py::
         publish_this.label = "Publish"  # optional
         publish_this.short_description = "Submit this article to The Texas Tribune"  # optional
 
-        objectactions = ('publish_this', )
+        change_actions = ('publish_this', )
 
 
 Usage
 -----
 
-Tools are defined just like defining actions as modeladmin methods, see:
-`admin
-actions <https://docs.djangoproject.com/en/dev/ref/contrib/admin/actions/#actions-as-modeladmin-methods>`_
-for examples and detailed syntax. You can return nothing or an http
-response. The major difference being the functions you write will take
+Defining new tool actions are just like defining regular `admin actions
+<https://docs.djangoproject.com/en/dev/ref/contrib/admin/actions/>`_. The major
+difference is the action functions for you write for the change view will take
 an object instance instead of a queryset (see *Re-using Admin Actions* below).
 
-Tools are exposed by putting them in an ``objectactions`` attribute in
-your modeladmin like::
+Tool actions are exposed by putting them in a ``change_actions`` attribute in
+your model admin. You can also add tool actions to the changelist views too.
+You'll get a queryset like a regular admin action::
 
     from django_object_actions import DjangoObjectActions
-
 
     class MyModelAdmin(DjangoObjectActions, admin.ModelAdmin):
         def toolfunc(self, request, obj):
@@ -56,26 +55,29 @@ your modeladmin like::
         toolfunc.label = "This will be the label of the button"  # optional
         toolfunc.short_description = "This will be the tooltip of the button"  # optional
 
-        objectactions = ('toolfunc', )
+        def make_published(modeladmin, request, queryset):
+            queryset.update(status='p')
 
-Just like actions, you can send a message with ``self.message_user``.
+        change_actions = ('toolfunc', )
+        changelist_actions = ('make_published', )
+
+Just like admin actions, you can send a message with ``self.message_user``.
 Normally, you would do something to the object and go back to the same
 place, but if you return a HttpResponse, it will follow it (hey, just
-like actions!).
+like admin actions!).
 
-If your admin modifies ``get_urls``, ``render_change_form``, or
-``change_form_template``, you'll need to take extra care.
+If your admin modifies ``get_urls``, ``change_view``, or ``changelist_view``,
+you'll need to take extra care.
 
 Re-using Admin Actions
 ``````````````````````
 
-If you would like an admin action to also be an object tool, add the
-``takes_instance_or_queryset`` decorator like::
+If you would like a preexisting admin action to also be an change action, add
+the ``takes_instance_or_queryset`` decorator like::
 
 
     from django_object_actions import (DjangoObjectActions,
             takes_instance_or_queryset)
-
 
     class RobotAdmin(DjangoObjectActions, admin.ModelAdmin):
         # ... snip ...
@@ -84,7 +86,7 @@ If you would like an admin action to also be an object tool, add the
         def tighten_lug_nuts(self, request, queryset):
             queryset.update(lugnuts=F('lugnuts') - 1)
 
-        objectactions = ['tighten_lug_nuts']
+        change_actions = ['tighten_lug_nuts']
         actions = ['tighten_lug_nuts']
 
 Customizing Admin Actions
@@ -116,36 +118,27 @@ by adding a Django widget style `attrs` attribute::
         'class': 'addlink',
     }
 
-Programmatically Enabling Object Admin Actions
-``````````````````````````````````````````````
+Programmatically Disabling Actions
+``````````````````````````````````
 
-You can programatically enable and disable registered object actions by defining
-your own custom ``get_object_actions()`` method. In this example, certain actions
-only apply to certain object states (i.e. You should not be able to close an company
-account if the account is already closed)::
+You can programmatically disable registered actions by defining your own custom
+``get_change_actions()`` method. In this example, certain actions only apply to
+certain object states (i.e. You should not be able to close an company account
+if the account is already closed)::
 
-   def get_object_actions(self, request, context, **kwargs):
-        objectactions = []
+    def get_change_actions(self, request, object_id, form_url):
+        actions = super(PollAdmin, self).get_change_actions(request, object_id, form_url)
+        actions = list(actions)
+        if not request.user.is_superuser:
+            return []
 
-        # Actions cannot be applied to new objects (i.e. Using "add" new obj)
-        if context.get('original') is not None:
-            # The obj to perform checks against to determine object actions you want to support
-            obj = context['original']
+        obj = self.model.objects.get(pk=object_id)
+        if obj.question.endswith('?'):
+            actions.remove('question_mark')
 
-            if not obj.verified:
-                objectactions.extend(['verify_company_account_action', ])
+        return actions
 
-            status_code = obj.status_code
-
-            if status_code == 'Active':
-                objectactions.extend(['suspend_company_account_action', 'close_company_account_action', ])
-            elif status_code == 'Suspended':
-                objectactions.extend(['close_company_account_action', 'reactivate_company_account_action', ])
-            elif status_code == 'Closed':
-                objectactions.extend(['reactivate_company_account_action', ])
-
-        return objectactions
-
+The same is true for changelist actions with ``get_changelist_actions``.
 
 
 Alternate Installation
@@ -172,6 +165,12 @@ Limitations
    <https://github.com/crccheck/django-object-actions/blob/master/django_obj
    ect_actions/templates/django_object_actions/change_form.html>`_. You can also
    use ``from django_object_actions import BaseDjangoObjectActions`` instead.
+
+3. Security. This has been written with the assumption that everyone in the
+   Django admin belongs there. Permissions should be enforced in your own
+   actions irregardless of what this provides. Better default security is
+   planned for the future.
+
 
 Development
 -----------
@@ -200,7 +199,8 @@ Various helpers are available as make commands. Type ``make help`` and view the
 Similar Packages
 ----------------
 
-If you want more UI, check out `Django Admin Row Actions <https://github.com/DjangoAdminHackers/django-admin-row-actions>`_.
+If you want more UI, check out `Django Admin Row Actions
+<https://github.com/DjangoAdminHackers/django-admin-row-actions>`_.
 
 Django Object Actions is very similar to
 `django-object-tools <https://github.com/praekelt/django-object-tools>`_,

@@ -5,8 +5,8 @@ from django.core.urlresolvers import reverse
 from django.db.models import F
 from django.http import HttpResponseRedirect
 
-from django_object_actions import (DjangoObjectActions,
-        takes_instance_or_queryset)
+from django_object_actions import (
+    DjangoObjectActions, takes_instance_or_queryset)
 
 from .models import Choice, Poll, Comment
 
@@ -30,6 +30,9 @@ class ChoiceAdmin(DjangoObjectActions, admin.ModelAdmin):
         obj.save()
     decrement_vote.short_description = "-1"
 
+    def delete_all(self, request, queryset):
+        self.message_user(request, 'just kidding!')
+
     def reset_vote(self, request, obj):
         obj.votes = 0
         obj.save()
@@ -42,8 +45,11 @@ class ChoiceAdmin(DjangoObjectActions, admin.ModelAdmin):
     def raise_key_error(self, request, obj):
         raise KeyError
 
-    objectactions = ('increment_vote', 'decrement_vote', 'reset_vote',
-        'edit_poll', 'raise_key_error')
+    change_actions = (
+        'increment_vote', 'decrement_vote', 'reset_vote', 'edit_poll',
+        'raise_key_error',
+    )
+    changelist_actions = ('delete_all',)
     actions = ['increment_vote']
 
 admin.site.register(Choice, ChoiceAdmin)
@@ -57,7 +63,8 @@ class ChoiceInline(admin.StackedInline):
 class PollAdmin(DjangoObjectActions, admin.ModelAdmin):
     fieldsets = [
         (None, {'fields': ['question']}),
-        ('Date information', {'fields': ['pub_date'], 'classes': ['collapse']}),
+        ('Date information',
+         {'fields': ['pub_date'], 'classes': ['collapse']}),
     ]
     inlines = [ChoiceInline]
     list_display = ('question', 'pub_date', 'was_published_recently')
@@ -74,11 +81,30 @@ class PollAdmin(DjangoObjectActions, admin.ModelAdmin):
             return
 
         self.message_user(request, 'All choices deleted')
-        return render_to_response('clear_choices.html',
+        return render_to_response(
+            'clear_choices.html',
             dict(object=obj), context_instance=RequestContext(request))
     delete_all_choices.label = "Delete All Choices"
 
-    objectactions = ('delete_all_choices', )
+    def question_mark(self, request, obj):
+        """Add a question mark."""
+        obj.question = obj.question + '?'
+        obj.save()
+
+    change_actions = ('delete_all_choices', 'question_mark')
+
+    def get_change_actions(self, request, object_id, form_url):
+        actions = super(PollAdmin, self).get_change_actions(request, object_id, form_url)
+        actions = list(actions)
+        if not request.user.is_superuser:
+            return []
+
+        obj = self.model.objects.get(pk=object_id)
+        if obj.question.endswith('?'):
+            actions.remove('question_mark')
+
+        return actions
+
 admin.site.register(Poll, PollAdmin)
 
 
@@ -89,5 +115,5 @@ class CommentAdmin(DjangoObjectActions, admin.ModelAdmin):
             return
         obj.comment = ' '.join(['hodor' for x in obj.comment.split()])
         obj.save()
-    objectactions = ('hodor', )
+    change_actions = ('hodor', )
 admin.site.register(Comment, CommentAdmin)
