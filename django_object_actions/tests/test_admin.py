@@ -12,7 +12,7 @@ from example_project.polls.factories import CommentFactory, PollFactory
 class CommentTest(LoggedInTestCase):
     def test_action_on_a_model_with_uuid_pk_works(self):
         comment = CommentFactory()
-        url = '/admin/polls/comment/{0}/tools/hodor/'.format(comment.pk)
+        url = '/admin/polls/comment/{0}/actions/hodor/'.format(comment.pk)
         # sanity check that url has a uuid
         self.assertIn('-', url)
         response = self.client.get(url)
@@ -27,12 +27,12 @@ class ChangeTest(LoggedInTestCase):
         self.assertIn('Delete_all', response.rendered_content)
 
     def test_changelist_action_view(self):
-        url = '/admin/polls/choice/tools/delete_all/'
+        url = '/admin/polls/choice/actions/delete_all/'
         response = self.client.get(url)
         self.assertRedirects(response, '/admin/polls/choice/')
 
     def test_changelist_nonexistent_action(self):
-        url = '/admin/polls/choice/tools/xyzzy/'
+        url = '/admin/polls/choice/actions/xyzzy/'
         response = self.client.get(url)
         self.assertEqual(response.status_code, 404)
 
@@ -40,7 +40,7 @@ class ChangeTest(LoggedInTestCase):
         poll = PollFactory.create()
         self.assertFalse(poll.question.endswith('?'))
         admin_change_url = reverse('admin:polls_poll_change', args=(poll.pk,))
-        action_url = '/admin/polls/poll/1/tools/question_mark/'
+        action_url = '/admin/polls/poll/1/actions/question_mark/'
 
         # button is in the admin
         response = self.client.get(admin_change_url)

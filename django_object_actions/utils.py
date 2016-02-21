@@ -21,7 +21,7 @@ class BaseDjangoObjectActions(object):
     Attributes
     ----------
     model : django.db.models.Model
-        The Django Model these tools work on. This is populated by Django.
+        The Django Model these actions work on. This is populated by Django.
     change_actions : list of str
         Write the names of the methods of the model admin that can be used as
         tools in the change view.
@@ -98,7 +98,7 @@ class BaseDjangoObjectActions(object):
 
     def _get_action_urls(self):
         """Get the url patterns that route each action to a view."""
-        tools = {}
+        actions = {}
 
         try:
             model_name = self.model._meta.model_name
@@ -107,43 +107,43 @@ class BaseDjangoObjectActions(object):
             model_name = self.model._meta.module_name
         # e.g.: polls_poll
         base_url_name = '%s_%s' % (self.model._meta.app_label, model_name)
-        # e.g.: polls_poll_tools
-        model_tools_url_name = '%s_tools' % base_url_name
+        # e.g.: polls_poll_actions
+        model_actions_url_name = '%s_actions' % base_url_name
 
-        self.tools_view_name = 'admin:' + model_tools_url_name
+        self.tools_view_name = 'admin:' + model_actions_url_name
 
         # WISHLIST use get_change_actions and get_changelist_actions
         # TODO separate change and changelist actions
-        for tool in chain(self.change_actions, self.changelist_actions):
-            tools[tool] = getattr(self, tool)
+        for action in chain(self.change_actions, self.changelist_actions):
+            actions[action] = getattr(self, action)
         return [
             # change, supports pks that are numbers or uuids
-            url(r'^(?P<pk>[0-9a-f\-]+)/tools/(?P<tool>\w+)/$',
+            url(r'^(?P<pk>[0-9a-f\-]+)/actions/(?P<tool>\w+)/$',
                 self.admin_site.admin_view(  # checks permissions
                     ChangeActionView.as_view(
                         model=self.model,
-                        tools=tools,
+                        actions=actions,
                         back='admin:%s_change' % base_url_name,
                     )
                 ),
-                name=model_tools_url_name),
+                name=model_actions_url_name),
             # changelist
-            url(r'^tools/(?P<tool>\w+)/$',
+            url(r'^actions/(?P<tool>\w+)/$',
                 self.admin_site.admin_view(  # checks permissions
                     ChangeListActionView.as_view(
                         model=self.model,
-                        tools=tools,
+                        actions=actions,
                         back='admin:%s_changelist' % base_url_name,
                     )
                 ),
                 # Dupe name is fine. https://code.djangoproject.com/ticket/14259
-                name=model_tools_url_name),
+                name=model_actions_url_name),
         ]
 
     def _get_tool_dict(self, tool_name):
         """Represents the tool as a dict with extra meta."""
         tool = getattr(self, tool_name)
-        standard_attrs, custom_attrs = self._get_tool_button_attrs(tool)
+        standard_attrs, custom_attrs = self._get_button_attrs(tool)
         return dict(
             name=tool_name,
             label=getattr(tool, 'label', tool_name),
@@ -151,7 +151,7 @@ class BaseDjangoObjectActions(object):
             custom_attrs=custom_attrs,
         )
 
-    def _get_tool_button_attrs(self, tool):
+    def _get_button_attrs(self, tool):
         """
         Get the HTML attributes associated with a tool.
 
@@ -190,7 +190,7 @@ class DjangoObjectActions(BaseDjangoObjectActions):
 
 class BaseActionView(View):
     """
-    The view that runs a change action tool's callable.
+    The view that runs a change/changelist action callable.
 
     Attributes
     ----------
@@ -199,12 +199,12 @@ class BaseActionView(View):
         `_get_action_urls` and turned into a url with the `back_url` property.
     model : django.db.model.Model
         The model this tool operates on.
-    tools : dict
-        A mapping of tool names to tool callables.
+    actions : dict
+        A mapping of action names to callables.
     """
     back = None
     model = None
-    tools = None
+    actions = None
 
     @property
     def view_args(self):
@@ -226,11 +226,11 @@ class BaseActionView(View):
         """
         raise NotImplementedError
 
-    def get(self, request, **kwargs):
+    def get(self, request, tool, **kwargs):
         try:
-            view = self.tools[kwargs['tool']]
+            view = self.actions[tool]
         except KeyError:
-            raise Http404('Tool does not exist')
+            raise Http404('Action does not exist')
 
         ret = view(request, *self.view_args)
         if isinstance(ret, HttpResponseBase):
