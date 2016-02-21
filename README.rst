@@ -164,6 +164,12 @@ Limitations
    ect_actions/templates/django_object_actions/change_form.html>`_. You can also
    use ``from django_object_actions import BaseDjangoObjectActions`` instead.
 
+3. Security. This has been written with the assumption that everyone in the
+   Django admin belongs there. Permissions should be enforced in your own
+   actions irregardless of what this provides. Better default security is
+   planned for the future.
+
+
 Development
 -----------
 
