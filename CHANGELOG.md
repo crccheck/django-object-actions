@@ -1,6 +1,11 @@
 0.8.0 (unreleased)
 ------------------
 
+* Renames `objectactions` to `change_actions`
+* Removes `get_objectactions` (see below)
+* Adds `changelist_actions` for creating action tools in the change list view too
+* Adds `get_change_actions` and `get_changelist_actions`
+
 ### Breaking changes
 
 * Deleted `get_objectactions(request, context, **kwargs)`. If you used this
