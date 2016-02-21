@@ -117,27 +117,22 @@ by adding a Django widget style `attrs` attribute::
     }
 
 Programmatically Disabling Object Admin Actions
-``````````````````````````````````````````````
+```````````````````````````````````````````````
 
 You can programmatically disable registered actions by defining your own custom
 ``get_change_actions()`` method. In this example, certain actions only apply to
 certain object states (i.e. You should not be able to close an company account
 if the account is already closed)::
 
-   def get_change_actions(self, request, object_id, **kwargs):
-        actions = super().get_change_actions(request, object_id, **kwargs)
+    def get_change_actions(self, request, object_id, form_url):
+        actions = super(PollAdmin, self).get_change_actions(request, object_id, form_url)
+        actions = list(actions)
+        if not request.user.is_superuser:
+            return []
 
-        obj = self.model.get(pk=object_id)
-
-        if obj.verified:
-            actions.remove('verify_company_account_action')
-
-        status_code = obj.status_code
-
-        if status_code == 'Active':
-            actions.remove('enable_account')
-        else:
-            actions.remove('disable_account')
+        obj = self.model.objects.get(pk=object_id)
+        if obj.question.endswith('?'):
+            actions.remove('question_mark')
 
         return actions
 

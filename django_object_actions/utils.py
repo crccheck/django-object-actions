@@ -52,6 +52,8 @@ class BaseDjangoObjectActions(object):
 
         self.tools_view_name = 'admin:' + model_tools_url_name
 
+        # WISHLIST use get_change_actions and get_changelist_actions
+        # TODO separate change and changelist actions
         for tool in chain(self.change_actions, self.changelist_actions):
             tools[tool] = getattr(self, tool)
         return [

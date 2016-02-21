@@ -86,11 +86,23 @@ class PollAdmin(DjangoObjectActions, admin.ModelAdmin):
             dict(object=obj), context_instance=RequestContext(request))
     delete_all_choices.label = "Delete All Choices"
 
-    change_actions = ('delete_all_choices', )
+    def question_mark(self, request, obj):
+        """Add a question mark."""
+        obj.question = obj.question + '?'
+        obj.save()
+
+    change_actions = ('delete_all_choices', 'question_mark')
 
     def get_change_actions(self, request, object_id, form_url):
         actions = super(PollAdmin, self).get_change_actions(request, object_id, form_url)
-        import ipdb; ipdb.set_trace()
+        actions = list(actions)
+        if not request.user.is_superuser:
+            return []
+
+        obj = self.model.objects.get(pk=object_id)
+        if obj.question.endswith('?'):
+            actions.remove('question_mark')
+
         return actions
 
 admin.site.register(Poll, PollAdmin)

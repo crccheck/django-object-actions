@@ -6,8 +6,13 @@ except ImportError:  # pragma: no cover
     get_user_model = lambda: User
 
 import factory
+from factory import faker
+from django.utils import timezone
 
 from . import models
+
+
+fake = faker.faker.Factory.create()
 
 
 class UserFactory(factory.DjangoModelFactory):
@@ -25,3 +30,11 @@ class UserFactory(factory.DjangoModelFactory):
 class CommentFactory(factory.DjangoModelFactory):
     class Meta:
         model = models.Comment
+
+
+class PollFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = models.Poll
+
+    question = factory.LazyAttribute(lambda __: fake.sentence())
+    pub_date = factory.LazyAttribute(lambda __: timezone.now())
