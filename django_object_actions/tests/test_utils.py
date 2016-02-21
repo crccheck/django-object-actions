@@ -18,8 +18,8 @@ class BaseDjangoObjectActionsTest(TestCase):
 
     @mock.patch('django_object_actions.utils.BaseDjangoObjectActions'
                 '.admin_site', create=True)
-    def test_get_tool_urls_trivial_case(self, mock_site):
-        urls = self.instance.get_tool_urls()
+    def test_get_action_urls_trivial_case(self, mock_site):
+        urls = self.instance._get_action_urls()
 
         self.assertEqual(len(urls), 2)
         self.assertEqual(urls[0].name, 'app_model_tools')

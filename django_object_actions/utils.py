@@ -16,7 +16,7 @@ from django.views.generic.list import MultipleObjectMixin
 
 class BaseDjangoObjectActions(object):
     """
-    ModelAdmin mixin to add object-tools just like adding admin actions.
+    ModelAdmin mixin to add new actions just like adding admin actions.
 
     Attributes
     ----------
@@ -30,14 +30,74 @@ class BaseDjangoObjectActions(object):
         tools in the changelist view.
     tools_view_name : str
         The name of the Django Object Actions admin view, including the 'admin'
-        namespace. Populated by `get_tool_urls`.
+        namespace. Populated by `_get_action_urls`.
     """
     change_actions = []
     changelist_actions = []
     tools_view_name = None
 
-    def get_tool_urls(self):
-        """Get the url patterns that route each tool to a special view."""
+    # EXISTING ADMIN METHODS MODIFIED
+    #################################
+
+    def get_urls(self):
+        """Prepend `get_urls` with our own patterns."""
+        urls = super(BaseDjangoObjectActions, self).get_urls()
+        return self._get_action_urls() + urls
+
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        extra_context = {
+            'objectactions': [
+                self._get_tool_dict(action) for action in
+                self.get_change_actions(request, object_id, form_url)
+            ],
+            'tools_view_name': self.tools_view_name,
+        }
+        return super(BaseDjangoObjectActions, self).change_view(
+            request, object_id, form_url, extra_context)
+
+    def changelist_view(self, request, extra_context=None):
+        extra_context = {
+            'objectactions': [
+                self._get_tool_dict(action) for action in
+                self.get_changelist_actions(request)
+            ],
+            'tools_view_name': self.tools_view_name,
+        }
+        return super(BaseDjangoObjectActions, self).changelist_view(
+            request, extra_context)
+
+    # USER OVERRIDABLE
+    ##################
+
+    def get_change_actions(self, request, object_id, form_url):
+        """
+        Override this to customize what actions get to the change view.
+
+        This takes the same parameters as `change_view`.
+
+        For example, to restrict actions to superusers, you could do:
+
+            class ChoiceAdmin(DjangoObjectActions, admin.ModelAdmin):
+                def get_change_actions(self, request, **kwargs):
+                    if request.user.is_superuser:
+                        return super(ChoiceAdmin, self).get_change_actions(
+                            request, **kwargs
+                        )
+                    return []
+        """
+        return self.change_actions
+
+    def get_changelist_actions(self, request):
+        """
+        Override this to customize what actions get to the changelist view.
+        """
+        return self.changelist_actions
+
+    # INTERNAL METHODS
+    ##################
+
+    def _get_action_urls(self):
+        """Get the url patterns that route each action to a view."""
         tools = {}
 
         try:
@@ -80,39 +140,6 @@ class BaseDjangoObjectActions(object):
                 name=model_tools_url_name),
         ]
 
-    # EXISTING ADMIN METHODS MODIFIED
-    #################################
-
-    def get_urls(self):
-        """Prepend `get_urls` with our own patterns."""
-        urls = super(BaseDjangoObjectActions, self).get_urls()
-        return self.get_tool_urls() + urls
-
-    def change_view(self, request, object_id, form_url='', extra_context=None):
-        extra_context = {
-            'objectactions': [
-                self._get_tool_dict(action) for action in
-                self.get_change_actions(request, object_id, form_url)
-            ],
-            'tools_view_name': self.tools_view_name,
-        }
-        return super(BaseDjangoObjectActions, self).change_view(
-            request, object_id, form_url, extra_context)
-
-    def changelist_view(self, request, extra_context=None):
-        extra_context = {
-            'objectactions': [
-                self._get_tool_dict(action) for action in
-                self.get_changelist_actions(request)
-            ],
-            'tools_view_name': self.tools_view_name,
-        }
-        return super(BaseDjangoObjectActions, self).changelist_view(
-            request, extra_context)
-
-    # CUSTOM METHODS
-    ################
-
     def _get_tool_dict(self, tool_name):
         """Represents the tool as a dict with extra meta."""
         tool = getattr(self, tool_name)
@@ -123,30 +150,6 @@ class BaseDjangoObjectActions(object):
             standard_attrs=standard_attrs,
             custom_attrs=custom_attrs,
         )
-
-    def get_change_actions(self, request, object_id, form_url):
-        """
-        Override this to customize what actions get to the change view.
-
-        This takes the same parameters as `change_view`.
-
-        For example, to restrict actions to superusers, you could do:
-
-            class ChoiceAdmin(DjangoObjectActions, admin.ModelAdmin):
-                def get_change_actions(self, request, **kwargs):
-                    if request.user.is_superuser:
-                        return super(ChoiceAdmin, self).get_change_actions(
-                            request, **kwargs
-                        )
-                    return []
-        """
-        return self.change_actions
-
-    def get_changelist_actions(self, request):
-        """
-        Override this to customize what actions get to the changelist view.
-        """
-        return self.changelist_actions
 
     def _get_tool_button_attrs(self, tool):
         """
@@ -193,7 +196,7 @@ class BaseActionView(View):
     ----------
     back : str
         The urlpattern name to send users back to. This is set in
-        `get_tool_urls` and turned into a url with the `back_url` property.
+        `_get_action_urls` and turned into a url with the `back_url` property.
     model : django.db.model.Model
         The model this tool operates on.
     tools : dict
