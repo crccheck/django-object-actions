@@ -36,8 +36,8 @@ coverage: ## Run and then display coverage report
 
 resetdb: ## Delete and then recreate the dev sqlite database
 	python $(MANAGE) reset_db --router=default --noinput
-	python $(MANAGE) syncdb --noinput
-	python $(MANAGE) migrate --noinput
+	-python $(MANAGE) syncdb --noinput
+	-python $(MANAGE) migrate --noinput
 	python $(MANAGE) loaddata sample_data
 
 .PHONY: build
@@ -51,7 +51,7 @@ build/%:
 run: run/1.9
 
 run/%:
-	docker run --rm -p 8000:8000 --sig-proxy=false $(IMAGE):$*
+	docker run --rm -p 8000:8000 -it $(IMAGE):$*
 
 test/%:
 	docker run --rm -p 8000:8000 --sig-proxy=false $(IMAGE):$* make test

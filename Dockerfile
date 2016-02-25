@@ -9,4 +9,6 @@ EXPOSE 8000
 
 ENV PYTHONPATH /usr/src/app
 
+RUN make resetdb
+
 CMD python example_project/manage.py runserver 0.0.0.0:$PORT
