@@ -53,8 +53,15 @@ run: run/1.9
 run/%:
 	docker run --rm -p 8000:8000 -it $(IMAGE):$*
 
+docker/publish: ## Publish Docker images to the hub
+	docker push $(IMAGE):1.9
+	docker push $(IMAGE):1.8
+	docker push $(IMAGE):1.7
+	docker push $(IMAGE):1.6
+	docker push $(IMAGE):1.5
+
 test/%:
-	docker run --rm -p 8000:8000 --sig-proxy=false $(IMAGE):$* make test
+	docker run --rm -p 8000:8000 -t $(IMAGE):$* make test
 
 bash:
 	docker run --rm -it $(IMAGE):1.9 /bin/bash
