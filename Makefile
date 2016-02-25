@@ -42,7 +42,7 @@ resetdb: ## Delete and then recreate the dev sqlite database
 
 .PHONY: build
 build: ## Build a full set of Docker images
-build: build/1.9 build/1.8.7 build/1.7.11 build/1.6.11 build/1.5.12
+build: build/1.9.2 build/1.8.9 build/1.7.11 build/1.6.11 build/1.5.12
 
 build/%:
 	docker build --build-arg DJANGO_VERSION=$* \
