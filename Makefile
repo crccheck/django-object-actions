@@ -36,13 +36,13 @@ coverage: ## Run and then display coverage report
 
 resetdb: ## Delete and then recreate the dev sqlite database
 	python $(MANAGE) reset_db --router=default --noinput
-	python $(MANAGE) syncdb --noinput
-	python $(MANAGE) migrate --noinput
+	-python $(MANAGE) syncdb --noinput
+	-python $(MANAGE) migrate --noinput
 	python $(MANAGE) loaddata sample_data
 
 .PHONY: build
 build: ## Build a full set of Docker images
-build: build/1.9 build/1.8.7 build/1.7.11 build/1.6.11 build/1.5.12
+build: build/1.9.2 build/1.8.9 build/1.7.11 build/1.6.11 build/1.5.12
 
 build/%:
 	docker build --build-arg DJANGO_VERSION=$* \
@@ -51,10 +51,17 @@ build/%:
 run: run/1.9
 
 run/%:
-	docker run --rm -p 8000:8000 --sig-proxy=false $(IMAGE):$*
+	docker run --rm -p 8000:8000 -it $(IMAGE):$*
+
+docker/publish: ## Publish Docker images to the hub
+	docker push $(IMAGE):1.9
+	docker push $(IMAGE):1.8
+	docker push $(IMAGE):1.7
+	docker push $(IMAGE):1.6
+	docker push $(IMAGE):1.5
 
 test/%:
-	docker run --rm -p 8000:8000 --sig-proxy=false $(IMAGE):$* make test
+	docker run --rm -p 8000:8000 -t $(IMAGE):$* make test
 
 bash:
 	docker run --rm -it $(IMAGE):1.9 /bin/bash
