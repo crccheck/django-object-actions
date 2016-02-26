@@ -1,5 +1,5 @@
-0.8.0 (unreleased)
-------------------
+0.8.0
+-----
 
 * Renames `objectactions` to `change_actions`
 * Removes `get_objectactions` (see below)

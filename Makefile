@@ -71,10 +71,11 @@ version:
 	@sed -i -r /version/s/[0-9.]+/$(VERSION)/ django_object_actions/__init__.py
 
 # Release instructions
-# 1. bump VERSION
-# 2. run `make release`
-# 3. `git push --tags origin master`
-# 4. update release notes
+# 1. update CHANGELOG
+# 2. bump VERSION
+# 3. run `make release`
+# 4. `git push --tags origin master`
+# 5. update release notes
 release: clean version
 	@git commit -am "bump version to v$(VERSION)"
 	@git tag v$(VERSION)
