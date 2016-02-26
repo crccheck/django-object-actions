@@ -172,6 +172,16 @@ Limitations
    planned for the future.
 
 
+Demo Admin & Docker images
+--------------------------
+
+You can try the demo admin against several versions of Django with these Docker
+images: https://hub.docker.com/r/crccheck/django-object-actions/
+
+This runs the example Django project in ``./example_project`` based on the
+"polls" tutorial. ``admin.py`` demos what you can do with this app.
+
+
 Development
 -----------
 
