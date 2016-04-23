@@ -1,3 +1,9 @@
+0.8.1
+-----
+
+* Fix how extra_context set by admins was not passed
+* Fix how if you had multiple admins, you always got redirected to the default admin
+
 0.8.0
 -----
 
