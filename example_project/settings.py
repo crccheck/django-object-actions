@@ -10,12 +10,6 @@ def project_dir(*paths):
 
 
 DEBUG = True
-TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'APP_DIRS': True,
-    },
-]
 
 DATABASES = {'default': dj_database_url.config(default='sqlite:///' +
     project_dir('example_project.db'))}
