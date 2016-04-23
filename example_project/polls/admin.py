@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 from django.contrib import admin
+from django.contrib.admin import AdminSite
 from django.core.urlresolvers import reverse
 from django.db.models import F
 from django.http import HttpResponseRedirect
@@ -117,3 +118,7 @@ class CommentAdmin(DjangoObjectActions, admin.ModelAdmin):
         obj.save()
     change_actions = ('hodor', )
 admin.site.register(Comment, CommentAdmin)
+
+
+support_admin = AdminSite(name='support')
+support_admin.register(Poll, PollAdmin)
