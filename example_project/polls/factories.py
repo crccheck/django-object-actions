@@ -20,14 +20,23 @@ class UserFactory(factory.DjangoModelFactory):
     password = factory.PostGenerationMethodCall('set_password', 'password')
 
 
-class CommentFactory(factory.DjangoModelFactory):
-    class Meta:
-        model = models.Comment
-
-
 class PollFactory(factory.DjangoModelFactory):
     class Meta:
         model = models.Poll
 
     question = factory.LazyAttribute(lambda __: fake.sentence())
     pub_date = factory.LazyAttribute(lambda __: timezone.now())
+
+
+class ChoiceFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = models.Choice
+
+    poll = factory.SubFactory(PollFactory)
+    choice_text = factory.LazyAttribute(lambda __: fake.word())
+    votes = factory.LazyAttribute(lambda __: fake.pyint())
+
+
+class CommentFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = models.Comment

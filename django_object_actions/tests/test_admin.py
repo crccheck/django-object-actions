@@ -9,7 +9,7 @@ from .tests import LoggedInTestCase
 from example_project.polls.factories import CommentFactory, PollFactory
 
 
-class CommentTest(LoggedInTestCase):
+class CommentTests(LoggedInTestCase):
     def test_action_on_a_model_with_uuid_pk_works(self):
         comment = CommentFactory()
         comment_url = reverse('admin:polls_comment_change', args=(comment.pk,))
@@ -20,12 +20,19 @@ class CommentTest(LoggedInTestCase):
         self.assertRedirects(response, comment_url)
 
 
-class ChangeTest(LoggedInTestCase):
+class ChangeTests(LoggedInTestCase):
     def test_buttons_load(self):
         url = '/admin/polls/choice/'
         response = self.client.get(url)
         self.assertIn('objectactions', response.context_data)
         self.assertIn('Delete_all', response.rendered_content)
+
+    def test_changelist_template_context(self):
+        url = reverse('admin:polls_poll_changelist')
+        response = self.client.get(url)
+        self.assertIn('objectactions', response.context_data)
+        self.assertIn('tools_view_name', response.context_data)
+        self.assertIn('foo', response.context_data)
 
     def test_changelist_action_view(self):
         url = '/admin/polls/choice/actions/delete_all/'
@@ -55,10 +62,22 @@ class ChangeTest(LoggedInTestCase):
         self.assertNotIn(action_url, response.rendered_content)
 
 
-class MultipleAdmins(LoggedInTestCase):
+class ChangeListTests(LoggedInTestCase):
+    def test_changelist_template_context(self):
+        poll = PollFactory()
+        url = reverse('admin:polls_poll_change', args=(poll.pk,))
+
+        response = self.client.get(url)
+        self.assertIn('objectactions', response.context_data)
+        self.assertIn('tools_view_name', response.context_data)
+        self.assertIn('foo', response.context_data)
+
+
+class MultipleAdminsTests(LoggedInTestCase):
     def test_redirect_back_from_secondary_admin(self):
-        poll = PollFactory.create()
-        admin_change_url = reverse('admin:polls_poll_change', args=(poll.pk,), current_app='support')
+        poll = PollFactory()
+        admin_change_url = reverse('admin:polls_poll_change', args=(poll.pk,),
+                                   current_app='support')
         action_url = '/support/polls/poll/1/actions/question_mark/'
         self.assertTrue(admin_change_url.startswith('/support/'))
 
