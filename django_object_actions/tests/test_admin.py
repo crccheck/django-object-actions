@@ -9,7 +9,7 @@ from .tests import LoggedInTestCase
 from example_project.polls.factories import CommentFactory, PollFactory
 
 
-class CommentTest(LoggedInTestCase):
+class CommentTests(LoggedInTestCase):
     def test_action_on_a_model_with_uuid_pk_works(self):
         comment = CommentFactory()
         url = '/admin/polls/comment/{0}/actions/hodor/'.format(comment.pk)
@@ -19,12 +19,19 @@ class CommentTest(LoggedInTestCase):
         self.assertEqual(response.status_code, 302)
 
 
-class ChangeTest(LoggedInTestCase):
+class ChangeTests(LoggedInTestCase):
     def test_buttons_load(self):
         url = '/admin/polls/choice/'
         response = self.client.get(url)
         self.assertIn('objectactions', response.context_data)
         self.assertIn('Delete_all', response.rendered_content)
+
+    def test_changelist_template_context(self):
+        url = reverse('admin:polls_poll_changelist')
+        response = self.client.get(url)
+        self.assertIn('objectactions', response.context_data)
+        self.assertIn('tools_view_name', response.context_data)
+        self.assertIn('foo', response.context_data)
 
     def test_changelist_action_view(self):
         url = '/admin/polls/choice/actions/delete_all/'
@@ -52,3 +59,14 @@ class ChangeTest(LoggedInTestCase):
         # button is not in the admin anymore
         response = self.client.get(admin_change_url)
         self.assertNotIn(action_url, response.rendered_content)
+
+
+class ChangeListTests(LoggedInTestCase):
+    def test_changelist_template_context(self):
+        poll = PollFactory()
+        url = reverse('admin:polls_poll_change', args=(poll.pk,))
+
+        response = self.client.get(url)
+        self.assertIn('objectactions', response.context_data)
+        self.assertIn('tools_view_name', response.context_data)
+        self.assertIn('foo', response.context_data)

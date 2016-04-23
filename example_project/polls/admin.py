@@ -75,6 +75,10 @@ class PollAdmin(DjangoObjectActions, admin.ModelAdmin):
     search_fields = ['question']
     date_hierarchy = 'pub_date'
 
+    def changelist_view(self, request, extra_context=None):
+        extra_context = {'foo': 'changelist_view'}
+        return super(PollAdmin, self).changelist_view(request, extra_context)
+
     # Detail
     ########
 
@@ -84,6 +88,10 @@ class PollAdmin(DjangoObjectActions, admin.ModelAdmin):
          {'fields': ['pub_date'], 'classes': ['collapse']}),
     ]
     inlines = [ChoiceInline]
+
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        extra = {'foo': 'change_view'}
+        return super(PollAdmin, self).change_view(request, object_id, form_url, extra)
 
     # Object actions
     ################
