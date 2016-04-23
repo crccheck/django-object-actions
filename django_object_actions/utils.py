@@ -126,6 +126,7 @@ class BaseDjangoObjectActions(object):
                         model=self.model,
                         actions=actions,
                         back='admin:%s_change' % base_url_name,
+                        current_app=self.admin_site.name,
                     )
                 ),
                 name=model_actions_url_name),
@@ -136,6 +137,7 @@ class BaseDjangoObjectActions(object):
                         model=self.model,
                         actions=actions,
                         back='admin:%s_changelist' % base_url_name,
+                        current_app=self.admin_site.name,
                     )
                 ),
                 # Dupe name is fine. https://code.djangoproject.com/ticket/14259
@@ -207,6 +209,7 @@ class BaseActionView(View):
     back = None
     model = None
     actions = None
+    current_app = None
 
     @property
     def view_args(self):
@@ -260,7 +263,7 @@ class ChangeActionView(SingleObjectMixin, BaseActionView):
 
     @property
     def back_url(self):
-        return reverse(self.back, args=(self.kwargs['pk'],))
+        return reverse(self.back, args=(self.kwargs['pk'],), current_app=self.current_app)
 
 
 class ChangeListActionView(MultipleObjectMixin, BaseActionView):
@@ -270,7 +273,7 @@ class ChangeListActionView(MultipleObjectMixin, BaseActionView):
 
     @property
     def back_url(self):
-        return reverse(self.back)
+        return reverse(self.back, current_app=self.current_app)
 
 
 def takes_instance_or_queryset(func):

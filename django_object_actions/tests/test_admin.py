@@ -12,11 +12,12 @@ from example_project.polls.factories import CommentFactory, PollFactory
 class CommentTests(LoggedInTestCase):
     def test_action_on_a_model_with_uuid_pk_works(self):
         comment = CommentFactory()
-        url = '/admin/polls/comment/{0}/actions/hodor/'.format(comment.pk)
+        comment_url = reverse('admin:polls_comment_change', args=(comment.pk,))
+        action_url = '/admin/polls/comment/{0}/actions/hodor/'.format(comment.pk)
         # sanity check that url has a uuid
-        self.assertIn('-', url)
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 302)
+        self.assertIn('-', action_url)
+        response = self.client.get(action_url)
+        self.assertRedirects(response, comment_url)
 
 
 class ChangeTests(LoggedInTestCase):
@@ -70,3 +71,15 @@ class ChangeListTests(LoggedInTestCase):
         self.assertIn('objectactions', response.context_data)
         self.assertIn('tools_view_name', response.context_data)
         self.assertIn('foo', response.context_data)
+
+
+class MultipleAdminsTests(LoggedInTestCase):
+    def test_redirect_back_from_secondary_admin(self):
+        poll = PollFactory()
+        admin_change_url = reverse('admin:polls_poll_change', args=(poll.pk,),
+                                   current_app='support')
+        action_url = '/support/polls/poll/1/actions/question_mark/'
+        self.assertTrue(admin_change_url.startswith('/support/'))
+
+        response = self.client.get(action_url)
+        self.assertRedirects(response, admin_change_url)
