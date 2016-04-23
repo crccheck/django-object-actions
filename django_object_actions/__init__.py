@@ -1,5 +1,5 @@
 """A Django app for adding object tools for models in the admin."""
-__version__ = '0.8.1'
+__version__ = '0.8.2'
 
 
 # kind of like __all__, make these available for public

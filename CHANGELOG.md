@@ -1,3 +1,8 @@
+0.8.2
+-----
+
+* Fix how the demo site stopped working because of bad settings
+
 0.8.1
 -----
 
