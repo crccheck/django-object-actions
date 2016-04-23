@@ -1,13 +1,7 @@
-try:
-    from django.contrib.auth import get_user_model
-except ImportError:  # pragma: no cover
-    # Django 1.4
-    from django.contrib.auth.models import User
-    get_user_model = lambda: User
-
 import factory
-from factory import faker
+from django.contrib.auth import get_user_model
 from django.utils import timezone
+from factory import faker
 
 from . import models
 
@@ -18,10 +12,9 @@ fake = faker.faker.Factory.create()
 class UserFactory(factory.DjangoModelFactory):
     class Meta:
         model = get_user_model()
-    first_name = factory.Sequence(lambda i: u'John{0}'.format(i))
-    last_name = factory.Sequence(lambda i: u'Doe{0}'.format(i))
-    username = factory.LazyAttribute(lambda x: '{0}{1}'.format(
-        x.first_name, x.last_name))
+    first_name = factory.LazyAttribute(lambda i: fake.first_name())
+    last_name = factory.LazyAttribute(lambda i: fake.last_name())
+    username = factory.LazyAttribute(lambda x: '{0}{1}'.format(x.first_name, x.last_name))
     email = factory.LazyAttribute(lambda x: '{0}@{1}.com'.format(
         x.first_name.lower(), x.last_name.lower()))
     password = factory.PostGenerationMethodCall('set_password', 'password')
