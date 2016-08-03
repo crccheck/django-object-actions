@@ -209,7 +209,7 @@ Various helpers are available as make commands. Type ``make help`` and view the
 Similar Packages
 ----------------
 
-If you want more UI, check out `Django Admin Row Actions
+If you want an actions menu for each row of your changelist, check out `Django Admin Row Actions
 <https://github.com/DjangoAdminHackers/django-admin-row-actions>`_.
 
 Django Object Actions is very similar to
