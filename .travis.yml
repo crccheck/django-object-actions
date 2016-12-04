@@ -10,8 +10,6 @@ addons:
 # Generate this env list with:
 # tox -l | awk '{ print "  - TOX_ENV="$0}'
 env:
-  - TOX_ENV=django15-py26
-  - TOX_ENV=django15-py27
   - TOX_ENV=django16-py26
   - TOX_ENV=django16-py27
   - TOX_ENV=django16-py33
