@@ -65,8 +65,14 @@ INSTALLED_APPS = (
 )
 
 
-# STFU, Django 1.7
-# To be deleted once Django 1.8 testing begins
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'APP_DIRS': True,
+    },
+]
+
+# DJANGO1.7
 SILENCED_SYSTEM_CHECKS = [
     '1_7.W001',
 ]

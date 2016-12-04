@@ -98,17 +98,14 @@ class PollAdmin(DjangoObjectActions, admin.ModelAdmin):
     ################
 
     def delete_all_choices(self, request, obj):
-        from django.shortcuts import render_to_response
-        from django.template import RequestContext
+        from django.shortcuts import render
 
         if request.method == 'POST':
             obj.choice_set.all().delete()
             return
 
         self.message_user(request, 'All choices deleted')
-        return render_to_response(
-            'clear_choices.html',
-            dict(object=obj), context_instance=RequestContext(request))
+        return render(request, 'clear_choices.html', {'object': obj})
     delete_all_choices.label = "Delete All Choices"
 
     def question_mark(self, request, obj):
