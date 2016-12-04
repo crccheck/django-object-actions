@@ -115,8 +115,9 @@ class BaseDjangoObjectActions(object):
         for action in chain(self.change_actions, self.changelist_actions):
             actions[action] = getattr(self, action)
         return [
-            # change, supports pks that are numbers, uuids and strings
-            url(r'^(?P<pk>[0-9a-zA-Z\-]+)/actions/(?P<tool>\w+)/$',
+            # change, supports the same pks the admin does
+            # https://github.com/django/django/blob/stable/1.10.x/django/contrib/admin/options.py#L555
+            url(r'^(?P<pk>.+)/actions/(?P<tool>\w+)/$',
                 self.admin_site.admin_view(  # checks permissions
                     ChangeActionView.as_view(
                         model=self.model,
