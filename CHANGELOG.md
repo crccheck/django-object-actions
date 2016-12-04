@@ -1,3 +1,11 @@
+0.9.0
+-----
+
+* Add support for all primary key formats (#75)
+* Add support for Django 1.10 (#74)
+* Remove support for Django 1.6 (#73)
+* Documentation tweaks (#71 #70)
+
 0.8.2
 -----
 

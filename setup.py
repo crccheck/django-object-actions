@@ -3,7 +3,7 @@ from setuptools import setup
 
 setup(
     name='django-object-actions',
-    version='0.8.2',
+    version='0.9.0',
     author='Chris Chang',
     author_email='c@crccheck.com',
     url='https://github.com/crccheck/django-object-actions',
