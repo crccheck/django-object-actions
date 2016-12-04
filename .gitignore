@@ -1,16 +1,13 @@
-media
-
-*.log
-*.pot
 *.pyc
+__pycache__
 .DS_Store
 .coverage
-.sass-cache
-
-
-.env
 .tox/
 *.db
+
+
+# Private files
+.env
 
 
 # build
@@ -18,4 +15,3 @@ MANIFEST
 build/*
 dist/*
 *.egg-info
-

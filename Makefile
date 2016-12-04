@@ -27,6 +27,9 @@ install: ## Install development requirements
 	pip install -r requirements.txt
 	pip install Django tox
 
+tdd: ## Run tests with a file watcher
+	nodemon --ext py -x sh -c "python -W ignore::RuntimeWarning $(MANAGE) test --failfast django_object_actions || true"
+
 test: ## Run test suite
 	python -W ignore::RuntimeWarning $(MANAGE) test django_object_actions
 
