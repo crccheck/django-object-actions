@@ -19,8 +19,9 @@ clean: ## Remove generated files
 	rm -rf dist
 	rm -rf *.egg
 	rm -rf *.egg-info
-	find . -name "*.pyc" -delete
 	find . -name ".DS_Store" -delete
+	find . -name "*.pyc" -delete
+	find . -type d -name "__pycache__" -exec rm -rf {} \; || true
 
 install: ## Install development requirements
 	pip install -r requirements.txt
