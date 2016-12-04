@@ -102,11 +102,7 @@ class BaseDjangoObjectActions(object):
         """Get the url patterns that route each action to a view."""
         actions = {}
 
-        try:
-            model_name = self.model._meta.model_name
-        except AttributeError:  # pragma: no cover
-            # DJANGO15
-            model_name = self.model._meta.module_name
+        model_name = self.model._meta.model_name
         # e.g.: polls_poll
         base_url_name = '%s_%s' % (self.model._meta.app_label, model_name)
         # e.g.: polls_poll_actions

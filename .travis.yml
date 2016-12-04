@@ -1,18 +1,8 @@
 language: python
-# DELETEME TravisCI support for Python 3.5
-# https://github.com/travis-ci/travis-ci/issues/4794
-addons:
-  apt:
-    sources:
-      - deadsnakes
-    packages:
-      - python3.5
+cache: pip
 # Generate this env list with:
 # tox -l | awk '{ print "  - TOX_ENV="$0}'
 env:
-  - TOX_ENV=django15-py26
-  - TOX_ENV=django15-py27
-  - TOX_ENV=django16-py26
   - TOX_ENV=django16-py27
   - TOX_ENV=django16-py33
   - TOX_ENV=django17-py27
@@ -28,4 +18,3 @@ env:
 install: pip install tox coveralls
 script: tox -e $TOX_ENV
 after_success: coveralls
-sudo: false
