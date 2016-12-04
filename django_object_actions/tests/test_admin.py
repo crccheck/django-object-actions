@@ -4,6 +4,8 @@ Integration tests that actually try and use the tools setup in admin.py
 from __future__ import unicode_literals
 
 from django.core.urlresolvers import reverse
+from django.http import HttpResponse
+from mock import patch
 
 from .tests import LoggedInTestCase
 from example_project.polls.factories import CommentFactory, PollFactory
@@ -18,6 +20,26 @@ class CommentTests(LoggedInTestCase):
         self.assertIn('-', action_url)
         response = self.client.get(action_url)
         self.assertRedirects(response, comment_url)
+
+    @patch('django_object_actions.utils.ChangeActionView.get')
+    def test_action_on_a_model_with_arbitrary_pk_works(self, mock_view):
+        mock_view.return_value = HttpResponse()
+        action_url = '/admin/polls/comment/{0}/actions/hodor/'.format(' i am a pk ')
+
+        self.client.get(action_url)
+
+        self.assertTrue(mock_view.called)
+        self.assertEqual(mock_view.call_args[1]['pk'], ' i am a pk ')
+
+    @patch('django_object_actions.utils.ChangeActionView.get')
+    def test_action_on_a_model_with_slash_in_pk_works(self, mock_view):
+        mock_view.return_value = HttpResponse()
+        action_url = '/admin/polls/comment/{0}/actions/hodor/'.format('pk/slash')
+
+        self.client.get(action_url)
+
+        self.assertTrue(mock_view.called)
+        self.assertEqual(mock_view.call_args[1]['pk'], 'pk/slash')
 
 
 class ChangeTests(LoggedInTestCase):
