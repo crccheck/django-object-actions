@@ -3,9 +3,13 @@ Integration tests that actually try and use the tools setup in admin.py
 """
 from __future__ import unicode_literals
 
-from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from mock import patch
+
+try:
+    from django.urls import reverse
+except ImportError:
+    from django.core.urlresolvers import reverse  # < django 1.10
 
 from .tests import LoggedInTestCase
 from example_project.polls.factories import CommentFactory, PollFactory

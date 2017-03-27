@@ -2,12 +2,13 @@ from __future__ import unicode_literals
 
 from django.contrib import admin
 from django.contrib.admin import AdminSite
+from django.db.models import F
+from django.http import HttpResponseRedirect
+
 try:
     from django.urls import reverse
 except ImportError:
     from django.core.urlresolvers import reverse  # < django 1.10
-from django.db.models import F
-from django.http import HttpResponseRedirect
 
 from django_object_actions import (
     DjangoObjectActions, takes_instance_or_queryset)
