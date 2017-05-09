@@ -1,6 +1,6 @@
 from django.conf import settings
-from django.conf.urls import include, url
 from django.contrib import admin
+from django.urls import include, url
 from django.views.static import serve
 try:
     from django.conf.urls import patterns
