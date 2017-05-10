@@ -1,7 +1,7 @@
 dj-database-url==0.4.1
 # Can upgrade once we lose DJANGO1.7
 django-extensions==1.6.7
-factory-boy==2.7.0
+factory-boy==2.8.1
 faker==0.7.7
 coverage==4.2
 mock==2.0.0

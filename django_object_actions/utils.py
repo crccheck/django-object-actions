@@ -5,13 +5,17 @@ from itertools import chain
 
 from django.conf.urls import url
 from django.contrib import messages
-from django.core.urlresolvers import reverse
 from django.db.models.query import QuerySet
 from django.http import Http404, HttpResponseRedirect
 from django.http.response import HttpResponseBase
 from django.views.generic import View
 from django.views.generic.detail import SingleObjectMixin
 from django.views.generic.list import MultipleObjectMixin
+
+try:
+    from django.urls import reverse
+except ImportError:
+    from django.core.urlresolvers import reverse  # < django 1.10
 
 
 class BaseDjangoObjectActions(object):
