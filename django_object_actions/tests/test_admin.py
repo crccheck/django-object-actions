@@ -7,6 +7,11 @@ from django.http import HttpResponse
 from django.urls import reverse
 from mock import patch
 
+try:
+    from django.urls import reverse
+except ImportError:
+    from django.core.urlresolvers import reverse  # < django 1.10
+
 from .tests import LoggedInTestCase
 from example_project.polls.factories import CommentFactory, PollFactory
 

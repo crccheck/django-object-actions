@@ -6,6 +6,11 @@ from django.db.models import F
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
+try:
+    from django.urls import reverse
+except ImportError:
+    from django.core.urlresolvers import reverse  # < django 1.10
+
 from django_object_actions import (
     DjangoObjectActions, takes_instance_or_queryset)
 
