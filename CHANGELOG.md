@@ -1,24 +1,24 @@
-0.9.0
------
+## 0.10.0
+
+* Add support for Django 1.11 (#76 #78)
+
+## 0.9.0
 
 * Add support for all primary key formats (#75)
 * Add support for Django 1.10 (#74)
 * Remove support for Django 1.6 (#73)
 * Documentation tweaks (#71 #70)
 
-0.8.2
------
+## 0.8.2
 
 * Fix how the demo site stopped working because of bad settings
 
-0.8.1
------
+## 0.8.1
 
 * Fix how extra_context set by admins was not passed
 * Fix how if you had multiple admins, you always got redirected to the default admin
 
-0.8.0
------
+## 0.8.0
 
 * Renames `objectactions` to `change_actions`
 * Removes `get_object_actions` (see below)
