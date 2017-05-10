@@ -4,6 +4,7 @@ Integration tests that actually try and use the tools setup in admin.py
 from __future__ import unicode_literals
 
 from django.http import HttpResponse
+from django.urls import reverse
 from mock import patch
 
 try:

@@ -4,6 +4,7 @@ from django.contrib import admin
 from django.contrib.admin import AdminSite
 from django.db.models import F
 from django.http import HttpResponseRedirect
+from django.urls import reverse
 
 try:
     from django.urls import reverse
