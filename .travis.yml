@@ -18,8 +18,9 @@ env:
   - TOX_ENV=django110-py35
   - TOX_ENV=django111-py27
   - TOX_ENV=django111-py35
-  - TOX_ENV=django111-py36
-  - TOX_ENV=coveralls-django111-py36
+  # TravisCI's Python 3.6 support is incomplete
+  # - TOX_ENV=django111-py36
+  - TOX_ENV=coveralls-django111-py35
 install: pip install tox coveralls
 script: tox -e $TOX_ENV
 after_success: coveralls
