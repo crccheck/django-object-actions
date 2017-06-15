@@ -19,7 +19,8 @@ Install Django Object Actions::
 
     pip install django-object-actions
 
-Add ``django_object_actions`` to your ``INSTALLED_APPS``.
+Add ``django_object_actions`` to your ``INSTALLED_APPS`` so Django can find our
+templates.
 
 In your admin.py::
 
@@ -30,7 +31,7 @@ In your admin.py::
         def publish_this(self, request, obj):
             publish_obj(obj)
         publish_this.label = "Publish"  # optional
-        publish_this.short_description = "Submit this article to The Texas Tribune"  # optional
+        publish_this.short_description = "Submit this article"  # optional
 
         change_actions = ('publish_this', )
 
@@ -152,6 +153,17 @@ template loader `will find it
 If you don't intend to use the template customizations at all, don't add
 ``django_object_actions`` to your ``INSTALLED_APPS`` at all and use
 ``BaseDjangoObjectActions`` instead of ``DjangoObjectActions``.
+
+
+More Examples
+-------------
+
+Making an action that links off-site::
+
+    def external_link(self, request, obj):
+        from django.http import HttpResponseRedirect
+        url = f'https://example.com/{obj.id}'
+        return HttpResponseRedirect(url)
 
 
 Limitations
