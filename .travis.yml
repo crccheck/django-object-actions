@@ -1,4 +1,5 @@
 language: python
+# Workaround for Python 3.6 missing
 python: "3.6"
 cache: pip
 # Generate this env list with:
@@ -19,9 +20,8 @@ env:
   - TOX_ENV=django110-py35
   - TOX_ENV=django111-py27
   - TOX_ENV=django111-py35
-  # TravisCI's Python 3.6 support is incomplete
   - TOX_ENV=django111-py36
-  - TOX_ENV=coveralls-django111-py35
+  - TOX_ENV=coveralls-django111-py36
 install: pip install tox coveralls
 script: tox -e $TOX_ENV
 after_success: coveralls
