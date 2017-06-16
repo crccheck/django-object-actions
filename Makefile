@@ -27,6 +27,10 @@ install: ## Install development requirements
 	pip install -r requirements.txt
 	pip install Django tox
 
+.PHONY: requirements.txt
+requirements.txt: ## Regenerate requirements.txt
+	pip-compile requirements.in > $@
+
 tdd: ## Run tests with a file watcher
 	nodemon --ext py -x sh -c "python -W ignore::RuntimeWarning $(MANAGE) test --failfast django_object_actions || true"
 
