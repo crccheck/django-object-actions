@@ -1,7 +1,7 @@
 dj-database-url
-# Can upgrade once we lose DJANGO1.7
-django-extensions==1.6.7
+django-extensions==2.0.0
 factory-boy
 Faker
 coverage
 mock
+uuid
