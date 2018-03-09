@@ -36,6 +36,7 @@ SECRET_KEY = 'lolimasekrit'
 
 ROOT_URLCONF = 'example_project.urls'
 
+# DJANGO1.9 switch to only MIDDLEWARE
 MIDDLEWARE_CLASSES = MIDDLEWARE = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -74,9 +75,4 @@ TEMPLATES = [
             ],
         },
     },
-]
-
-# DJANGO1.7
-SILENCED_SYSTEM_CHECKS = [
-    '1_7.W001',
 ]
