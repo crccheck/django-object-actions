@@ -83,6 +83,8 @@ version:
 # 3. run `make release`
 # 4. `git push --tags origin master`
 # 5. update release notes
+# 6. `chandler push`
+# 6. `make build docker/publish`
 release: clean version
 	@git commit -am "bump version to v$(VERSION)"
 	@git tag v$(VERSION)

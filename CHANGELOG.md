@@ -1,13 +1,35 @@
+## 1.0.0
+
+I didn't get around to everything I listed in #44 as a release blocker for 1.0,
+but with Django going 2.0 and dropping backwards compatibility, I decided this
+library needs some more stability. In the future look for more removals as
+support for older versions of Django keep getting dropped.
+
+https://github.com/crccheck/django-object-actions/compare/v0.10.0...v1.0.0
+
+### Added
+* [430be02e59] - Add support for Django 2.0 (#85)
+
+### Changed
+* [a7b183f3c1] - Cleanup random Django version support docs (#86)
+* [81af3e7cd5] - Add a redirect example to the README (#82)
+
 ## 0.10.0
 
 * Add support for Django 1.11 (#76 #78)
+
+https://github.com/crccheck/django-object-actions/compare/v0.9.0...v0.10.0
 
 ## 0.9.0
 
 * Add support for all primary key formats (#75)
 * Add support for Django 1.10 (#74)
-* Remove support for Django 1.6 (#73)
 * Documentation tweaks (#71 #70)
+
+### Removed
+* Remove support for Django 1.6 (#73)
+
+https://github.com/crccheck/django-object-actions/compare/v0.8.2...v0.9.0
 
 ## 0.8.2
 
