@@ -1,26 +1,18 @@
-from django.conf import settings
-from django.conf.urls import include, url
+from django import VERSION
+from django.conf.urls import url
 from django.contrib import admin
-from django.views.static import serve
-try:
-    from django.conf.urls import patterns
-except ImportError:
-    # DJANGO1.6 DJANGO1.7
-    # https://docs.djangoproject.com/en/1.8/releases/1.8/#django-conf-urls-patterns
-    def patterns(__, *urlpatterns):
-        return urlpatterns
-
 from example_project.polls.admin import support_admin
 
+if VERSION[0] == 1 and VERSION[1] <= 8:
+    from django.conf.urls import include
+else:
+    # DJANGO1.9
+    # https://docs.djangoproject.com/en/2.0/releases/1.9/#passing-a-3-tuple-or-an-app-name-to-include
+    def include(urls):
+        return urls
 
-admin.autodiscover()
 
-urlpatterns = patterns(
-    '',
+urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^support/', include(support_admin.urls)),
-    # serve media
-    url(r'^media/(?P<path>.*)$', serve, {
-        'document_root': settings.MEDIA_ROOT,
-    }),
-)
+]

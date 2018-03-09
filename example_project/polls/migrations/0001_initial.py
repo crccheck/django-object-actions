@@ -4,7 +4,6 @@ from __future__ import unicode_literals
 
 from django.db import migrations, models
 import django.db.models.deletion
-import django_extensions.db.fields
 
 
 class Migration(migrations.Migration):
@@ -26,7 +25,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Comment',
             fields=[
-                ('uuid', django_extensions.db.fields.UUIDField(blank=True, editable=False, primary_key=True, serialize=False)),
+                ('uuid', models.UUIDField(editable=False, primary_key=True, serialize=False)),
                 ('comment', models.TextField(blank=True, null=True)),
             ],
         ),

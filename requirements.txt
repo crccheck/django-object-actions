@@ -6,10 +6,12 @@
 #
 coverage==4.4.1
 dj-database-url==0.4.2
-django-extensions==1.6.7
+django-extensions==2.0.0
 factory-boy==2.8.1
-faker==0.7.17             # via factory-boy
+faker==0.7.17
 mock==2.0.0
 pbr==3.0.1                # via mock
 python-dateutil==2.6.0    # via faker
 six==1.10.0               # via django-extensions, faker, mock, python-dateutil
+typing==3.6.4             # via django-extensions
+uuid==1.30
