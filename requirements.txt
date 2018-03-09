@@ -4,14 +4,15 @@
 #
 #    pip-compile --output-file requirements.txt requirements.in
 #
-coverage==4.4.1
-dj-database-url==0.4.2
+coverage==4.5.1
+dj-database-url==0.5.0
 django-extensions==2.0.0
-factory-boy==2.8.1
-faker==0.7.17
+factory-boy==2.10.0
+faker==0.8.11             # via factory-boy
 mock==2.0.0
-pbr==3.0.1                # via mock
-python-dateutil==2.6.0    # via faker
-six==1.10.0               # via django-extensions, faker, mock, python-dateutil
+pbr==3.1.1                # via mock
+python-dateutil==2.6.1    # via faker
+six==1.11.0               # via django-extensions, faker, mock, python-dateutil
+text-unidecode==1.2       # via faker
 typing==3.6.4             # via django-extensions
 uuid==1.30
