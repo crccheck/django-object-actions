@@ -24,6 +24,7 @@ clean: ## Remove generated files
 	find . -type d -name "__pycache__" -exec rm -rf {} \; || true
 
 install: ## Install development requirements
+	@[ -n "${VIRTUAL_ENV}" ] || (echo "ERROR: This should be run from a virtualenv" && exit 1)
 	pip install -r requirements.txt
 	pip install Django tox
 
