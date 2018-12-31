@@ -45,4 +45,4 @@ matrix:
 
 install: pip install tox coveralls
 script: tox -e $TOX_ENV
-after_success: coveralls
+after_success: [ "$TOX_ENV" = "coveralls-django21-py37" ] && coveralls || true
