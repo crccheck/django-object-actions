@@ -151,7 +151,7 @@ class BaseDjangoObjectActions(object):
         standard_attrs, custom_attrs = self._get_button_attrs(tool)
         return dict(
             name=tool_name,
-            label=getattr(tool, 'label', tool_name),
+            label=getattr(tool, 'label', tool_name.replace('_', ' ').capitalize()),
             standard_attrs=standard_attrs,
             custom_attrs=custom_attrs,
         )
