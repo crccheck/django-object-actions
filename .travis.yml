@@ -47,6 +47,10 @@ matrix:
     - python: 3.7
       env: TOX_ENV=coveralls-django22-py37
 
+branches:
+  only:
+    - master
+
 # TODO https://docs.travis-ci.com/user/build-stages/
 # install: pip install tox coveralls
 # script: tox -e $TOX_ENV
