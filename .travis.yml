@@ -1,6 +1,8 @@
 language: python
 cache: pip
 dist: xenial
+install: pip install tox coveralls
+script: tox -e $TOX_ENV
 
 matrix:
   include:
