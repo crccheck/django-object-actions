@@ -4,6 +4,7 @@ __pycache__
 .coverage
 .tox/
 *.db
+*.sqlite
 
 
 # Private files
