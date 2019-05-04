@@ -2,5 +2,6 @@ dj-database-url
 django-extensions==2.0.0
 factory-boy
 coverage
+# DELETEME after python 2.7 is dropped
 mock
 uuid
