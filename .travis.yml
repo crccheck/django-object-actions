@@ -1,5 +1,8 @@
 language: python
 cache: pip
+dist: xenial
+install: pip install tox coveralls
+script: tox -e $TOX_ENV
 
 matrix:
   include:
@@ -25,13 +28,32 @@ matrix:
       env: TOX_ENV=django111-py35
     - python: 3.6
       env: TOX_ENV=django111-py36
+    - python: 3.4
+      env: TOX_ENV=django20-py34
     - python: 3.5
       env: TOX_ENV=django20-py35
     - python: 3.6
       env: TOX_ENV=django20-py36
+    - python: 3.7
+      env: TOX_ENV=django20-py37
+    - python: 3.5
+      env: TOX_ENV=django21-py35
     - python: 3.6
-      env: TOX_ENV=coveralls-django111-py36
+      env: TOX_ENV=django21-py36
+    - python: 3.7
+      env: TOX_ENV=django21-py37
+    - python: 3.6
+      env: TOX_ENV=django22-py36
+    - python: 3.7
+      env: TOX_ENV=django22-py37
+    - python: 3.7
+      env: TOX_ENV=coveralls-django22-py37
 
-install: pip install tox coveralls
-script: tox -e $TOX_ENV
-after_success: coveralls
+branches:
+  only:
+    - master
+
+# TODO https://docs.travis-ci.com/user/build-stages/
+# install: pip install tox coveralls
+# script: tox -e $TOX_ENV
+# after_success: [ "$TOX_ENV" = "coveralls-django21-py37" ] && coveralls || true

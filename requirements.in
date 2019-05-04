@@ -1,7 +1,6 @@
 dj-database-url
 django-extensions==2.0.0
 factory-boy
-Faker
 coverage
 mock
 uuid
