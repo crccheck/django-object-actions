@@ -50,18 +50,19 @@ resetdb: ## Delete and then recreate the dev sqlite database
 
 .PHONY: build
 build: ## Build a full set of Docker images
-build: build/2.1 build/2.0 build/1.11.11 build/1.10.8 build/1.9.13 build/1.8.18
+build: build/2.2 build/2.1 build/2.0 build/1.11.11 build/1.10.8 build/1.9.13 build/1.8.18
 
 build/%:
 	docker build --build-arg DJANGO_VERSION=$* \
 	  -t $(IMAGE):$$(echo "$*" | cut -f 1-2 -d.) .
 
-run: run/2.1
+run: run/2.2
 
 run/%:
 	docker run --rm -p 8000:8000 -it $(IMAGE):$*
 
 docker/publish: ## Publish Docker images to the hub
+	docker push $(IMAGE):2.2
 	docker push $(IMAGE):2.1
 	docker push $(IMAGE):2.0
 	docker push $(IMAGE):1.11
