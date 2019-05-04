@@ -73,6 +73,7 @@ test/%:
 bash:
 	docker run --rm -it $(IMAGE):2.0 /bin/bash
 
+.PHONY: version
 version:
 	@sed -i -r /version/s/[0-9.]+/$(VERSION)/ setup.py
 	@sed -i -r /version/s/[0-9.]+/$(VERSION)/ django_object_actions/__init__.py

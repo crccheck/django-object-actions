@@ -1,3 +1,11 @@
+## 1.1.0
+
+### Added
+* [4191afd691] - feat: Make default labels prettier (#93)
+
+### Fixed
+* [fb908697a6] - Return to preserved filters on change_list after object action (#88)
+
 ## 1.0.0
 
 I didn't get around to everything I listed in #44 as a release blocker for 1.0,
