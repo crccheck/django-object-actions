@@ -51,7 +51,7 @@ class ChangeTests(LoggedInTestCase):
         url = '/admin/polls/choice/'
         response = self.client.get(url)
         self.assertIn('objectactions', response.context_data)
-        self.assertIn('Delete_all', response.rendered_content)
+        self.assertIn('Delete all', response.rendered_content)
 
     def test_changelist_template_context(self):
         url = reverse('admin:polls_poll_changelist')
