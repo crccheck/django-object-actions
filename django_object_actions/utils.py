@@ -15,7 +15,7 @@ from django.views.generic.list import MultipleObjectMixin
 try:
     from django.urls import reverse
 except ImportError:
-    from django.core.urlresolvers import reverse  # < django 1.10
+    from django.core.urlresolvers import reverse  # DJANGO1.10
 
 
 class BaseDjangoObjectActions(object):

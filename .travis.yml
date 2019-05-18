@@ -52,6 +52,8 @@ matrix:
 branches:
   only:
     - master
+notifications:
+  email: false
 
 # TODO https://docs.travis-ci.com/user/build-stages/
 # install: pip install tox coveralls
