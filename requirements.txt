@@ -7,9 +7,9 @@
 coverage==4.5.3
 dj-database-url==0.5.0
 django-extensions==2.1.6
-factory-boy==2.11.1
-faker==1.0.5              # via factory-boy
-mock==3.0.4
+factory-boy==2.12.0
+faker==1.0.7              # via factory-boy
+mock==3.0.5
 python-dateutil==2.8.0    # via faker
 six==1.12.0               # via django-extensions, faker, mock, python-dateutil
 text-unidecode==1.2       # via faker
