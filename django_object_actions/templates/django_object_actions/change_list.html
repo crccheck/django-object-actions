@@ -4,7 +4,7 @@
 {% block object-tools-items %}
   {% for tool in objectactions %}
     <li class="objectaction-item" data-tool-name="{{ tool.name }}">
-      {% url tools_view_name pk=object_id tool=tool.name as action_url %}
+      {% url tools_view_name tool=tool.name as action_url %}
       <a href="{% add_preserved_filters action_url %}" title="{{ tool.standard_attrs.title }}"
          {% for k, v in tool.custom_attrs.items %}
            {{ k }}="{{ v }}"
