@@ -11,6 +11,10 @@ quickstart: resetdb
 	python $(MANAGE) createsuperuser
 	python $(MANAGE) runserver
 
+dev: ## Run the example project
+	@echo Browse at http://localhost:8000/admin/
+	python $(MANAGE) runserver
+
 clean: ## Remove generated files
 	rm -rf .coverage
 	rm -rf .tox
