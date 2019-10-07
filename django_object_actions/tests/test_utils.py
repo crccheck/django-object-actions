@@ -3,26 +3,24 @@ from django.test import TestCase
 
 from example_project.polls.models import Poll
 
-from ..utils import (
-    BaseDjangoObjectActions,
-    BaseActionView,
-    takes_instance_or_queryset,
-)
+from ..utils import BaseDjangoObjectActions, BaseActionView, takes_instance_or_queryset
 
 
 class BaseDjangoObjectActionsTest(TestCase):
     def setUp(self):
         self.instance = BaseDjangoObjectActions()
         self.instance.model = mock.Mock(
-            **{'_meta.app_label': 'app', '_meta.model_name': 'model'})
+            **{"_meta.app_label": "app", "_meta.model_name": "model"}
+        )
 
-    @mock.patch('django_object_actions.utils.BaseDjangoObjectActions'
-                '.admin_site', create=True)
+    @mock.patch(
+        "django_object_actions.utils.BaseDjangoObjectActions" ".admin_site", create=True
+    )
     def test_get_action_urls_trivial_case(self, mock_site):
         urls = self.instance._get_action_urls()
 
         self.assertEqual(len(urls), 2)
-        self.assertEqual(urls[0].name, 'app_model_actions')
+        self.assertEqual(urls[0].name, "app_model_actions")
 
     def test_get_change_actions_gets_attribute(self):
         # Set up
@@ -30,9 +28,7 @@ class BaseDjangoObjectActionsTest(TestCase):
 
         # Test
         returned_value = self.instance.get_change_actions(
-            request=mock.Mock(),
-            object_id=mock.Mock(),
-            form_url=mock.Mock(),
+            request=mock.Mock(), object_id=mock.Mock(), form_url=mock.Mock()
         )
 
         # Assert
@@ -40,41 +36,42 @@ class BaseDjangoObjectActionsTest(TestCase):
 
     def test_get_button_attrs_returns_defaults(self):
         # TODO: use `mock`
-        mock_tool = type('mock_tool', (object, ), {})
+        mock_tool = type("mock_tool", (object,), {})
         attrs, __ = self.instance._get_button_attrs(mock_tool)
-        self.assertEqual(attrs['class'], '')
-        self.assertEqual(attrs['title'], '')
+        self.assertEqual(attrs["class"], "")
+        self.assertEqual(attrs["title"], "")
 
     def test_get_button_attrs_disallows_href(self):
-        mock_tool = type('mock_tool', (object, ), {
-            'attrs': {'href': 'hreeeeef'},
-        })
+        mock_tool = type("mock_tool", (object,), {"attrs": {"href": "hreeeeef"}})
         attrs, __ = self.instance._get_button_attrs(mock_tool)
-        self.assertNotIn('href', attrs)
+        self.assertNotIn("href", attrs)
 
     def test_get_button_attrs_disallows_title(self):
-        mock_tool = type('mock_tool', (object, ), {
-            'attrs': {'title': 'i wanna be a title'},
-            'short_description': 'real title',
-        })
+        mock_tool = type(
+            "mock_tool",
+            (object,),
+            {
+                "attrs": {"title": "i wanna be a title"},
+                "short_description": "real title",
+            },
+        )
         attrs, __ = self.instance._get_button_attrs(mock_tool)
-        self.assertEqual(attrs['title'], 'real title')
+        self.assertEqual(attrs["title"], "real title")
 
     def test_get_button_attrs_gets_set(self):
-        mock_tool = type('mock_tool', (object, ), {
-            'attrs': {'class': 'class'},
-            'short_description': 'description',
-        })
+        mock_tool = type(
+            "mock_tool",
+            (object,),
+            {"attrs": {"class": "class"}, "short_description": "description"},
+        )
         attrs, __ = self.instance._get_button_attrs(mock_tool)
-        self.assertEqual(attrs['class'], 'class')
-        self.assertEqual(attrs['title'], 'description')
+        self.assertEqual(attrs["class"], "class")
+        self.assertEqual(attrs["title"], "description")
 
     def test_get_button_attrs_custom_attrs_get_partitioned(self):
-        mock_tool = type('mock_tool', (object, ), {
-            'attrs': {'nonstandard': 'wombat'},
-        })
+        mock_tool = type("mock_tool", (object,), {"attrs": {"nonstandard": "wombat"}})
         attrs, custom = self.instance._get_button_attrs(mock_tool)
-        self.assertEqual(custom['nonstandard'], 'wombat')
+        self.assertEqual(custom["nonstandard"], "wombat")
 
 
 class BaseActionViewTests(TestCase):
@@ -82,14 +79,14 @@ class BaseActionViewTests(TestCase):
         super(BaseActionViewTests, self).setUp()
         self.view = BaseActionView()
 
-    @mock.patch('django_object_actions.utils.messages')
+    @mock.patch("django_object_actions.utils.messages")
     def test_message_user_proxies_messages(self, mock_messages):
-        self.view.message_user('request', 'message')
-        mock_messages.info.assert_called_once_with('request', 'message')
+        self.view.message_user("request", "message")
+        mock_messages.info.assert_called_once_with("request", "message")
 
 
 class DecoratorTest(TestCase):
-    fixtures = ['sample_data']
+    fixtures = ["sample_data"]
 
     def setUp(self):
         # WISHLIST don't depend on fixture
@@ -102,9 +99,9 @@ class DecoratorTest(TestCase):
             return queryset
 
         # make sure my test function outputs the third arg
-        self.assertEqual(myfunc(None, None, 'foo'), 'foo')
+        self.assertEqual(myfunc(None, None, "foo"), "foo")
         # or the `queryset` kwarg
-        self.assertEqual(myfunc(None, None, queryset='bar'), 'bar')
+        self.assertEqual(myfunc(None, None, queryset="bar"), "bar")
 
     def test_decorated(self):
         # setup

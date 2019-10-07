@@ -13,6 +13,6 @@ else:
 
 
 urlpatterns = [
-    url(r'^admin/', include(admin.site.urls)),
-    url(r'^support/', include(support_admin.urls)),
+    url(r"^admin/", include(admin.site.urls)),
+    url(r"^support/", include(support_admin.urls)),
 ]
