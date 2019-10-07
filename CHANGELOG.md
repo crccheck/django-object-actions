@@ -1,3 +1,11 @@
+<a name="1.1.1"></a>
+## [1.1.1](https://github.com/crccheck/django-object-actions/compare/v1.1.0...v1.1.1) (2019-10-06)
+
+### Bug Fixes
+
+* changelist action links had no 'href' (#98) 8b8aed3, closes #96
+
+
 ## 1.1.0
 
 ### Added
