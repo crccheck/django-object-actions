@@ -2,7 +2,7 @@ from setuptools import setup
 
 
 setup(
-    name="django-object-actions",
+name="django-object-actions",
     version="1.1.1",
     author="Chris Chang",
     author_email="c@crccheck.com",
