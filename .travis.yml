@@ -5,43 +5,43 @@ install: pip install tox
 
 env:
   - python: 2.7
-    env: TOX_ENV=django18-py27
+    TOX_ENV=django18-py27
   - python: 3.4
-    env: TOX_ENV=django18-py34
+    TOX_ENV=django18-py34
   - python: 3.5
-    env: TOX_ENV=django18-py35
+    TOX_ENV=django18-py35
   - python: 2.7
-    env: TOX_ENV=django19-py27
+    TOX_ENV=django19-py27
   - python: 3.4
-    env: TOX_ENV=django19-py34
+    TOX_ENV=django19-py34
   - python: 3.5
-    env: TOX_ENV=django19-py35
+    TOX_ENV=django19-py35
   - python: 2.7
-    env: TOX_ENV=django110-py27
+    TOX_ENV=django110-py27
   - python: 3.5
-    env: TOX_ENV=django110-py35
+    TOX_ENV=django110-py35
   - python: 2.7
-    env: TOX_ENV=django111-py27
+    TOX_ENV=django111-py27
   - python: 3.5
-    env: TOX_ENV=django111-py35
+    TOX_ENV=django111-py35
   - python: 3.6
-    env: TOX_ENV=django111-py36
+    TOX_ENV=django111-py36
   - python: 3.4
-    env: TOX_ENV=django20-py34
+    TOX_ENV=django20-py34
   - python: 3.5
-    env: TOX_ENV=django20-py35
+    TOX_ENV=django20-py35
   - python: 3.6
-    env: TOX_ENV=django20-py36
+    TOX_ENV=django20-py36
   - python: 3.7
-    env: TOX_ENV=django20-py37
+    TOX_ENV=django20-py37
   - python: 3.5
-    env: TOX_ENV=django21-py35
+    TOX_ENV=django21-py35
   - python: 3.6
-    env: TOX_ENV=django21-py36
+    TOX_ENV=django21-py36
   - python: 3.7
-    env: TOX_ENV=django21-py37
+    TOX_ENV=django21-py37
   - python: 3.6
-    env: TOX_ENV=django22-py36
+    TOX_ENV=django22-py36
   - python: 3.7
     env: TOX_ENV=django22-py37
 script: tox -e $TOX_ENV
