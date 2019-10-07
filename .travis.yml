@@ -3,8 +3,6 @@ cache: pip
 dist: xenial
 install: pip install tox
 
-matrix:
-  include:
 jobs:
   include:
     - stage: test
@@ -68,6 +66,7 @@ jobs:
       python: 3.7
       env: TOX_ENV=django22-py37
     - stage: lint
+      install: pip install black
       script: echo TODO
     # - stage: coverage
     # install: pip install tox coveralls
