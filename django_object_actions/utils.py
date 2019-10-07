@@ -36,6 +36,7 @@ class BaseDjangoObjectActions(object):
         The name of the Django Object Actions admin view, including the 'admin'
         namespace. Populated by `_get_action_urls`.
     """
+
     change_actions = []
     changelist_actions = []
     tools_view_name = None
@@ -48,29 +49,35 @@ class BaseDjangoObjectActions(object):
         urls = super(BaseDjangoObjectActions, self).get_urls()
         return self._get_action_urls() + urls
 
-    def change_view(self, request, object_id, form_url='', extra_context=None):
+    def change_view(self, request, object_id, form_url="", extra_context=None):
         extra_context = extra_context or {}
-        extra_context.update({
-            'objectactions': [
-                self._get_tool_dict(action) for action in
-                self.get_change_actions(request, object_id, form_url)
-            ],
-            'tools_view_name': self.tools_view_name,
-        })
+        extra_context.update(
+            {
+                "objectactions": [
+                    self._get_tool_dict(action)
+                    for action in self.get_change_actions(request, object_id, form_url)
+                ],
+                "tools_view_name": self.tools_view_name,
+            }
+        )
         return super(BaseDjangoObjectActions, self).change_view(
-            request, object_id, form_url, extra_context)
+            request, object_id, form_url, extra_context
+        )
 
     def changelist_view(self, request, extra_context=None):
         extra_context = extra_context or {}
-        extra_context.update({
-            'objectactions': [
-                self._get_tool_dict(action) for action in
-                self.get_changelist_actions(request)
-            ],
-            'tools_view_name': self.tools_view_name,
-        })
+        extra_context.update(
+            {
+                "objectactions": [
+                    self._get_tool_dict(action)
+                    for action in self.get_changelist_actions(request)
+                ],
+                "tools_view_name": self.tools_view_name,
+            }
+        )
         return super(BaseDjangoObjectActions, self).changelist_view(
-            request, extra_context)
+            request, extra_context
+        )
 
     # USER OVERRIDABLE
     ##################
@@ -108,11 +115,11 @@ class BaseDjangoObjectActions(object):
 
         model_name = self.model._meta.model_name
         # e.g.: polls_poll
-        base_url_name = '%s_%s' % (self.model._meta.app_label, model_name)
+        base_url_name = "%s_%s" % (self.model._meta.app_label, model_name)
         # e.g.: polls_poll_actions
-        model_actions_url_name = '%s_actions' % base_url_name
+        model_actions_url_name = "%s_actions" % base_url_name
 
-        self.tools_view_name = 'admin:' + model_actions_url_name
+        self.tools_view_name = "admin:" + model_actions_url_name
 
         # WISHLIST use get_change_actions and get_changelist_actions
         # TODO separate change and changelist actions
@@ -121,28 +128,32 @@ class BaseDjangoObjectActions(object):
         return [
             # change, supports the same pks the admin does
             # https://github.com/django/django/blob/stable/1.10.x/django/contrib/admin/options.py#L555
-            url(r'^(?P<pk>.+)/actions/(?P<tool>\w+)/$',
+            url(
+                r"^(?P<pk>.+)/actions/(?P<tool>\w+)/$",
                 self.admin_site.admin_view(  # checks permissions
                     ChangeActionView.as_view(
                         model=self.model,
                         actions=actions,
-                        back='admin:%s_change' % base_url_name,
+                        back="admin:%s_change" % base_url_name,
                         current_app=self.admin_site.name,
                     )
                 ),
-                name=model_actions_url_name),
+                name=model_actions_url_name,
+            ),
             # changelist
-            url(r'^actions/(?P<tool>\w+)/$',
+            url(
+                r"^actions/(?P<tool>\w+)/$",
                 self.admin_site.admin_view(  # checks permissions
                     ChangeListActionView.as_view(
                         model=self.model,
                         actions=actions,
-                        back='admin:%s_changelist' % base_url_name,
+                        back="admin:%s_changelist" % base_url_name,
                         current_app=self.admin_site.name,
                     )
                 ),
                 # Dupe name is fine. https://code.djangoproject.com/ticket/14259
-                name=model_actions_url_name),
+                name=model_actions_url_name,
+            ),
         ]
 
     def _get_tool_dict(self, tool_name):
@@ -151,7 +162,7 @@ class BaseDjangoObjectActions(object):
         standard_attrs, custom_attrs = self._get_button_attrs(tool)
         return dict(
             name=tool_name,
-            label=getattr(tool, 'label', tool_name.replace('_', ' ').capitalize()),
+            label=getattr(tool, "label", tool_name.replace("_", " ").capitalize()),
             standard_attrs=standard_attrs,
             custom_attrs=custom_attrs,
         )
@@ -165,18 +176,18 @@ class BaseDjangoObjectActions(object):
         and passed on. This is kinda awkward and due for a refactor for
         readability.
         """
-        attrs = getattr(tool, 'attrs', {})
+        attrs = getattr(tool, "attrs", {})
         # href is not allowed to be set. should an exception be raised instead?
-        if 'href' in attrs:
-            attrs.pop('href')
+        if "href" in attrs:
+            attrs.pop("href")
         # title is not allowed to be set. should an exception be raised instead?
         # `short_description` should be set instead to parallel django admin
         # actions
-        if 'title' in attrs:
-            attrs.pop('title')
+        if "title" in attrs:
+            attrs.pop("title")
         default_attrs = {
-            'class': attrs.get('class', ''),
-            'title': getattr(tool, 'short_description', ''),
+            "class": attrs.get("class", ""),
+            "title": getattr(tool, "short_description", ""),
         }
         standard_attrs = {}
         custom_attrs = {}
@@ -207,6 +218,7 @@ class BaseActionView(View):
     actions : dict
         A mapping of action names to callables.
     """
+
     back = None
     model = None
     actions = None
@@ -236,7 +248,7 @@ class BaseActionView(View):
         try:
             view = self.actions[tool]
         except KeyError:
-            raise Http404('Action does not exist')
+            raise Http404("Action does not exist")
 
         ret = view(request, *self.view_args)
         if isinstance(ret, HttpResponseBase):
@@ -260,17 +272,19 @@ class BaseActionView(View):
 class ChangeActionView(SingleObjectMixin, BaseActionView):
     @property
     def view_args(self):
-        return (self.get_object(), )
+        return (self.get_object(),)
 
     @property
     def back_url(self):
-        return reverse(self.back, args=(self.kwargs['pk'],), current_app=self.current_app)
+        return reverse(
+            self.back, args=(self.kwargs["pk"],), current_app=self.current_app
+        )
 
 
 class ChangeListActionView(MultipleObjectMixin, BaseActionView):
     @property
     def view_args(self):
-        return (self.get_queryset(), )
+        return (self.get_queryset(),)
 
     @property
     def back_url(self):
@@ -279,6 +293,7 @@ class ChangeListActionView(MultipleObjectMixin, BaseActionView):
 
 def takes_instance_or_queryset(func):
     """Decorator that makes standard Django admin actions compatible."""
+
     @wraps(func)
     def decorated_function(self, request, queryset):
         # func follows the prototype documented at:
@@ -296,4 +311,5 @@ def takes_instance_or_queryset(func):
                     model = queryset._meta.concrete_model
                 queryset = model.objects.filter(pk=queryset.pk)
         return func(self, request, queryset)
+
     return decorated_function

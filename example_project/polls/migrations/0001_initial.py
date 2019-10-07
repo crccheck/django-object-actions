@@ -10,36 +10,56 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Choice',
+            name="Choice",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('choice_text', models.CharField(max_length=200)),
-                ('votes', models.IntegerField()),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("choice_text", models.CharField(max_length=200)),
+                ("votes", models.IntegerField()),
             ],
         ),
         migrations.CreateModel(
-            name='Comment',
+            name="Comment",
             fields=[
-                ('uuid', models.UUIDField(editable=False, primary_key=True, serialize=False)),
-                ('comment', models.TextField(blank=True, null=True)),
+                (
+                    "uuid",
+                    models.UUIDField(editable=False, primary_key=True, serialize=False),
+                ),
+                ("comment", models.TextField(blank=True, null=True)),
             ],
         ),
         migrations.CreateModel(
-            name='Poll',
+            name="Poll",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('question', models.CharField(max_length=200)),
-                ('pub_date', models.DateTimeField(verbose_name=b'date published')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("question", models.CharField(max_length=200)),
+                ("pub_date", models.DateTimeField(verbose_name=b"date published")),
             ],
         ),
         migrations.AddField(
-            model_name='choice',
-            name='poll',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='polls.Poll'),
+            model_name="choice",
+            name="poll",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="polls.Poll"
+            ),
         ),
     ]
