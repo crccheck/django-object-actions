@@ -50,6 +50,7 @@ script: tox -e $TOX_ENV
 stage: test
 
 jobs:
+  include:
     - stage: lint
       script: echo TODO
     # - stage: coverage
