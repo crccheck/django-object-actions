@@ -44,11 +44,10 @@ env:
     env: TOX_ENV=django22-py36
   - python: 3.7
     env: TOX_ENV=django22-py37
+script: tox -e $TOX_ENV
 
 jobs:
   include:
-    - stage: test
-      script: tox -e $TOX_ENV
     - stage: lint
       script: echo TODO
     # - stage: coverage
