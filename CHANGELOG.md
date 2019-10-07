@@ -1,5 +1,5 @@
 <a name="1.1.1"></a>
-## [1.1.1](//compare/v1.1.0...v1.1.1) (2019-10-06)
+## [1.1.1](https://github.com/crccheck/django-object-actions/compare/v1.1.0...v1.1.1) (2019-10-06)
 
 ### Bug Fixes
 
