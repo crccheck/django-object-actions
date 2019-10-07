@@ -67,7 +67,7 @@ jobs:
     #   env: TOX_ENV=django22-py37
     - stage: lint
       install: pip install black
-      script: echo TODO
+      script: black --check .
     # - stage: coverage
     # install: pip install tox coveralls
     # script: tox -e $TOX_ENV
