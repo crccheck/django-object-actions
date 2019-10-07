@@ -2,7 +2,6 @@ language: python
 cache: pip
 dist: xenial
 install: pip install tox coveralls
-script: tox -e $TOX_ENV
 
 matrix:
   include:
@@ -49,13 +48,19 @@ matrix:
     - python: 3.7
       env: TOX_ENV=coveralls-django22-py37
 
+jobs:
+  include:
+    - stage: test
+      script: tox -e $TOX_ENV
+    - stage: lint
+      script: echo TODO
+    # - stage: coverage
+    # install: pip install tox coveralls
+    # script: tox -e $TOX_ENV
+    # after_success: [ "$TOX_ENV" = "coveralls-django21-py37" ] && coveralls || true
+
 branches:
   only:
     - master
 notifications:
   email: false
-
-# TODO https://docs.travis-ci.com/user/build-stages/
-# install: pip install tox coveralls
-# script: tox -e $TOX_ENV
-# after_success: [ "$TOX_ENV" = "coveralls-django21-py37" ] && coveralls || true
