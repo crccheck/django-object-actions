@@ -47,8 +47,10 @@ matrix:
       env: TOX_ENV=django22-py37
 script: tox -e $TOX_ENV
 
+stage: Test
+
 jobs:
-  include:
+    - stage:
     - stage: lint
       script: echo TODO
     # - stage: coverage
