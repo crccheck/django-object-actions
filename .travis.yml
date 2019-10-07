@@ -2,6 +2,7 @@ language: python
 cache: pip
 dist: xenial
 install: pip install tox
+script: tox -e $TOX_ENV
 
 jobs:
   include:
@@ -72,7 +73,6 @@ jobs:
     # install: pip install tox coveralls
     # script: tox -e $TOX_ENV
     # after_success: [ "$TOX_ENV" = "coveralls-django21-py37" ] && coveralls || true
-script: tox -e $TOX_ENV
 
 stages:
   - test
