@@ -15,14 +15,18 @@ Django Admin Actions? Well now they can be.
 Quick-Start Guide
 -----------------
 
-Install Django Object Actions::
+Install Django Object Actions:
+
+.. code-block:: bash
 
     pip install django-object-actions
 
 Add ``django_object_actions`` to your ``INSTALLED_APPS`` so Django can find our
 templates.
 
-In your admin.py::
+In your admin.py:
+
+.. code-block:: python
 
     from django_object_actions import DjangoObjectActions
 
@@ -46,7 +50,9 @@ an object instance instead of a queryset (see *Re-using Admin Actions* below).
 
 Tool actions are exposed by putting them in a ``change_actions`` attribute in
 your model admin. You can also add tool actions to the changelist views too.
-You'll get a queryset like a regular admin action::
+You'll get a queryset like a regular admin action:
+
+.. code-block:: python
 
     from django_object_actions import DjangoObjectActions
 
@@ -74,8 +80,9 @@ Re-using Admin Actions
 ``````````````````````
 
 If you would like a preexisting admin action to also be an change action, add
-the ``takes_instance_or_queryset`` decorator like::
+the ``takes_instance_or_queryset`` decorator like:
 
+.. code-block:: python
 
     from django_object_actions import (DjangoObjectActions,
             takes_instance_or_queryset)
@@ -94,7 +101,9 @@ Customizing Admin Actions
 `````````````````````````
 
 To give the action some a helpful title tooltip, add a ``short_description``
-attribute, similar to how admin actions work::
+attribute, similar to how admin actions work:
+
+.. code-block:: python
 
     def increment_vote(self, request, obj):
         obj.votes = obj.votes + 1
@@ -102,7 +111,9 @@ attribute, similar to how admin actions work::
     increment_vote.short_description = "Increment the vote count by one"
 
 By default, Django Object Actions will guess what to label the button based on
-the name of the function. You can override this with a ``label`` attribute::
+the name of the function. You can override this with a ``label`` attribute:
+
+.. code-block:: python
 
     def increment_vote(self, request, obj):
         obj.votes = obj.votes + 1
@@ -110,7 +121,9 @@ the name of the function. You can override this with a ``label`` attribute::
     increment_vote.label = "Vote++"
 
 If you need even more control, you can add arbitrary attributes to the buttons
-by adding a Django widget style `attrs` attribute::
+by adding a Django widget style `attrs` attribute:
+
+.. code-block:: python
 
     def increment_vote(self, request, obj):
         obj.votes = obj.votes + 1
@@ -125,7 +138,9 @@ Programmatically Disabling Actions
 You can programmatically disable registered actions by defining your own custom
 ``get_change_actions()`` method. In this example, certain actions only apply to
 certain object states (i.e. You should not be able to close an company account
-if the account is already closed)::
+if the account is already closed):
+
+.. code-block:: python
 
     def get_change_actions(self, request, object_id, form_url):
         actions = super(PollAdmin, self).get_change_actions(request, object_id, form_url)
@@ -158,7 +173,9 @@ If you don't intend to use the template customizations at all, don't add
 More Examples
 -------------
 
-Making an action that links off-site::
+Making an action that links off-site:
+
+.. code-block:: python
 
     def external_link(self, request, obj):
         from django.http import HttpResponseRedirect
@@ -197,7 +214,9 @@ This runs the example Django project in ``./example_project`` based on the
 Development
 -----------
 
-Getting started *(with virtualenvwrapper)*::
+Getting started *(with virtualenvwrapper)*:
+
+.. code-block:: bash
 
     # get a copy of the code
     git clone git@github.com:crccheck/django-object-actions.git
