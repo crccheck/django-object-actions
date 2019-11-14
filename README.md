@@ -1,9 +1,7 @@
 Django Object Actions
 =====================
 
-[![image](https://travis-ci.org/crccheck/django-object-actions.png)](https://travis-ci.org/crccheck/django-object-actions)
-
-[![image](https://coveralls.io/repos/crccheck/django-object-actions/badge.png)](https://coveralls.io/r/crccheck/django-object-actions)
+[![Build Status](https://travis-ci.org/crccheck/django-object-actions.svg?branch=master)](https://travis-ci.org/crccheck/django-object-actions)
 
 If you\'ve ever tried making your own admin object tools and you were
 like me, you immediately gave up. Why can\'t they be as easy as making
