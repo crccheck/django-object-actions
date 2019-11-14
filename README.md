@@ -14,8 +14,8 @@ Quick-Start Guide
 
 Install Django Object Actions:
 
-``` {.bash}
-pip install django-object-actions
+```shell
+$ pip install django-object-actions
 ```
 
 Add `django_object_actions` to your `INSTALLED_APPS` so Django can find
@@ -23,9 +23,8 @@ our templates.
 
 In your admin.py:
 
-``` {.python}
+```python
 from django_object_actions import DjangoObjectActions
-
 
 class ArticleAdmin(DjangoObjectActions, admin.ModelAdmin):
     def publish_this(self, request, obj):
@@ -49,7 +48,7 @@ Tool actions are exposed by putting them in a `change_actions` attribute
 in your model admin. You can also add tool actions to the changelist
 views too. You\'ll get a queryset like a regular admin action:
 
-``` {.python}
+```python
 from django_object_actions import DjangoObjectActions
 
 class MyModelAdmin(DjangoObjectActions, admin.ModelAdmin):
@@ -78,7 +77,7 @@ you\'ll need to take extra care.
 If you would like a preexisting admin action to also be an change
 action, add the `takes_instance_or_queryset` decorator like:
 
-``` {.python}
+```python
 from django_object_actions import (DjangoObjectActions,
         takes_instance_or_queryset)
 
@@ -98,7 +97,7 @@ class RobotAdmin(DjangoObjectActions, admin.ModelAdmin):
 To give the action some a helpful title tooltip, add a
 `short_description` attribute, similar to how admin actions work:
 
-``` {.python}
+```python
 def increment_vote(self, request, obj):
     obj.votes = obj.votes + 1
     obj.save()
@@ -109,7 +108,7 @@ By default, Django Object Actions will guess what to label the button
 based on the name of the function. You can override this with a `label`
 attribute:
 
-``` {.python}
+```python
 def increment_vote(self, request, obj):
     obj.votes = obj.votes + 1
     obj.save()
@@ -119,7 +118,7 @@ increment_vote.label = "Vote++"
 If you need even more control, you can add arbitrary attributes to the
 buttons by adding a Django widget style [attrs]{.title-ref} attribute:
 
-``` {.python}
+```python
 def increment_vote(self, request, obj):
     obj.votes = obj.votes + 1
     obj.save()
@@ -135,7 +134,7 @@ custom `get_change_actions()` method. In this example, certain actions
 only apply to certain object states (i.e. You should not be able to
 close an company account if the account is already closed):
 
-``` {.python}
+```python
 def get_change_actions(self, request, object_id, form_url):
     actions = super(PollAdmin, self).get_change_actions(request, object_id, form_url)
     actions = list(actions)
@@ -167,7 +166,7 @@ More Examples
 
 Making an action that links off-site:
 
-``` {.python}
+```python
 def external_link(self, request, obj):
     from django.http import HttpResponseRedirect
     url = f'https://example.com/{obj.id}'
@@ -206,7 +205,7 @@ Development
 
 Getting started *(with virtualenvwrapper)*:
 
-``` {.bash}
+```shell
 # get a copy of the code
 git clone git@github.com:crccheck/django-object-actions.git
 cd django-object-actions
