@@ -52,11 +52,10 @@ resetdb: ## Delete and then recreate the dev sqlite database
 	python $(MANAGE) migrate --noinput
 	python $(MANAGE) loaddata sample_data
 
-.PHONY: build
-build: ## Build a full set of Docker images
-build: build/2.2.6 build/2.1.13 build/2.0.13 build/1.11.25 build/1.10.8 build/1.9.13 build/1.8.18
+docker/build: ## Build a full set of Docker images
+docker/build: docker/build/2.2.6 docker/build/2.1.13 docker/build/2.0.13 docker/build/1.11.25 docker/build/1.10.8 docker/build/1.9.13 docker/build/1.8.18
 
-build/%:
+docker/build/%:
 	docker build --build-arg DJANGO_VERSION=$* \
 	  -t $(IMAGE):$$(echo "$*" | cut -f 1-2 -d.) .
 
