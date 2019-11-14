@@ -83,17 +83,16 @@ bash:
 version:
 	@sed -i -r /version/s/[0-9.]+/$(VERSION)/ setup.py
 	@sed -i -r /version/s/[0-9.]+/$(VERSION)/ django_object_actions/__init__.py
+	# TODO figure out how to get Make to insert a \n
+	git add . && standard-version --commit-all  --changelogHeader "# Changelog"
 
 # Release instructions
-# 1. update CHANGELOG
-# 2. bump VERSION
-# 3. run `make release`
+# 1. bump VERSION
+# 2. `make version`
+# 3. `make release`
 # 4. `git push --tags origin master`
-# 5. update release notes
-# 6. `chandler push`
+# 5. `chandler push`
 # 6. `make build docker/publish`
-release: clean version
-	@git commit -am "bump version to v$(VERSION)"
-	@git tag v$(VERSION)
+release:
 	@-pip install wheel > /dev/null
 	python setup.py sdist bdist_wheel upload
