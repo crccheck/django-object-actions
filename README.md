@@ -179,8 +179,7 @@ Limitations
     actions.
 2.  If you provide your own custom `change_form.html`, you\'ll also need
     to manually copy in the relevant bits of [our change form
-    \<https://github.com/crccheck/django-object-actions/blob/master/django\_obj
-    ect\_actions/templates/django\_object\_actions/change\_form.html\>]().
+    ](./django_object_actions/templates/django_object_actions/change_form.html).
     You can also use
     `from django_object_actions import BaseDjangoObjectActions` instead.
 3.  Security. This has been written with the assumption that everyone in
