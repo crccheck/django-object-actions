@@ -37,7 +37,7 @@ Usage
 -----
 
 Defining new tool actions are just like defining regular [admin
-actions](https://docs.djangoproject.com/en/dev/ref/contrib/admin/actions/).
+actions](https://docs.djangoproject.com/en/stable/ref/contrib/admin/actions/).
 The major difference is the action functions for you write for the
 change view will take an object instance instead of a queryset (see
 *Re-using Admin Actions* below).
@@ -153,7 +153,7 @@ The same is true for changelist actions with `get_changelist_actions`.
 You don't have to add this to `INSTALLED_APPS`, all you need to to do
 is copy the template `django_object_actions/change_form.html` some place
 Django's template loader [will find
-it](https://docs.djangoproject.com/en/dev/ref/settings/#template-dirs).
+it](https://docs.djangoproject.com/en/stable/ref/settings/#template-dirs).
 
 If you don't intend to use the template customizations at all, don't
 add `django_object_actions` to your `INSTALLED_APPS` at all and use
@@ -234,5 +234,5 @@ Django Object Actions is very similar to
 [django-object-tools](https://github.com/praekelt/django-object-tools),
 but does not require messing with your urls.py, does not do anything
 special with permissions, and uses the same patterns as making [admin
-actions](https://docs.djangoproject.com/en/dev/ref/contrib/admin/actions/#actions-as-modeladmin-methods)
+actions](https://docs.djangoproject.com/en/stable/ref/contrib/admin/actions/#actions-as-modeladmin-methods)
 in Django.
