@@ -3,8 +3,8 @@ Django Object Actions
 
 [![Build Status](https://travis-ci.org/crccheck/django-object-actions.svg?branch=master)](https://travis-ci.org/crccheck/django-object-actions)
 
-If you\'ve ever tried making your own admin object tools and you were
-like me, you immediately gave up. Why can\'t they be as easy as making
+If you've ever tried making your own admin object tools and you were
+like me, you immediately gave up. Why can't they be as easy as making
 Django Admin Actions? Well now they can be.
 
 Quick-Start Guide
@@ -44,7 +44,7 @@ change view will take an object instance instead of a queryset (see
 
 Tool actions are exposed by putting them in a `change_actions` attribute
 in your model admin. You can also add tool actions to the changelist
-views too. You\'ll get a queryset like a regular admin action:
+views too. You'll get a queryset like a regular admin action:
 
 ```python
 from django_object_actions import DjangoObjectActions
@@ -68,7 +68,7 @@ go back to the same place, but if you return a HttpResponse, it will
 follow it (hey, just like admin actions!).
 
 If your admin modifies `get_urls`, `change_view`, or `changelist_view`,
-you\'ll need to take extra care.
+you'll need to take extra care.
 
 ### Re-using Admin Actions
 
@@ -150,12 +150,12 @@ The same is true for changelist actions with `get_changelist_actions`.
 
 ### Alternate Installation
 
-You don\'t have to add this to `INSTALLED_APPS`, all you need to to do
+You don't have to add this to `INSTALLED_APPS`, all you need to to do
 is copy the template `django_object_actions/change_form.html` some place
-Django\'s template loader [will find
+Django's template loader [will find
 it](https://docs.djangoproject.com/en/dev/ref/settings/#template-dirs).
 
-If you don\'t intend to use the template customizations at all, don\'t
+If you don't intend to use the template customizations at all, don't
 add `django_object_actions` to your `INSTALLED_APPS` at all and use
 `BaseDjangoObjectActions` instead of `DjangoObjectActions`.
 
@@ -177,7 +177,7 @@ Limitations
 1.  `django-object-actions` expects functions to be methods of the model
     admin. While Django gives you a lot more options for their admin
     actions.
-2.  If you provide your own custom `change_form.html`, you\'ll also need
+2.  If you provide your own custom `change_form.html`, you'll also need
     to manually copy in the relevant bits of [our change form
     ](./django_object_actions/templates/django_object_actions/change_form.html).
     You can also use
