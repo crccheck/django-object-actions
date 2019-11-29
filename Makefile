@@ -90,9 +90,10 @@ version:
 # 1. bump VERSION
 # 2. `make version`
 # 3. `make release`
-# 4. `git push --tags origin master`
+# 4. `git push --follow-tags origin master`
 # 5. `chandler push`
 # 6. `make build docker/publish`
-release:
-	@-pip install wheel > /dev/null
-	python setup.py sdist bdist_wheel upload
+release: clean
+	@-pip install twine wheel > /dev/null
+	python setup.py sdist bdist_wheel
+	twine upload dist/*
