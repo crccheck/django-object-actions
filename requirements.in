@@ -3,5 +3,4 @@ django-extensions
 factory-boy
 coverage
 # DELETEME after python 2.7 is dropped
-mock
 uuid
