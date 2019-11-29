@@ -7,17 +7,11 @@ script: tox -e $TOX_ENV
 jobs:
   include:
     - stage: test
-      python: 2.7
-      env: TOX_ENV=django18-py27
-    - stage: test
       python: 3.4
       env: TOX_ENV=django18-py34
     - stage: test
       python: 3.5
       env: TOX_ENV=django18-py35
-    - stage: test
-      python: 2.7
-      env: TOX_ENV=django19-py27
     - stage: test
       python: 3.4
       env: TOX_ENV=django19-py34
@@ -25,14 +19,8 @@ jobs:
       python: 3.5
       env: TOX_ENV=django19-py35
     - stage: test
-      python: 2.7
-      env: TOX_ENV=django110-py27
-    - stage: test
       python: 3.5
       env: TOX_ENV=django110-py35
-    - stage: test
-      python: 2.7
-      env: TOX_ENV=django111-py27
     - stage: test
       python: 3.5
       env: TOX_ENV=django111-py35
