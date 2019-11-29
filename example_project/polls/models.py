@@ -1,5 +1,5 @@
 import datetime
-import uuid
+from uuid import uuid4
 
 from django.db import models
 from django.utils import timezone
@@ -30,7 +30,7 @@ class Choice(models.Model):
 
 
 class Comment(models.Model):
-    uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    uuid = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     comment = models.TextField(null=True, blank=True)
 
     def __str__(self):
