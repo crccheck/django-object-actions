@@ -1,4 +1,17 @@
 # Changelog
+## [2.0.0](https://github.com/crccheck/django-object-actions/compare/v1.1.2...v2.0.0) (2019-11-30)
+
+
+### ⚠ BREAKING CHANGES
+
+* This release drops Python 2 support
+
+Django has [dropped Python 2 support](https://docs.djangoproject.com/en/2.2/releases/2.0/#python-compatibility) ever since Django 2.0 (December 2, 2017). With Django 3.0 coming very soon and Python 2 reaching end of life, it doesn't make sense to continue supporting Python 2.
+
+### Features
+
+* Drop Python 2 support ([#105](https://github.com/crccheck/django-object-actions/issues/105)) ([551d2bb](https://github.com/crccheck/django-object-actions/commit/551d2bb2a66c5fd1c157b05c288032124affba41))
+
 ### [1.1.2](https://github.com/crccheck/django-object-actions/compare/v1.1.1...v1.1.2) (2019-11-14)
 
 ## [1.1.1](https://github.com/crccheck/django-object-actions/compare/v1.1.0...v1.1.1) (2019-10-06)
