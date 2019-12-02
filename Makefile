@@ -92,7 +92,7 @@ version:
 # 3. `make release`
 # 4. `git push --follow-tags origin master`
 # 5. `chandler push`
-# 6. `make build docker/publish`
+# 6. `make docker/build docker/publish`
 release: clean
 	@-pip install twine wheel > /dev/null
 	python setup.py sdist bdist_wheel
