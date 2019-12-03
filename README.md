@@ -33,6 +33,7 @@ class ArticleAdmin(DjangoObjectActions, admin.ModelAdmin):
     change_actions = ('publish_this', )
 ```
 
+
 Usage
 -----
 
@@ -187,6 +188,12 @@ Limitations
     the Django admin belongs there. Permissions should be enforced in
     your own actions irregardless of what this provides. Better default
     security is planned for the future.
+
+
+Python and Django compatibility
+-------------------------------
+
+See [`tox.ini`](./tox.ini) for which Python and Django versions this supports.
 
 
 Demo Admin & Docker images
