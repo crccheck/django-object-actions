@@ -53,18 +53,19 @@ resetdb: ## Delete and then recreate the dev sqlite database
 	python $(MANAGE) loaddata sample_data
 
 docker/build: ## Build a full set of Docker images
-docker/build: docker/build/2.2.6 docker/build/2.1.13 docker/build/2.0.13 docker/build/1.11.25 docker/build/1.10.8 docker/build/1.9.13 docker/build/1.8.18
+docker/build: docker/build/3.0 docker/build/2.2.6 docker/build/2.1.13 docker/build/2.0.13 docker/build/1.11.25 docker/build/1.10.8 docker/build/1.9.13 docker/build/1.8.18
 
 docker/build/%:
 	docker build --build-arg DJANGO_VERSION=$* \
 	  -t $(IMAGE):$$(echo "$*" | cut -f 1-2 -d.) .
 
-run: run/2.2
+run: run/3.0
 
 run/%:
 	docker run --rm -p 8000:8000 -it $(IMAGE):$*
 
 docker/publish: ## Publish Docker images to the hub
+	docker push $(IMAGE):3.0
 	docker push $(IMAGE):2.2
 	docker push $(IMAGE):2.1
 	docker push $(IMAGE):2.0
@@ -77,7 +78,7 @@ test/%:
 	docker run --rm -p 8000:8000 -t $(IMAGE):$* make test
 
 bash:
-	docker run --rm -it $(IMAGE):2.2 /bin/sh
+	docker run --rm -it $(IMAGE):3.0 /bin/sh
 
 .PHONY: version
 version:
@@ -92,7 +93,7 @@ version:
 # 3. `make release`
 # 4. `git push --follow-tags origin master`
 # 5. `chandler push`
-# 6. `make build docker/publish`
+# 6. `make docker/build docker/publish`
 release: clean
 	@-pip install twine wheel > /dev/null
 	python setup.py sdist bdist_wheel
