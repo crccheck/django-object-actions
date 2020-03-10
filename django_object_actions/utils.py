@@ -70,7 +70,7 @@ class BaseDjangoObjectActions(object):
                     self._get_tool_dict(action)
                     for action in self.get_changelist_actions(request)
                 ],
-                "tools_view_name": self.tools_view_name,
+                "tools_view_name": "%s_list" % self.tools_view_name,
             }
         )
         return super(BaseDjangoObjectActions, self).changelist_view(
@@ -150,7 +150,7 @@ class BaseDjangoObjectActions(object):
                     )
                 ),
                 # Dupe name is fine. https://code.djangoproject.com/ticket/14259
-                name=model_actions_url_name,
+                name="%s_list" % model_actions_url_name,
             ),
         ]
 
