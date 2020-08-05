@@ -1,6 +1,6 @@
 language: python
 cache: pip
-dist: xenial
+dist: bionic
 install: pip install tox
 script: tox -e $TOX_ENV
 
