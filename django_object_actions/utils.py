@@ -223,12 +223,6 @@ class BaseActionView(View):
     actions = None
     current_app = None
 
-    def setup(self, request, *args, **kwargs):
-        # Fixes issue if model object has special symbols in primary key
-        super().setup(request, *args, **kwargs)
-        for k, v in self.kwargs.items():
-            self.kwargs[k] = unquote(v)
-
     @property
     def view_args(self):
         """
@@ -250,6 +244,9 @@ class BaseActionView(View):
         raise NotImplementedError
 
     def get(self, request, tool, **kwargs):
+        for k, v in self.kwargs.items():
+            self.kwargs[k] = unquote(v)
+
         try:
             view = self.actions[tool]
         except KeyError:
