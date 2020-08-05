@@ -170,7 +170,7 @@ class RelatedDataAdmin(DjangoObjectActions, admin.ModelAdmin):
             # bail because we need a comment
             obj.extra_data = "hodor"
         else:
-            obj.extra_data = ''
+            obj.extra_data = ""
         obj.save()
 
     change_actions = ("fill_up",)

@@ -43,16 +43,18 @@ class CommentFactory(factory.DjangoModelFactory):
 
 def get_random_string(length):
     letters = string.ascii_lowercase
-    result_str = ''.join(random.choice(letters) for i in range(length))
+    result_str = "".join(random.choice(letters) for i in range(length))
     return result_str
 
 
 class RelatedDataFactory(factory.DjangoModelFactory):
     id = factory.lazy_attribute(
-        lambda __: '{}:{}-{}!{}'.format(get_random_string(2),
-                                        get_random_string(2),
-                                        get_random_string(2),
-                                        get_random_string(2))
+        lambda __: "{}:{}-{}!{}".format(
+            get_random_string(2),
+            get_random_string(2),
+            get_random_string(2),
+            get_random_string(2),
+        )
     )
 
     class Meta:

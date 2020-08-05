@@ -7,25 +7,30 @@ import uuid
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('polls', '0001_initial'),
+        ("polls", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='RelatedData',
+            name="RelatedData",
             fields=[
-                ('id', models.CharField(max_length=32, primary_key=True, serialize=False)),
-                ('extra_data', models.TextField(blank=True, default='')),
+                (
+                    "id",
+                    models.CharField(max_length=32, primary_key=True, serialize=False),
+                ),
+                ("extra_data", models.TextField(blank=True, default="")),
             ],
         ),
         migrations.AlterField(
-            model_name='comment',
-            name='uuid',
-            field=models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False),
+            model_name="comment",
+            name="uuid",
+            field=models.UUIDField(
+                default=uuid.uuid4, editable=False, primary_key=True, serialize=False
+            ),
         ),
         migrations.AlterField(
-            model_name='poll',
-            name='pub_date',
-            field=models.DateTimeField(verbose_name='date published'),
+            model_name="poll",
+            name="pub_date",
+            field=models.DateTimeField(verbose_name="date published"),
         ),
     ]
