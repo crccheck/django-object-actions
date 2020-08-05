@@ -35,3 +35,11 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.comment or ""
+
+
+class RelatedData(models.Model):
+    id = models.CharField(primary_key=True, max_length=32)
+    extra_data = models.TextField(blank=True, default='')
+
+    def __str__(self):
+        return self.extra_data or self.id

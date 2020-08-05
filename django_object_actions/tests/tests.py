@@ -80,3 +80,4 @@ class AppTests(LoggedInTestCase):
     def test_render_button(self):
         response = self.client.get(reverse("admin:polls_choice_change", args=(1,)))
         self.assertEqual(response.status_code, 200)
+
