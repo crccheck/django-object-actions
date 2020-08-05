@@ -1,6 +1,7 @@
 """
 Integration tests that actually try and use the tools setup in admin.py
 """
+from django.contrib.admin.utils import quote
 from django.http import HttpResponse
 from mock import patch
 
@@ -49,9 +50,10 @@ class ExtraTests(LoggedInTestCase):
     def test_action_on_a_model_with_complex_id(self):
         related_data = RelatedDataFactory()
         related_data_url = reverse("admin:polls_relateddata_change", args=(related_data.pk, ))
-        action_url = "admin/polls/relateddata/{}/actions/fill_up/".format(related_data.pk)
+        action_url = "/admin/polls/relateddata/{}/actions/fill_up/".format(quote(related_data.pk))
 
         response = self.client.get(action_url)
+        self.assertNotEqual(response.status_code, 404)
         self.assertRedirects(response, related_data_url)
 
 

@@ -3,6 +3,7 @@ from itertools import chain
 
 from django.conf.urls import url
 from django.contrib import messages
+from django.contrib.admin.utils import unquote
 from django.db.models.query import QuerySet
 from django.http import Http404, HttpResponseRedirect
 from django.http.response import HttpResponseBase
@@ -221,6 +222,12 @@ class BaseActionView(View):
     model = None
     actions = None
     current_app = None
+
+    def setup(self, request, *args, **kwargs):
+        # Fixes issue if model object has special symbols in primary key
+        super().setup(request, *args, **kwargs)
+        for k, v in self.kwargs.items():
+            self.kwargs[k] = unquote(v)
 
     @property
     def view_args(self):
