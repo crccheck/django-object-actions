@@ -244,6 +244,7 @@ class BaseActionView(View):
         raise NotImplementedError
 
     def get(self, request, tool, **kwargs):
+        # Fix for case if there are special symbols in object pk
         for k, v in self.kwargs.items():
             self.kwargs[k] = unquote(v)
 
