@@ -1,4 +1,17 @@
 # Changelog
+## [3.0.0](https://github.com/crccheck/django-object-actions/compare/v2.0.0...v3.0.0) (2020-08-08)
+
+
+### ⚠ BREAKING CHANGES
+
+* **deps:** drop Python 3.4 support in preparation for adding type hints and Django 3.1 support
+
+### Features
+
+* **deps:** Add Django 3.1 support ([#109](https://github.com/crccheck/django-object-actions/issues/109)) ([2c7170e](https://github.com/crccheck/django-object-actions/commit/2c7170e3a73317a9417733a7ddfe0fabab84fe85))
+* **deps:** Drop Python 3.4 support ([#108](https://github.com/crccheck/django-object-actions/issues/108)) ([68519d4](https://github.com/crccheck/django-object-actions/commit/68519d48fa8dd4d3b203981a52157841e5152774)), closes [#107](https://github.com/crccheck/django-object-actions/issues/107)
+* add Django 3 test support ([#106](https://github.com/crccheck/django-object-actions/issues/106)) ([4eaf14c](https://github.com/crccheck/django-object-actions/commit/4eaf14c3caff36d5ab274835d38baef7e66213dc))
+
 ## [2.0.0](https://github.com/crccheck/django-object-actions/compare/v1.1.2...v2.0.0) (2019-11-30)
 
 
