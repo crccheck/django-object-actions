@@ -44,6 +44,7 @@ test: ## Run test suite
 
 lint: ## Check code style
 	black --check .
+	mypy --ignore-missing-imports django_object_actions
 
 coverage: ## Run and then display coverage report
 	coverage erase
