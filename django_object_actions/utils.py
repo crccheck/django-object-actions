@@ -39,7 +39,7 @@ class BaseDjangoObjectActions:
 
     change_actions: Iterable[str] = []
     changelist_actions: Iterable[str] = []
-    tools_view_name: str = None
+    tools_view_name: str
 
     # EXISTING ADMIN METHODS MODIFIED
     #################################
