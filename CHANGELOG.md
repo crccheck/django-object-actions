@@ -1,4 +1,11 @@
 # Changelog
+### [3.0.1](https://github.com/crccheck/django-object-actions/compare/v3.0.0...v3.0.1) (2020-08-09)
+
+
+### Bug Fixes
+
+* Objects with special symbols in primary key 404-ed ([#110](https://github.com/crccheck/django-object-actions/issues/110)) ([0c90ce1](https://github.com/crccheck/django-object-actions/commit/0c90ce12a066baf873037eed415052074430d9d2)), closes [/github.com/django/django/blob/master/django/contrib/admin/utils.py#L17](https://github.com/crccheck//github.com/django/django/blob/master/django/contrib/admin/utils.py/issues/L17)
+
 ## [3.0.0](https://github.com/crccheck/django-object-actions/compare/v2.0.0...v3.0.0) (2020-08-08)
 
 
