@@ -1,5 +1,6 @@
 from functools import wraps
 from itertools import chain
+from typing import Iterable
 
 from django.conf.urls import url
 from django.contrib import messages
@@ -36,9 +37,9 @@ class BaseDjangoObjectActions(object):
         namespace. Populated by `_get_action_urls`.
     """
 
-    change_actions = []
-    changelist_actions = []
-    tools_view_name = None
+    change_actions: Iterable[str] = []
+    changelist_actions: Iterable[str] = []
+    tools_view_name: str = None
 
     # EXISTING ADMIN METHODS MODIFIED
     #################################
