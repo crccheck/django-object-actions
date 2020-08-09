@@ -18,7 +18,7 @@ except ImportError:
     from django.core.urlresolvers import reverse  # DJANGO1.10
 
 
-class BaseDjangoObjectActions(object):
+class BaseDjangoObjectActions:
     """
     ModelAdmin mixin to add new actions just like adding admin actions.
 
