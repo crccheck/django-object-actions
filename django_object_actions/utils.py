@@ -3,6 +3,7 @@ from itertools import chain
 
 from django.conf.urls import url
 from django.contrib import messages
+from django.contrib.admin.utils import unquote
 from django.db.models.query import QuerySet
 from django.http import Http404, HttpResponseRedirect
 from django.http.response import HttpResponseBase
@@ -243,6 +244,10 @@ class BaseActionView(View):
         raise NotImplementedError
 
     def get(self, request, tool, **kwargs):
+        # Fix for case if there are special symbols in object pk
+        for k, v in self.kwargs.items():
+            self.kwargs[k] = unquote(v)
+
         try:
             view = self.actions[tool]
         except KeyError:
