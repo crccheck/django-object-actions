@@ -42,6 +42,9 @@ tdd: ## Run tests with a file watcher
 test: ## Run test suite
 	python -W ignore::RuntimeWarning $(MANAGE) test django_object_actions
 
+lint: ## Check code style
+	black --check .
+
 coverage: ## Run and then display coverage report
 	coverage erase
 	coverage run $(MANAGE) test django_object_actions
