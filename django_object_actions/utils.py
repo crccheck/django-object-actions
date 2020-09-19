@@ -1,7 +1,6 @@
 from functools import wraps
 from itertools import chain
 
-from django.conf.urls import url
 from django.contrib import messages
 from django.contrib.admin.utils import unquote
 from django.db.models.query import QuerySet
@@ -10,6 +9,11 @@ from django.http.response import HttpResponseBase
 from django.views.generic import View
 from django.views.generic.detail import SingleObjectMixin
 from django.views.generic.list import MultipleObjectMixin
+
+try:
+    from django.urls import re_path
+except ImportError:
+    from django.conf.urls import url as re_path  # DJANGO1.11
 
 try:
     from django.urls import reverse
@@ -127,7 +131,7 @@ class BaseDjangoObjectActions(object):
         return [
             # change, supports the same pks the admin does
             # https://github.com/django/django/blob/stable/1.10.x/django/contrib/admin/options.py#L555
-            url(
+            re_path(
                 r"^(?P<pk>.+)/actions/(?P<tool>\w+)/$",
                 self.admin_site.admin_view(  # checks permissions
                     ChangeActionView.as_view(
@@ -140,7 +144,7 @@ class BaseDjangoObjectActions(object):
                 name=model_actions_url_name,
             ),
             # changelist
-            url(
+            re_path(
                 r"^actions/(?P<tool>\w+)/$",
                 self.admin_site.admin_view(  # checks permissions
                     ChangeListActionView.as_view(
