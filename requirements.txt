@@ -4,14 +4,13 @@
 #
 #    pip-compile requirements.in
 #
-asgiref==3.3.4            # via django
-coverage==5.5             # via -r requirements.in
-dj-database-url==0.5.0    # via -r requirements.in
-django-extensions==3.1.2  # via -r requirements.in
-factory-boy==3.2.0        # via -r requirements.in
-faker==8.0.0              # via factory-boy
-python-dateutil==2.8.1    # via faker
-pytz==2021.1              # via django
-six==1.15.0               # via python-dateutil
-sqlparse==0.4.1           # via django
+coverage==4.5.4
+dj-database-url==0.5.0
+django-extensions==2.2.3
+factory-boy==2.12.0
+faker==2.0.2              # via factory-boy
+mock==3.0.5
+python-dateutil==2.8.0    # via faker
+six==1.12.0               # via django-extensions, faker, mock, python-dateutil
 text-unidecode==1.3       # via faker
+uuid==1.30
