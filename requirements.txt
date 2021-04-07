@@ -8,7 +8,6 @@ asgiref==3.3.4            # via django
 coverage==5.5             # via -r requirements.in
 dj-database-url==0.5.0    # via -r requirements.in
 django-extensions==3.1.2  # via -r requirements.in
-django==3.2               # via django-extensions
 factory-boy==3.2.0        # via -r requirements.in
 faker==8.0.0              # via factory-boy
 python-dateutil==2.8.1    # via faker
