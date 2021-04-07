@@ -63,6 +63,9 @@ jobs:
     - stage: test
       python: 3.8
       env: TOX_ENV=django31-py38
+    - stage: test
+      python: 3.8
+      env: TOX_ENV=django32-py38
     - stage: lint
       install: pip install black
       script: black --check .
