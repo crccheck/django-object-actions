@@ -81,12 +81,16 @@ test/%:
 bash:
 	docker run --rm -it $(IMAGE):3.1 /bin/sh
 
+# TODO figure out how to get Make to insert a \n in --header and actually output Refactor sections
+# --skip.commit --skip.tag \
 .PHONY: version
 version:
 	@sed -i -r /version/s/[0-9.]+/$(VERSION)/ setup.py
 	@sed -i -r /version/s/[0-9.]+/$(VERSION)/ django_object_actions/__init__.py
-	# TODO figure out how to get Make to insert a \n
-	git add . && standard-version --commit-all  --changelogHeader "# Changelog"
+	git add . && standard-version \
+	  --commit-all \
+	  --types '[{"type":"feat","section":"Features"},{"type":"fix","section":"Bug Fixes"},{"type":"chore","section":"Chores"},{"type":"docs","section":"Docs"},{"type":"style","hidden":true},{"type":"refactor","section":"Refactors"},{"type":"perf","hidden":true},{"type":"test","hidden":true}]' \
+	  --header "# Changelog"
 
 # Release instructions
 # 1. bump VERSION

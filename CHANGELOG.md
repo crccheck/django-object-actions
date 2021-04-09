@@ -1,4 +1,10 @@
 # Changelog
+### [3.0.2](https://github.com/crccheck/django-object-actions/compare/v3.0.1...v3.0.2) (2021-04-09)
+
+### Refactors
+
+* Use django.urls.re_path instead of deprecated django.conf.urls.url (#112)
+
 ### [3.0.1](https://github.com/crccheck/django-object-actions/compare/v3.0.0...v3.0.1) (2020-08-09)
 
 
