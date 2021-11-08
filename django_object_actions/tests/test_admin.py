@@ -3,12 +3,8 @@ Integration tests that actually try and use the tools setup in admin.py
 """
 from django.contrib.admin.utils import quote
 from django.http import HttpResponse
+from django.urls import reverse
 from unittest.mock import patch
-
-try:
-    from django.urls import reverse
-except ImportError:
-    from django.core.urlresolvers import reverse  # < DJANGO1.10
 
 from .tests import LoggedInTestCase
 from example_project.polls.factories import (

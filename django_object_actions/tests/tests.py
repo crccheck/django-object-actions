@@ -1,7 +1,4 @@
-try:
-    from django.urls import reverse
-except ImportError:
-    from django.core.urlresolvers import reverse  # < DJANGO1.10
+from django.urls import reverse
 from django.test import TestCase
 
 from example_project.polls.factories import UserFactory
