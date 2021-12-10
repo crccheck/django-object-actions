@@ -209,7 +209,7 @@ tutorial. `admin.py` demos what you can do with this app.
 Development
 -----------
 
-Getting started *(with virtualenvwrapper)*:
+Getting started:
 
 ```shell
 # get a copy of the code
@@ -223,6 +223,9 @@ make quickstart  # runs 'make resetdb' and some extra steps
 
 Various helpers are available as make commands. Type `make help` and
 view the `Makefile` to see what other things you can do.
+
+Some commands assume you are in the virtualenv. If you see
+"ModuleNotFoundError"s, try running `poetry shell` first.
 
 
 Similar Packages

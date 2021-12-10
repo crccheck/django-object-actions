@@ -28,15 +28,15 @@ install: ## Install development dependencies
 	pip install Django
 
 tdd: ## Run tests with a file watcher
-	nodemon --ext py -x sh -c "python -W ignore::RuntimeWarning $(MANAGE) test --failfast django_object_actions || true"
+	PYTHONPATH=. nodemon --ext py -x sh -c "poetry run python -W ignore::RuntimeWarning $(MANAGE) test --failfast django_object_actions || true"
 
 test: ## Run test suite
 	PYTHONPATH=. poetry run python -W ignore::RuntimeWarning $(MANAGE) test django_object_actions
 
 coverage: ## Run and then display coverage report
-	coverage erase
-	coverage run $(MANAGE) test django_object_actions
-	coverage report --show-missing
+	poetry run coverage erase
+	PYTHONPATH=. poetry run coverage run $(MANAGE) test django_object_actions
+	poetry run coverage report --show-missing
 
 resetdb: ## Delete and then recreate the dev sqlite database
 	python $(MANAGE) reset_db --router=default --noinput
