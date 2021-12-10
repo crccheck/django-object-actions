@@ -9,6 +9,10 @@ license = "Apache-2.0"
 python = "^3.6"
 
 [tool.poetry.dev-dependencies]
+coverage = "4.5.4"
+django-extensions = "2.2.3"
+factory-boy = "2.12.0"
+dj-database-url = "0.5.0"
 
 [build-system]
 requires = ["poetry>=0.12"]
