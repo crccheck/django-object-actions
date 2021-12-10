@@ -225,10 +225,6 @@ make test  # run test suite
 make quickstart  # runs 'make resetdb' and some extra steps
 ```
 
-This will install whatever the latest stable version of Django is. You
-can also install a specific version of Django and
-`pip install -r requirements.txt`.
-
 Various helpers are available as make commands. Type `make help` and
 view the `Makefile` to see what other things you can do.
 

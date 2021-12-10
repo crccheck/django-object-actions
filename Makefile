@@ -26,7 +26,7 @@ clean: ## Remove generated files
 	find . -name "*.pyc" -delete
 	find . -type d -name "__pycache__" -exec rm -rf {} \; || true
 
-install: ## Install development requirements
+install: ## Install development dependencies
 	poetry install
 	pip install Django tox
 
