@@ -13,13 +13,16 @@ jobs:
         python: ["3.6", "3.7"]
     name: "Django 2.0 + Python ${{ matrix.python }}"
     runs-on: ubuntu-latest
+    env:
+      POETRY_VIRTUALENVS_CREATE: false
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python }}
-      - run: pip install poetry "Django<2.1"
+      - run: pip install poetry
       - run: poetry install
+      - run: poetry add "Django<2.1"
       - run: make test
   test-dj21:
     strategy:
@@ -28,13 +31,16 @@ jobs:
         python: ["3.6", "3.7"]
     name: "Django 2.1 + Python ${{ matrix.python }}"
     runs-on: ubuntu-latest
+    env:
+      POETRY_VIRTUALENVS_CREATE: false
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python }}
-      - run: pip install poetry "Django<2.2"
+      - run: pip install poetry
       - run: poetry install
+      - run: poetry add "Django<2.2"
       - run: make test
   test-dj22:
     strategy:
@@ -43,13 +49,16 @@ jobs:
         python: ["3.6", "3.7", "3.8", "3.9"]
     name: "Django 2.2 + Python ${{ matrix.python }}"
     runs-on: ubuntu-latest
+    env:
+      POETRY_VIRTUALENVS_CREATE: false
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python }}
-      - run: pip install poetry "Django<2.3"
+      - run: pip install poetry
       - run: poetry install
+      - run: poetry add "Django<2.3"
       - run: make test
   test-dj30:
     strategy:
@@ -58,13 +67,16 @@ jobs:
         python: ["3.6", "3.7", "3.8", "3.9"]
     name: "Django 3.0 + Python ${{ matrix.python }}"
     runs-on: ubuntu-latest
+    env:
+      POETRY_VIRTUALENVS_CREATE: false
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python }}
-      - run: pip install poetry "Django<3.1"
+      - run: pip install poetry
       - run: poetry install
+      - run: poetry add "Django<3.1"
       - run: make test
   test-dj31:
     strategy:
@@ -73,13 +85,16 @@ jobs:
         python: ["3.6", "3.7", "3.8", "3.9"]
     name: "Django 3.1 + Python ${{ matrix.python }}"
     runs-on: ubuntu-latest
+    env:
+      POETRY_VIRTUALENVS_CREATE: false
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python }}
-      - run: pip install poetry "Django<3.2"
+      - run: pip install poetry
       - run: poetry install
+      - run: poetry add "Django<3.2"
       - run: make test
   test-dj32:
     strategy:
@@ -88,13 +103,16 @@ jobs:
         python: ["3.8", "3.9", "3.10"]
     name: "Django 3.2 + Python ${{ matrix.python }}"
     runs-on: ubuntu-latest
+    env:
+      POETRY_VIRTUALENVS_CREATE: false
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python }}
-      - run: pip install poetry "Django<3.3"
+      - run: pip install poetry
       - run: poetry install
+      - run: poetry add "Django<3.3"
       - run: make test
 
   lint:
