@@ -1,4 +1,7 @@
 # Changelog
+
+<!--next-version-placeholder-->
+
 ### [3.0.2](https://github.com/crccheck/django-object-actions/compare/v3.0.1...v3.0.2) (2021-04-09)
 
 ### Refactors
