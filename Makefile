@@ -27,13 +27,8 @@ clean: ## Remove generated files
 	find . -type d -name "__pycache__" -exec rm -rf {} \; || true
 
 install: ## Install development requirements
-	@[ -n "${VIRTUAL_ENV}" ] || (echo "ERROR: This should be run from a virtualenv" && exit 1)
-	pip install -r requirements.txt
+	poetry install
 	pip install Django tox
-
-.PHONY: requirements.txt
-requirements.txt: ## Regenerate requirements.txt
-	pip-compile requirements.in > $@
 
 tdd: ## Run tests with a file watcher
 	nodemon --ext py -x sh -c "python -W ignore::RuntimeWarning $(MANAGE) test --failfast django_object_actions || true"
