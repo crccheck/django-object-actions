@@ -1,4 +1,3 @@
-VERSION = $(shell cat VERSION)
 PROJECT = ./example_project
 MANAGE = $(PROJECT)/manage.py
 IMAGE = crccheck/django-object-actions
@@ -80,15 +79,3 @@ test/%:
 
 bash:
 	docker run --rm -it $(IMAGE):3.1 /bin/sh
-
-# TODO figure out how to get Make to insert a \n in --header and actually output Refactor sections
-# --skip.commit --skip.tag \
-.PHONY: version
-version:
-	@sed -i -r /version/s/[0-9.]+/$(VERSION)/ setup.py
-	@sed -i -r /version/s/[0-9.]+/$(VERSION)/ django_object_actions/__init__.py
-	git add . && standard-version \
-	  --commit-all \
-	  --types '[{"type":"feat","section":"Features"},{"type":"fix","section":"Bug Fixes"},{"type":"chore","section":"Chores"},{"type":"docs","section":"Docs"},{"type":"style","hidden":true},{"type":"refactor","section":"Refactors"},{"type":"perf","hidden":true},{"type":"test","hidden":true}]' \
-	  --header "# Changelog"
-
