@@ -5,62 +5,96 @@ on:
   push:
 
 jobs:
-  test:
+  test-dj20:
     strategy:
       fail-fast: false
       matrix:
-        versions:
-          - python: "3.6"
-            toxenv: "django20-py36"
-          - python: "3.7"
-            toxenv: "django20-py37"
-          - python: "3.6"
-            toxenv: "django21-py36"
-          - python: "3.7"
-            toxenv: "django21-py37"
-          - python: "3.6"
-            toxenv: "django22-py36"
-          - python: "3.7"
-            toxenv: "django22-py37"
-          - python: "3.8"
-            toxenv: "django22-py38"
-          - python: "3.9"
-            toxenv: "django22-py39"
-          - python: "3.6"
-            toxenv: "django30-py36"
-          - python: "3.7"
-            toxenv: "django30-py37"
-          - python: "3.8"
-            toxenv: "django30-py38"
-          - python: "3.9"
-            toxenv: "django30-py39"
-          - python: "3.6"
-            toxenv: "django31-py36"
-          - python: "3.7"
-            toxenv: "django31-py37"
-          - python: "3.8"
-            toxenv: "django31-py38"
-          - python: "3.9"
-            toxenv: "django31-py39"
-          - python: "3.8"
-            toxenv: "django32-py38"
-          - python: "3.9"
-            toxenv: "django32-py39"
-          - python: "3.10"
-            toxenv: "django32-py310"
-    
-    name: "Python ${{ matrix.versions.python }} - ${{ matrix.versions.toxenv }}"
+        python: ["3.6", "3.7"]
+    name: "Django 2.0 + Python ${{ matrix.python }}"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Python
-        uses: actions/setup-python@v2
+      - uses: actions/setup-python@v2
         with:
-          python-version: ${{ matrix.versions.python }}
-      - name: Install Dependencies
-        run: pip install tox
-      - name: Run Tests
-        run: tox -e ${{ matrix.versions.toxenv }}
+          python-version: ${{ matrix.python }}
+          cache: "pip"
+      - run: pip install poetry "Django<2.1"
+      - run: make test
+  test-dj21:
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.6", "3.7"]
+    name: "Django 2.1 + Python ${{ matrix.python }}"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python }}
+          cache: "pip"
+      - run: pip install poetry "Django<2.2"
+      - run: make test
+  test-dj22:
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.6", "3.7", "3.8", "3.9"]
+    name: "Django 2.2 + Python ${{ matrix.python }}"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python }}
+          cache: "pip"
+      - run: pip install poetry "Django<2.3"
+      - run: make test
+  test-dj30:
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.6", "3.7", "3.8", "3.9"]
+    name: "Django 3.0 + Python ${{ matrix.python }}"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python }}
+          cache: "pip"
+      - run: pip install poetry "Django<3.1"
+      - run: make test
+  test-dj31:
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.6", "3.7", "3.8", "3.9"]
+    name: "Django 3.1 + Python ${{ matrix.python }}"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python }}
+          cache: "pip"
+      - run: pip install poetry "Django<3.2"
+      - run: make test
+  test-dj32:
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.8", "3.9", "3.10"]
+    name: "Django 3.2 + Python ${{ matrix.python }}"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python }}
+          cache: "pip"
+      - run: pip install poetry "Django<3.3"
+      - run: make test
 
   lint:
     name: "Black"
