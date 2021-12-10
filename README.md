@@ -193,7 +193,7 @@ Limitations
 Python and Django compatibility
 -------------------------------
 
-See [`tox.ini`](./tox.ini) for which Python and Django versions this supports.
+See [`ci.yml`](./github/workflows/ci.yml) for which Python and Django versions this supports.
 
 
 Demo Admin & Docker images
@@ -215,12 +215,8 @@ Getting started *(with virtualenvwrapper)*:
 # get a copy of the code
 git clone git@github.com:crccheck/django-object-actions.git
 cd django-object-actions
-# set up your virtualenv (with virtualenvwrapper)
-mkvirtualenv django-object-actions
 # Install requirements
 make install
-# Hack your path so that we can reference packages starting from the root
-add2virtualenv .
 make test  # run test suite
 make quickstart  # runs 'make resetdb' and some extra steps
 ```

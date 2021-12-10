@@ -16,7 +16,6 @@ dev: ## Run the example project
 
 clean: ## Remove generated files
 	rm -rf .coverage
-	rm -rf .tox
 	rm -rf MANIFEST
 	rm -rf build
 	rm -rf dist
@@ -28,7 +27,7 @@ clean: ## Remove generated files
 
 install: ## Install development dependencies
 	poetry install
-	pip install Django tox
+	pip install Django
 
 tdd: ## Run tests with a file watcher
 	nodemon --ext py -x sh -c "python -W ignore::RuntimeWarning $(MANAGE) test --failfast django_object_actions || true"
