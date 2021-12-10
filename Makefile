@@ -40,7 +40,7 @@ tdd: ## Run tests with a file watcher
 	nodemon --ext py -x sh -c "python -W ignore::RuntimeWarning $(MANAGE) test --failfast django_object_actions || true"
 
 test: ## Run test suite
-	python -W ignore::RuntimeWarning $(MANAGE) test django_object_actions
+	PYTHONPATH=. python -W ignore::RuntimeWarning $(MANAGE) test django_object_actions
 
 coverage: ## Run and then display coverage report
 	coverage erase
