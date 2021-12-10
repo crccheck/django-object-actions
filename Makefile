@@ -92,14 +92,3 @@ version:
 	  --types '[{"type":"feat","section":"Features"},{"type":"fix","section":"Bug Fixes"},{"type":"chore","section":"Chores"},{"type":"docs","section":"Docs"},{"type":"style","hidden":true},{"type":"refactor","section":"Refactors"},{"type":"perf","hidden":true},{"type":"test","hidden":true}]' \
 	  --header "# Changelog"
 
-# Release instructions
-# 1. bump VERSION
-# 2. `make version`
-# 3. `make release`
-# 4. `git push --follow-tags origin master`
-# 5. `chandler push`
-# 6. `make docker/build docker/publish`
-release: clean
-	@-pip install twine wheel > /dev/null
-	python setup.py sdist bdist_wheel
-	twine upload dist/*
