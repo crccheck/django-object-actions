@@ -22,7 +22,7 @@ jobs:
           python-version: ${{ matrix.python }}
       - run: pip install poetry
       - run: poetry install
-      - run: poetry add "Django~=2.0"
+      - run: poetry add "Django==2.0.*"
       - run: make test
   test-dj21:
     strategy:
@@ -40,7 +40,7 @@ jobs:
           python-version: ${{ matrix.python }}
       - run: pip install poetry
       - run: poetry install
-      - run: poetry add "Django~=2.1"
+      - run: poetry add "Django==2.1.*"
       - run: make test
   test-dj22:
     strategy:
@@ -58,7 +58,7 @@ jobs:
           python-version: ${{ matrix.python }}
       - run: pip install poetry
       - run: poetry install
-      - run: poetry add "Django~=2.2"
+      - run: poetry add "Django==2.2.*"
       - run: make test
   test-dj30:
     strategy:
@@ -76,7 +76,7 @@ jobs:
           python-version: ${{ matrix.python }}
       - run: pip install poetry
       - run: poetry install
-      - run: poetry add "Django~=3.0"
+      - run: poetry add "Django==3.0.*"
       - run: make test
   test-dj31:
     strategy:
@@ -94,7 +94,7 @@ jobs:
           python-version: ${{ matrix.python }}
       - run: pip install poetry
       - run: poetry install
-      - run: poetry add "Django~=3.1"
+      - run: poetry add "Django==3.1.*"
       - run: make test
   test-dj32:
     strategy:
@@ -112,7 +112,7 @@ jobs:
           python-version: ${{ matrix.python }}
       - run: pip install poetry
       - run: poetry install
-      - run: poetry add "Django~=3.2"
+      - run: poetry add "Django==3.2.*"
       - run: make test
 
   lint:
