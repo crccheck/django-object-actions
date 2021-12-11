@@ -11,7 +11,8 @@ jobs:
       fail-fast: false
       matrix:
         python: ["3.6", "3.7"]
-    name: "Django 2.0 + Python ${{ matrix.python }}"
+        django: ["2.0.*", "2.1.*"]
+    name: "Django ${{ matrix.django }} + Python ${{ matrix.python }}"
     runs-on: ubuntu-latest
     env:
       POETRY_VIRTUALENVS_CREATE: false
@@ -22,25 +23,7 @@ jobs:
           python-version: ${{ matrix.python }}
       - run: pip install poetry
       - run: poetry install
-      - run: poetry add "Django==2.0.*"
-      - run: make test
-  test-dj21:
-    strategy:
-      fail-fast: false
-      matrix:
-        python: ["3.6", "3.7"]
-    name: "Django 2.1 + Python ${{ matrix.python }}"
-    runs-on: ubuntu-latest
-    env:
-      POETRY_VIRTUALENVS_CREATE: false
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
-        with:
-          python-version: ${{ matrix.python }}
-      - run: pip install poetry
-      - run: poetry install
-      - run: poetry add "Django==2.1.*"
+      - run: poetry add "Django==${{ matrix.django }}"
       - run: make test
   test-dj22:
     strategy:
