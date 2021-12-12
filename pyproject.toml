@@ -1,0 +1,33 @@
+[tool.poetry]
+name = "django-object-actions"
+version = "3.0.2"
+description = "A Django app for adding object tools for models in the admin"
+authors = ["crccheck <c@crccheck.com>"]
+license = "Apache-2.0"
+readme = "README.md"
+
+repository = "https://github.com/crccheck/django-object-actions"
+
+keywords = ["django", "admin"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Framework :: Django",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+]
+
+[tool.poetry.dependencies]
+python = "^3.6"
+
+[tool.poetry.dev-dependencies]
+coverage = "4.5.4"
+django-extensions = "2.2.3"
+factory-boy = "2.12.0"
+dj-database-url = "0.5.0"

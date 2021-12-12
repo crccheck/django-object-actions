@@ -3,64 +3,85 @@ name: CI
 on:
   pull_request:
   push:
-
+    branches:
+      - master
 jobs:
-  test:
+  test-dj20:
     strategy:
       fail-fast: false
       matrix:
-        versions:
-          - python: "3.6"
-            toxenv: "django20-py36"
-          - python: "3.7"
-            toxenv: "django20-py37"
-          - python: "3.6"
-            toxenv: "django21-py36"
-          - python: "3.7"
-            toxenv: "django21-py37"
-          - python: "3.6"
-            toxenv: "django22-py36"
-          - python: "3.7"
-            toxenv: "django22-py37"
-          - python: "3.8"
-            toxenv: "django22-py38"
-          - python: "3.9"
-            toxenv: "django22-py39"
-          - python: "3.6"
-            toxenv: "django30-py36"
-          - python: "3.7"
-            toxenv: "django30-py37"
-          - python: "3.8"
-            toxenv: "django30-py38"
-          - python: "3.9"
-            toxenv: "django30-py39"
-          - python: "3.6"
-            toxenv: "django31-py36"
-          - python: "3.7"
-            toxenv: "django31-py37"
-          - python: "3.8"
-            toxenv: "django31-py38"
-          - python: "3.9"
-            toxenv: "django31-py39"
-          - python: "3.8"
-            toxenv: "django32-py38"
-          - python: "3.9"
-            toxenv: "django32-py39"
-          - python: "3.10"
-            toxenv: "django32-py310"
-    
-    name: "Python ${{ matrix.versions.python }} - ${{ matrix.versions.toxenv }}"
+        python: ["3.6", "3.7"]
+        django: ["2.0.*", "2.1.*"]
+    name: "Django ${{ matrix.django }} + Python ${{ matrix.python }}"
     runs-on: ubuntu-latest
+    env:
+      POETRY_VIRTUALENVS_CREATE: false
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Python
-        uses: actions/setup-python@v2
+      - uses: actions/setup-python@v2
         with:
-          python-version: ${{ matrix.versions.python }}
-      - name: Install Dependencies
-        run: pip install tox
-      - name: Run Tests
-        run: tox -e ${{ matrix.versions.toxenv }}
+          python-version: ${{ matrix.python }}
+      - run: pip install poetry
+      - run: poetry install
+      - run: poetry add "Django==${{ matrix.django }}"
+      - run: make test
+  test-dj22:
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.6", "3.7", "3.8", "3.9"]
+        django: ["2.2.*"]
+    name: "Django ${{ matrix.django }} + Python ${{ matrix.python }}"
+    runs-on: ubuntu-latest
+    env:
+      POETRY_VIRTUALENVS_CREATE: false
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python }}
+      - run: pip install poetry
+      - run: poetry install
+      - run: poetry add "Django==${{ matrix.django }}"
+      - run: make test
+  test-dj31:
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.6", "3.7", "3.8", "3.9"]
+        django: ["3.0.*", "3.1.*"]
+    name: "Django ${{ matrix.django }} + Python ${{ matrix.python }}"
+    runs-on: ubuntu-latest
+    env:
+      POETRY_VIRTUALENVS_CREATE: false
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python }}
+      - run: pip install poetry
+      - run: poetry install
+      - run: poetry add "Django==${{ matrix.django }}"
+      - run: make test
+  test-dj32:
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.8", "3.9", "3.10"]
+        django: ["3.2.*"]
+    name: "Django ${{ matrix.django }} + Python ${{ matrix.python }}"
+    runs-on: ubuntu-latest
+    env:
+      POETRY_VIRTUALENVS_CREATE: false
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python }}
+      - run: pip install poetry
+      - run: poetry install
+      - run: poetry add "Django==${{ matrix.django }}"
+      - run: make test
 
   lint:
     name: "Black"
