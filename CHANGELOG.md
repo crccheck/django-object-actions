@@ -2,6 +2,14 @@
 
 <!--next-version-placeholder-->
 
+## v3.1.0 (2021-12-18)
+### Feature
+* **ci:** Add manual semantic-release ([#128](https://github.com/crccheck/django-object-actions/issues/128)) ([`f43fd11`](https://github.com/crccheck/django-object-actions/commit/f43fd1199a72be013766d437fe54d875e2fdd53f))
+* Add Python 3.9 & 3.10 support ([`28f0ef7`](https://github.com/crccheck/django-object-actions/commit/28f0ef7dd62eedbdac9d34ad115245ef8d935c4d))
+
+### Fix
+* Fix typo in version_variable ([#130](https://github.com/crccheck/django-object-actions/issues/130)) ([`040a802`](https://github.com/crccheck/django-object-actions/commit/040a8029c298d8bb17ffab0b75b9b9ecc3d70de2))
+
 ### [3.0.2](https://github.com/crccheck/django-object-actions/compare/v3.0.1...v3.0.2) (2021-04-09)
 
 ### Refactors
