@@ -80,6 +80,9 @@ jobs:
           python-version: ${{ matrix.python }}
       - run: pip install poetry
       - run: poetry install
+      - run: poetry build --format wheel
+      - run: rm -rf django_object_actions
+      - run: pip install --force-reinstall dist/*.whl
       - run: poetry add "Django==${{ matrix.django }}"
       - run: make test
 
