@@ -39,5 +39,5 @@ build-backend = "poetry.core.masonry.api"
 [tool.semantic_release]
 branch = "master"
 version_toml = "pyproject.toml:tool.poetry.version"
-version_variable = "django-object-actions/__init__.py:__version__"
+version_variable = "django_object_actions/__init__.py:__version__"
 build_command = "pip install poetry && poetry build"
