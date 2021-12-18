@@ -22,7 +22,6 @@ classifiers = [
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
 ]
-exclude = ["django_object_actions/templates/django_object_actions/*.html"]
 
 [tool.poetry.dependencies]
 python = "^3.6"
