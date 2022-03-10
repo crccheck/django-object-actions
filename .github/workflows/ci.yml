@@ -5,97 +5,40 @@ on:
   push:
     branches:
       - master
+
 jobs:
   create_matrix:
+    runs-on: ubuntu-latest
     steps:
       - name: Create matrix
         uses: fabiocaccamo/create-matrix-action@v1
         with:
           matrix: |
-            python-version {2.7}, django-version {1.7,1.8,1.9,1.10,1.11}, database {sqlite,mysql,postgres}
-            python-version {3.6}, django-version {1.8,1.9,1.10,1.11,2.0,2.1,2.2,3.0,3.1,3.2}, database {sqlite,mysql,postgres}
-            python-version {3.7}, django-version {2.0,2.1,2.2,3.0,3.1,3.2}, database {sqlite,mysql,postgres}
-            python-version {3.8}, django-version {2.2,3.0,3.1,3.2}, database {sqlite,mysql,postgres}
-            python-version {3.9}, django-version {2.2,3.0,3.1,3.2}, database {sqlite,mysql,postgres}
-            python-version {3.10}, django-version {3.2,4.0}, database {sqlite,mysql,postgres}
-
+            python {3.6}, django {2.0,2.1,2.2,3.1}
+            python {3.7}, django {2.0,2.1,2.2,3.1}
+            python {3.8}, django {2.2,3.1,3.2}
+            python {3.9}, django {2.2,3.1,3.2}
+            python {3.10}, django {3.2}
       - name: Set matrix output variable
         id: set_matrix
         run: |
           echo "::set-output name=matrix::$(cat ./matrix.json)"
+    outputs:
+      matrix: ${{ steps.set_matrix.outputs.matrix }}
 
-     outputs:
-        matrix: ${{ steps.set_matrix.outputs.matrix }}
-  test-dj20:
+  test:
+    needs: create_matrix
     strategy:
       fail-fast: false
       matrix:
-        python: ["3.6", "3.7"]
-        django: ["2.0.*", "2.1.*"]
+        include: ${{ fromJSON(needs.create_matrix.outputs.matrix) }}
     name: "Django ${{ matrix.django }} + Python ${{ matrix.python }}"
     runs-on: ubuntu-latest
     env:
       POETRY_VIRTUALENVS_CREATE: false
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
-        with:
-          python-version: ${{ matrix.python }}
-      - run: pip install poetry
-      - run: poetry install
-      - run: poetry add "Django==${{ matrix.django }}"
-      - run: make test
-  test-dj22:
-    strategy:
-      fail-fast: false
-      matrix:
-        python: ["3.6", "3.7", "3.8", "3.9"]
-        django: ["2.2.*"]
-    name: "Django ${{ matrix.django }} + Python ${{ matrix.python }}"
-    runs-on: ubuntu-latest
-    env:
-      POETRY_VIRTUALENVS_CREATE: false
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
-        with:
-          python-version: ${{ matrix.python }}
-      - run: pip install poetry
-      - run: poetry install
-      - run: poetry add "Django==${{ matrix.django }}"
-      - run: make test
-  test-dj31:
-    strategy:
-      fail-fast: false
-      matrix:
-        python: ["3.6", "3.7", "3.8", "3.9"]
-        django: ["3.0.*", "3.1.*"]
-    name: "Django ${{ matrix.django }} + Python ${{ matrix.python }}"
-    runs-on: ubuntu-latest
-    env:
-      POETRY_VIRTUALENVS_CREATE: false
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
-        with:
-          python-version: ${{ matrix.python }}
-      - run: pip install poetry
-      - run: poetry install
-      - run: poetry add "Django==${{ matrix.django }}"
-      - run: make test
-  test-dj32:
-    strategy:
-      fail-fast: false
-      matrix:
-        python: ["3.8", "3.9", "3.10"]
-        django: ["3.2.*"]
-    name: "Django ${{ matrix.django }} + Python ${{ matrix.python }}"
-    runs-on: ubuntu-latest
-    env:
-      POETRY_VIRTUALENVS_CREATE: false
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
         with:
           python-version: ${{ matrix.python }}
       - run: pip install poetry
@@ -103,7 +46,7 @@ jobs:
       - run: poetry build --format wheel
       - run: rm -rf django_object_actions
       - run: pip install --force-reinstall dist/*.whl
-      - run: poetry add "Django==${{ matrix.django }}"
+      - run: poetry add "Django~=${{ matrix.django }}"
       - run: make test
 
   lint:
