@@ -55,12 +55,10 @@ jobs:
     name: "Black"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
         with:
-          python-version: "3.8"
-      - name: Install Black
-        run: pip install black
-      - name: Run Black
-        run: black --check .
+          python-version: "3.10"
+      - run: pip install black
+      - run: black --check .
