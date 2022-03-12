@@ -2,6 +2,19 @@
 
 <!--next-version-placeholder-->
 
+## v4.0.0 (2022-03-12)
+### Feature
+* Drop Python 3.6 support ([#135](https://github.com/crccheck/django-object-actions/issues/135)) ([`8deebed`](https://github.com/crccheck/django-object-actions/commit/8deebedda55d0e5d466969c7f27a9c60e680e5e8))
+
+### Fix
+* Cleanup Django compatibility shims for <2.0 ([#126](https://github.com/crccheck/django-object-actions/issues/126)) ([`88cfb3b`](https://github.com/crccheck/django-object-actions/commit/88cfb3b2e06b17762639da7f48259eeae343942f))
+
+### Breaking
+* Python 3.6 is past end-of-life and is no longer supported. Keeping it in `pyproject.toml` was causing pains trying to install packages. Let's drop it while we're dropping support for other old stuff. ([`8deebed`](https://github.com/crccheck/django-object-actions/commit/8deebedda55d0e5d466969c7f27a9c60e680e5e8))
+
+### Documentation
+* Add Django@4.0 to CI ([#133](https://github.com/crccheck/django-object-actions/issues/133)) ([`20e2418`](https://github.com/crccheck/django-object-actions/commit/20e2418e6ada4651b3e6d51b5d10c545d8a6c863))
+
 ## v3.1.0 (2021-12-18)
 ### Feature
 * **ci:** Add manual semantic-release ([#128](https://github.com/crccheck/django-object-actions/issues/128)) ([`f43fd11`](https://github.com/crccheck/django-object-actions/commit/f43fd1199a72be013766d437fe54d875e2fdd53f))
