@@ -193,7 +193,7 @@ Limitations
 Python and Django compatibility
 -------------------------------
 
-See [`ci.yml`](./github/workflows/ci.yml) for which Python and Django versions this supports.
+See [`ci.yml`](./.github/workflows/ci.yml) for which Python and Django versions this supports.
 
 
 Demo Admin & Docker images
