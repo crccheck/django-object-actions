@@ -1,0 +1,42 @@
+[tool.poetry]
+name = "django-object-actions"
+version = "4.0.0"
+description = "A Django app for adding object tools for models in the admin"
+authors = ["crccheck <c@crccheck.com>"]
+license = "Apache-2.0"
+readme = "README.md"
+
+repository = "https://github.com/crccheck/django-object-actions"
+
+keywords = ["django", "admin"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Framework :: Django",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+
+[tool.poetry.dev-dependencies]
+coverage = "^6.3.2"
+django-extensions = "^3.1.5"
+factory-boy = "^3.2.1"
+dj-database-url = "0.5.0"
+
+[build-system]
+requires = ["poetry_core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.semantic_release]
+branch = "master"
+version_toml = "pyproject.toml:tool.poetry.version"
+version_variable = "django_object_actions/__init__.py:__version__"
+build_command = "pip install poetry && poetry build"

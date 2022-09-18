@@ -1,19 +1,15 @@
 from functools import wraps
 from itertools import chain
 
-from django.conf.urls import url
 from django.contrib import messages
+from django.contrib.admin.utils import unquote
 from django.db.models.query import QuerySet
 from django.http import Http404, HttpResponseRedirect
 from django.http.response import HttpResponseBase
 from django.views.generic import View
 from django.views.generic.detail import SingleObjectMixin
 from django.views.generic.list import MultipleObjectMixin
-
-try:
-    from django.urls import reverse
-except ImportError:
-    from django.core.urlresolvers import reverse  # DJANGO1.10
+from django.urls import re_path, reverse
 
 
 class BaseDjangoObjectActions(object):
@@ -126,7 +122,7 @@ class BaseDjangoObjectActions(object):
         return [
             # change, supports the same pks the admin does
             # https://github.com/django/django/blob/stable/1.10.x/django/contrib/admin/options.py#L555
-            url(
+            re_path(
                 r"^(?P<pk>.+)/actions/(?P<tool>\w+)/$",
                 self.admin_site.admin_view(  # checks permissions
                     ChangeActionView.as_view(
@@ -139,7 +135,7 @@ class BaseDjangoObjectActions(object):
                 name=model_actions_url_name,
             ),
             # changelist
-            url(
+            re_path(
                 r"^actions/(?P<tool>\w+)/$",
                 self.admin_site.admin_view(  # checks permissions
                     ChangeListActionView.as_view(
@@ -243,6 +239,10 @@ class BaseActionView(View):
         raise NotImplementedError
 
     def get(self, request, tool, **kwargs):
+        # Fix for case if there are special symbols in object pk
+        for k, v in self.kwargs.items():
+            self.kwargs[k] = unquote(v)
+
         try:
             view = self.actions[tool]
         except KeyError:

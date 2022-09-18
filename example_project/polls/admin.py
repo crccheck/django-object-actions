@@ -2,15 +2,11 @@ from django.contrib import admin
 from django.contrib.admin import AdminSite
 from django.db.models import F
 from django.http import HttpResponseRedirect
-
-try:
-    from django.urls import reverse
-except ImportError:
-    from django.core.urlresolvers import reverse  # < DJANGO1.10
+from django.urls import reverse
 
 from django_object_actions import DjangoObjectActions, takes_instance_or_queryset
 
-from .models import Choice, Poll, Comment
+from .models import Choice, Poll, Comment, RelatedData
 
 
 class ChoiceAdmin(DjangoObjectActions, admin.ModelAdmin):
@@ -158,6 +154,25 @@ class CommentAdmin(DjangoObjectActions, admin.ModelAdmin):
 
 
 admin.site.register(Comment, CommentAdmin)
+
+
+class RelatedDataAdmin(DjangoObjectActions, admin.ModelAdmin):
+
+    # Object actions
+    ################
+
+    def fill_up(self, request, obj):
+        if not obj.extra_data:
+            # bail because we need a comment
+            obj.extra_data = "hodor"
+        else:
+            obj.extra_data = ""
+        obj.save()
+
+    change_actions = ("fill_up",)
+
+
+admin.site.register(RelatedData, RelatedDataAdmin)
 
 
 support_admin = AdminSite(name="support")

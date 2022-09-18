@@ -1,7 +1,7 @@
 Django Object Actions
 =====================
 
-[![Build Status](https://travis-ci.org/crccheck/django-object-actions.svg?branch=master)](https://travis-ci.org/crccheck/django-object-actions)
+[![CI](https://github.com/crccheck/django-object-actions/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/crccheck/django-object-actions/actions/workflows/ci.yml?query=branch%3Amaster)
 
 If you've ever tried making admin object tools you may have thought, "why can't
 this be as easy as making Django Admin Actions?" Well now they can be.
@@ -193,7 +193,7 @@ Limitations
 Python and Django compatibility
 -------------------------------
 
-See [`tox.ini`](./tox.ini) for which Python and Django versions this supports.
+See [`ci.yml`](./.github/workflows/ci.yml) for which Python and Django versions this supports.
 
 
 Demo Admin & Docker images
@@ -209,28 +209,23 @@ tutorial. `admin.py` demos what you can do with this app.
 Development
 -----------
 
-Getting started *(with virtualenvwrapper)*:
+Getting started:
 
 ```shell
 # get a copy of the code
 git clone git@github.com:crccheck/django-object-actions.git
 cd django-object-actions
-# set up your virtualenv (with virtualenvwrapper)
-mkvirtualenv django-object-actions
 # Install requirements
 make install
-# Hack your path so that we can reference packages starting from the root
-add2virtualenv .
 make test  # run test suite
 make quickstart  # runs 'make resetdb' and some extra steps
 ```
 
-This will install whatever the latest stable version of Django is. You
-can also install a specific version of Django and
-`pip install -r requirements.txt`.
-
 Various helpers are available as make commands. Type `make help` and
 view the `Makefile` to see what other things you can do.
+
+Some commands assume you are in the virtualenv. If you see
+"ModuleNotFoundError"s, try running `poetry shell` first.
 
 
 Similar Packages

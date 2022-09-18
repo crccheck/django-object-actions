@@ -1,4 +1,54 @@
 # Changelog
+
+<!--next-version-placeholder-->
+
+## v4.0.0 (2022-03-12)
+### Feature
+* Drop Python 3.6 support ([#135](https://github.com/crccheck/django-object-actions/issues/135)) ([`8deebed`](https://github.com/crccheck/django-object-actions/commit/8deebedda55d0e5d466969c7f27a9c60e680e5e8))
+
+### Fix
+* Cleanup Django compatibility shims for <2.0 ([#126](https://github.com/crccheck/django-object-actions/issues/126)) ([`88cfb3b`](https://github.com/crccheck/django-object-actions/commit/88cfb3b2e06b17762639da7f48259eeae343942f))
+
+### Breaking
+* Python 3.6 is past end-of-life and is no longer supported. Keeping it in `pyproject.toml` was causing pains trying to install packages. Let's drop it while we're dropping support for other old stuff. ([`8deebed`](https://github.com/crccheck/django-object-actions/commit/8deebedda55d0e5d466969c7f27a9c60e680e5e8))
+
+### Documentation
+* Add Django@4.0 to CI ([#133](https://github.com/crccheck/django-object-actions/issues/133)) ([`20e2418`](https://github.com/crccheck/django-object-actions/commit/20e2418e6ada4651b3e6d51b5d10c545d8a6c863))
+
+## v3.1.0 (2021-12-18)
+### Feature
+* **ci:** Add manual semantic-release ([#128](https://github.com/crccheck/django-object-actions/issues/128)) ([`f43fd11`](https://github.com/crccheck/django-object-actions/commit/f43fd1199a72be013766d437fe54d875e2fdd53f))
+* Add Python 3.9 & 3.10 support ([`28f0ef7`](https://github.com/crccheck/django-object-actions/commit/28f0ef7dd62eedbdac9d34ad115245ef8d935c4d))
+
+### Fix
+* Fix typo in version_variable ([#130](https://github.com/crccheck/django-object-actions/issues/130)) ([`040a802`](https://github.com/crccheck/django-object-actions/commit/040a8029c298d8bb17ffab0b75b9b9ecc3d70de2))
+
+### [3.0.2](https://github.com/crccheck/django-object-actions/compare/v3.0.1...v3.0.2) (2021-04-09)
+
+### Refactors
+
+* Use django.urls.re_path instead of deprecated django.conf.urls.url (#112)
+
+### [3.0.1](https://github.com/crccheck/django-object-actions/compare/v3.0.0...v3.0.1) (2020-08-09)
+
+
+### Bug Fixes
+
+* Objects with special symbols in primary key 404-ed ([#110](https://github.com/crccheck/django-object-actions/issues/110)) ([0c90ce1](https://github.com/crccheck/django-object-actions/commit/0c90ce12a066baf873037eed415052074430d9d2)), closes [/github.com/django/django/blob/master/django/contrib/admin/utils.py#L17](https://github.com/crccheck//github.com/django/django/blob/master/django/contrib/admin/utils.py/issues/L17)
+
+## [3.0.0](https://github.com/crccheck/django-object-actions/compare/v2.0.0...v3.0.0) (2020-08-08)
+
+
+### ⚠ BREAKING CHANGES
+
+* **deps:** drop Python 3.4 support in preparation for adding type hints and Django 3.1 support
+
+### Features
+
+* **deps:** Add Django 3.1 support ([#109](https://github.com/crccheck/django-object-actions/issues/109)) ([2c7170e](https://github.com/crccheck/django-object-actions/commit/2c7170e3a73317a9417733a7ddfe0fabab84fe85))
+* **deps:** Drop Python 3.4 support ([#108](https://github.com/crccheck/django-object-actions/issues/108)) ([68519d4](https://github.com/crccheck/django-object-actions/commit/68519d48fa8dd4d3b203981a52157841e5152774)), closes [#107](https://github.com/crccheck/django-object-actions/issues/107)
+* add Django 3 test support ([#106](https://github.com/crccheck/django-object-actions/issues/106)) ([4eaf14c](https://github.com/crccheck/django-object-actions/commit/4eaf14c3caff36d5ab274835d38baef7e66213dc))
+
 ## [2.0.0](https://github.com/crccheck/django-object-actions/compare/v1.1.2...v2.0.0) (2019-11-30)
 
 
