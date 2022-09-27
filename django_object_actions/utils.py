@@ -4,6 +4,7 @@ from itertools import chain
 from django.conf.urls import url
 from django.contrib import messages
 from django.contrib.admin.utils import unquote
+from django.contrib.messages import get_messages
 from django.db.models.query import QuerySet
 from django.http import Http404, HttpResponseRedirect
 from django.http.response import HttpResponseBase
@@ -254,6 +255,17 @@ class BaseActionView(View):
             raise Http404("Action does not exist")
 
         ret = view(request, *self.view_args)
+        pk = kwargs.get('pk')
+        if pk:
+            obj = self.model.objects.get(pk=pk)
+            model_admin = view.__self__
+            messages = list(get_messages(request))
+            if messages:
+                message = messages[0]
+                message_text = f'{tool}, status: {message.level_tag}, message: {message.message}'
+            else:
+                message_text = f'{tool}'
+            model_admin.log_change(request, obj, message_text)
         if isinstance(ret, HttpResponseBase):
             return ret
 
