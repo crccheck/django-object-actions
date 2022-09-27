@@ -259,7 +259,7 @@ class BaseActionView(View):
         if pk:
             obj = self.model.objects.get(pk=pk)
             model_admin = view.__self__
-            messages = list(get_messages(request))
+            messages = request._messages._queued_messages
             if messages:
                 message = messages[0]
                 message_text = f'{tool}, status: {message.level_tag}, message: {message.message}'
