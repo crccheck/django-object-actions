@@ -311,3 +311,44 @@ def takes_instance_or_queryset(func):
         return func(self, request, queryset)
 
     return decorated_function
+
+
+def action(function=None, *, permissions=None, description=None, label=None):
+    """
+    Conveniently add attributes to an action function::
+
+        @admin_action(
+            permissions=['publish'],
+            description='Mark selected stories as published',
+            label='Publish'
+        )
+        def make_published(self, request, queryset):
+            queryset.update(status='p')
+
+    This is equivalent to setting some attributes (with the original, longer
+    names) on the function directly::
+
+        def make_published(self, request, queryset):
+            queryset.update(status='p')
+        make_published.allowed_permissions = ['publish']
+        make_published.short_description = 'Mark selected stories as published'
+        make_published.label = 'Publish'
+
+    This is the django-object-actions equivalent of
+    https://docs.djangoproject.com
+    /en/dev/ref/contrib/admin/actions/#django.contrib.admin.action
+    """
+
+    def decorator(func):
+        if permissions is not None:
+            func.allowed_permissions = permissions
+        if description is not None:
+            func.short_description = description
+        if label is not None:
+            func.label = label
+        return func
+
+    if function is None:
+        return decorator
+    else:
+        return decorator(function)

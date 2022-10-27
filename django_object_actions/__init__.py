@@ -7,4 +7,5 @@ from .utils import (
     BaseDjangoObjectActions,
     DjangoObjectActions,
     takes_instance_or_queryset,
+    action,
 )
