@@ -313,7 +313,9 @@ def takes_instance_or_queryset(func):
     return decorated_function
 
 
-def action(function=None, *, permissions=None, description=None, label=None):
+def action(
+    function=None, *, permissions=None, description=None, label=None, attrs=None
+):
     """
     Conveniently add attributes to an action function::
 
@@ -346,6 +348,8 @@ def action(function=None, *, permissions=None, description=None, label=None):
             func.short_description = description
         if label is not None:
             func.label = label
+        if attrs is not None:
+            func.attrs = attrs
         return func
 
     if function is None:

@@ -144,6 +144,20 @@ class DecoratorActionTest(TestCase):
         def action_3(modeladmin, request, queryset):
             pass
 
+        @action(
+            attrs={
+                "class": "addlink",
+            }
+        )
+        def action_4(modeladmin, request, queryset):
+            pass
+
         self.assertEqual(action_1.short_description, "First action of this admin site.")
         self.assertEqual(action_2.allowed_permissions, ["do_action2"])
         self.assertEqual(action_3.label, "Third action")
+        self.assertEqual(
+            action_4,
+            {
+                "class": "addlink",
+            },
+        )
