@@ -48,7 +48,7 @@ jobs:
         run: |
           rm -rf django_object_actions
           pip install --force-reinstall dist/*.whl
-      - run: pip install "Django~=${{ matrix.django-version }}"
+      - run: pip install "Django==${{ matrix.django-version }}.*"
       - run: make test
 
   lint:
