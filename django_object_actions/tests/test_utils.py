@@ -156,7 +156,7 @@ class DecoratorActionTest(TestCase):
         self.assertEqual(action_2.allowed_permissions, ["do_action2"])
         self.assertEqual(action_3.label, "Third action")
         self.assertEqual(
-            action_4,
+            action_4.attrs,
             {
                 "class": "addlink",
             },
