@@ -31,10 +31,10 @@ classifiers = [
 python = "^3.7"
 
 [tool.poetry.dev-dependencies]
-coverage = "^6.3.2"
-django-extensions = "^3.1.5"
-factory-boy = "^3.2.1"
-dj-database-url = "0.5.0"
+coverage = "6.*"
+django-extensions = "3.*"
+factory-boy = "3.*"
+dj-database-url = "1.*"
 
 [tool.semantic_release]
 branch = "master"
