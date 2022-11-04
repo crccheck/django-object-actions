@@ -319,7 +319,7 @@ def action(
     """
     Conveniently add attributes to an action function::
 
-        @admin_action(
+        @action(
             permissions=['publish'],
             description='Mark selected stories as published',
             label='Publish'
