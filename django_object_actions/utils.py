@@ -238,7 +238,7 @@ class BaseActionView(View):
         """
         raise NotImplementedError
 
-    def get(self, request, tool, **kwargs):
+    def post(self, request, tool, **kwargs):
         # Fix for case if there are special symbols in object pk
         for k, v in self.kwargs.items():
             self.kwargs[k] = unquote(v)
@@ -253,9 +253,6 @@ class BaseActionView(View):
             return ret
 
         return HttpResponseRedirect(self.back_url)
-
-    # HACK to allow POST requests too
-    post = get
 
     def message_user(self, request, message):
         """
