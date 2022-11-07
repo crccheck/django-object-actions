@@ -157,6 +157,25 @@ increment_vote.attrs = {
 }
 ```
 
+## Adding inline forms
+
+You can add parameters to the action button by adding Django [Form](https://docs.djangoproject.com/en/4.1/ref/forms/api/#django.forms.Form) object to it. Parameter values can be read form request's `POST` property.
+
+```python
+from django import forms
+
+class ResetAllForm(forms.Form):
+    new_value = forms.IntegerField(initial=0)
+
+def reset_all(self, request, queryset):
+    new_value = int(request.POST["new_value"])
+    queryset.update(value=new_value)
+reset_all.form = ResetAllForm()
+```
+
+Each action with form assigned is rendered in it's own, separate row.
+
+
 ### Programmatically Disabling Actions
 
 You can programmatically disable registered actions by defining your own

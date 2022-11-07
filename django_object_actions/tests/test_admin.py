@@ -8,6 +8,7 @@ from unittest.mock import patch
 
 from .tests import LoggedInTestCase
 from example_project.polls.factories import (
+    ChoiceFactory,
     CommentFactory,
     PollFactory,
     RelatedDataFactory,
@@ -134,3 +135,36 @@ class MultipleAdminsTests(LoggedInTestCase):
 
         response = self.client.post(action_url)
         self.assertRedirects(response, admin_change_url)
+
+
+class FormTests(LoggedInTestCase):
+    def test_form_is_rendered_in_change_view(self):
+        choice = ChoiceFactory()
+        admin_change_url = reverse("admin:polls_choice_change", args=(choice.pk,))
+
+        response = self.client.get(admin_change_url)
+
+        # form is in the admin
+        action_url_lookup = 'action="/admin/polls/choice/1/actions/change_votes/"'
+        self.assertIn(action_url_lookup, response.rendered_content)
+        form_lookup = '<form name="change_votes__form"'
+        self.assertIn(form_lookup, response.rendered_content)
+
+        # form has input
+        input_lookup = 'name="change_by"'
+        self.assertIn(input_lookup, response.rendered_content)
+
+    def test_form_is_rendered_in_changelist(self):
+        admin_change_url = reverse("admin:polls_choice_changelist")
+
+        response = self.client.get(admin_change_url)
+
+        # form is in the admin
+        action_url_lookup = 'action="/admin/polls/choice/actions/reset_all/"'
+        self.assertIn(action_url_lookup, response.rendered_content)
+        form_lookup = '<form name="reset_all__form"'
+        self.assertIn(form_lookup, response.rendered_content)
+
+        # form has input
+        input_lookup = 'name="new_value"'
+        self.assertIn(input_lookup, response.rendered_content)

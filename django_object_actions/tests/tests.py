@@ -31,6 +31,19 @@ class AppTests(LoggedInTestCase):
         c = Choice.objects.get(pk=1)
         self.assertEqual(c.votes, votes + 1)
 
+    def test_tool_func_gets_executed_with_form_params(self):
+        c = Choice.objects.get(pk=1)
+        votes = c.votes
+        response = self.client.post(
+            reverse("admin:polls_choice_actions", args=(1, "change_votes")),
+            data={"change_by": "10"},
+        )
+        self.assertEqual(response.status_code, 302)
+        url = reverse("admin:polls_choice_change", args=(1,))
+        self.assertTrue(response["location"].endswith(url))
+        c = Choice.objects.get(pk=1)
+        self.assertEqual(c.votes, votes + 10)
+
     def test_tool_can_return_httpresponse(self):
         # we know this url works because of fixtures
         url = reverse("admin:polls_choice_actions", args=(2, "edit_poll"))

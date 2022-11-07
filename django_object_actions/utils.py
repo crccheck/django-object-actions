@@ -4,6 +4,7 @@ from itertools import chain
 from django.contrib import messages
 from django.contrib.admin.utils import unquote
 from django.db.models.query import QuerySet
+from django.forms import Form
 from django.http import Http404, HttpResponseRedirect
 from django.http.response import HttpResponseBase
 from django.views.generic import View
@@ -159,6 +160,7 @@ class BaseDjangoObjectActions(object):
             label=getattr(tool, "label", tool_name.replace("_", " ").capitalize()),
             standard_attrs=standard_attrs,
             custom_attrs=custom_attrs,
+            form=self._get_form(tool),
         )
 
     def _get_button_attrs(self, tool):
@@ -191,6 +193,12 @@ class BaseDjangoObjectActions(object):
             else:
                 custom_attrs[k] = v
         return standard_attrs, custom_attrs
+
+    def _get_form(self, tool):
+        form = getattr(tool, "form", None)
+        if callable(form) and not isinstance(form, Form):
+            form = form()
+        return form
 
 
 class DjangoObjectActions(BaseDjangoObjectActions):
@@ -311,7 +319,13 @@ def takes_instance_or_queryset(func):
 
 
 def action(
-    function=None, *, permissions=None, description=None, label=None, attrs=None
+    function=None,
+    *,
+    permissions=None,
+    description=None,
+    label=None,
+    attrs=None,
+    form=None
 ):
     """
     Conveniently add attributes to an action function::
@@ -347,6 +361,8 @@ def action(
             func.label = label
         if attrs is not None:
             func.attrs = attrs
+        if form is not None:
+            func.form = form
         return func
 
     if function is None:

@@ -11,6 +11,15 @@ from django_object_actions import (
 )
 
 from .models import Choice, Poll, Comment, RelatedData
+from django import forms
+
+
+class ResetAllForm(forms.Form):
+    new_value = forms.IntegerField(initial=0)
+
+
+class ChangeVotesForm(forms.Form):
+    change_by = forms.IntegerField(initial=1)
 
 
 class ChoiceAdmin(DjangoObjectActions, admin.ModelAdmin):
@@ -18,6 +27,12 @@ class ChoiceAdmin(DjangoObjectActions, admin.ModelAdmin):
 
     # Actions
     #########
+
+    @action(form=ChangeVotesForm)
+    def change_votes(self, request, obj):
+        change_by = int(request.POST["change_by"])
+        obj.votes += change_by
+        obj.save()
 
     @action(
         description="+1",
@@ -45,6 +60,12 @@ class ChoiceAdmin(DjangoObjectActions, admin.ModelAdmin):
     def delete_all(self, request, queryset):
         self.message_user(request, "just kidding!")
 
+    @action(form=ResetAllForm())
+    def reset_all(self, request, queryset):
+        self.message_user(
+            request, f"resetting all to {request.POST['new_value']}. just kidding!"
+        )
+
     @action(description="0")
     def reset_vote(self, request, obj):
         obj.votes = 0
@@ -60,11 +81,15 @@ class ChoiceAdmin(DjangoObjectActions, admin.ModelAdmin):
     change_actions = (
         "increment_vote",
         "decrement_vote",
+        "change_votes",
         "reset_vote",
         "edit_poll",
         "raise_key_error",
     )
-    changelist_actions = ("delete_all",)
+    changelist_actions = (
+        "delete_all",
+        "reset_all",
+    )
 
 
 admin.site.register(Choice, ChoiceAdmin)

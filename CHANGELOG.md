@@ -3,6 +3,7 @@
 <!--next-version-placeholder-->
 ### Feature
 * Drop support for GET method. All action are now invoked with POST method.
+* Add option to include inline forms with actions.
 
 ### Breaking
 * When dealing with a secondary form in action, you cannot simply check the http method to determine if the form should be rendered or processed. You need to check for specific form inputs in POST payload.
