@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "django-object-actions"
-version = "4.0.0"
+version = "4.1.0"
 description = "A Django app for adding object tools for models in the admin"
 authors = ["crccheck <c@crccheck.com>"]
 license = "Apache-2.0"
