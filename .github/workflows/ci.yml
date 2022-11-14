@@ -20,7 +20,7 @@ jobs:
             python-version {3.10}, django-version {3.2,4.0,4.1}
             python-version {3.11}, django-version {3.2,4.0,4.1}
     outputs:
-      matrix: ${{ steps.set_matrix.outputs.matrix }}
+      matrix: ${{ steps.create_matrix.outputs.matrix }}
 
   test:
     needs: prepare
