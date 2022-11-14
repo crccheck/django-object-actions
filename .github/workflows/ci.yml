@@ -27,7 +27,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include: ${{ fromJSON(needs.prepare.outputs.matrix) }}
+        include: ${{ fromJson(needs.prepare.outputs.matrix) }}
     name: "Python ${{ matrix.python-version }} + Django ${{ matrix.django-version }}"
     runs-on: ubuntu-latest
     env:
