@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Create matrix
-        uses: fabiocaccamo/create-matrix-action@v1
+        uses: fabiocaccamo/create-matrix-action@v2
         with:
           matrix: |
             python-version {3.7}, django-version {2.0,2.1,2.2,3.0,3.1}
