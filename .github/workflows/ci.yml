@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Create matrix
+        id: create_matrix
         uses: fabiocaccamo/create-matrix-action@v3
         with:
           matrix: |
