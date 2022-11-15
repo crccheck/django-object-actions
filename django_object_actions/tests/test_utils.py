@@ -3,7 +3,12 @@ from unittest import mock
 from django.test import TestCase
 from example_project.polls.models import Poll
 
-from ..utils import BaseDjangoObjectActions, BaseActionView, takes_instance_or_queryset
+from ..utils import (
+    BaseDjangoObjectActions,
+    BaseActionView,
+    takes_instance_or_queryset,
+    action,
+)
 
 
 class BaseDjangoObjectActionsTest(TestCase):
@@ -122,3 +127,37 @@ class DecoratorTest(TestCase):
         queryset = myfunc(None, None, queryset=self.obj)
         # the resulting queryset only has one item and it's self.obj
         self.assertEqual(queryset.get(), self.obj)
+
+
+class DecoratorActionTest(TestCase):
+    def test_decorated(self):
+        # setup
+        @action(description="First action of this admin site.")
+        def action_1(modeladmin, request, queryset):
+            pass
+
+        @action(permissions=["do_action2"])
+        def action_2(modeladmin, request, queryset):
+            pass
+
+        @action(label="Third action")
+        def action_3(modeladmin, request, queryset):
+            pass
+
+        @action(
+            attrs={
+                "class": "addlink",
+            }
+        )
+        def action_4(modeladmin, request, queryset):
+            pass
+
+        self.assertEqual(action_1.short_description, "First action of this admin site.")
+        self.assertEqual(action_2.allowed_permissions, ["do_action2"])
+        self.assertEqual(action_3.label, "Third action")
+        self.assertEqual(
+            action_4.attrs,
+            {
+                "class": "addlink",
+            },
+        )

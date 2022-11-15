@@ -4,7 +4,11 @@ from django.db.models import F
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
-from django_object_actions import DjangoObjectActions, takes_instance_or_queryset
+from django_object_actions import (
+    DjangoObjectActions,
+    takes_instance_or_queryset,
+    action,
+)
 
 from .models import Choice, Poll, Comment, RelatedData
 
@@ -15,37 +19,36 @@ class ChoiceAdmin(DjangoObjectActions, admin.ModelAdmin):
     # Actions
     #########
 
+    @action(
+        description="+1",
+        label="vote++",
+        attrs={
+            "test": '"foo&bar"',
+            "Robert": '"); DROP TABLE Students; ',  # 327
+            "class": "addlink",
+        },
+    )
     @takes_instance_or_queryset
     def increment_vote(self, request, queryset):
         queryset.update(votes=F("votes") + 1)
-
-    increment_vote.short_description = "+1"
-    increment_vote.label = "vote++"
-    increment_vote.attrs = {
-        "test": '"foo&bar"',
-        "Robert": '"); DROP TABLE Students; ',  # 327
-        "class": "addlink",
-    }
 
     actions = ["increment_vote"]
 
     # Object actions
     ################
 
+    @action(description="-1")
     def decrement_vote(self, request, obj):
         obj.votes -= 1
         obj.save()
 
-    decrement_vote.short_description = "-1"
-
     def delete_all(self, request, queryset):
         self.message_user(request, "just kidding!")
 
+    @action(description="0")
     def reset_vote(self, request, obj):
         obj.votes = 0
         obj.save()
-
-    reset_vote.short_description = "0"
 
     def edit_poll(self, request, obj):
         url = reverse("admin:polls_poll_change", args=(obj.poll.pk,))
@@ -101,6 +104,7 @@ class PollAdmin(DjangoObjectActions, admin.ModelAdmin):
     # Object actions
     ################
 
+    @action(label="Delete All Choices")
     def delete_all_choices(self, request, obj):
         from django.shortcuts import render
 
@@ -110,8 +114,6 @@ class PollAdmin(DjangoObjectActions, admin.ModelAdmin):
 
         self.message_user(request, "All choices deleted")
         return render(request, "clear_choices.html", {"object": obj})
-
-    delete_all_choices.label = "Delete All Choices"
 
     def question_mark(self, request, obj):
         """Add a question mark."""
