@@ -34,6 +34,13 @@ class ChoiceAdmin(DjangoObjectActions, admin.ModelAdmin):
         obj.votes += change_by
         obj.save()
 
+    @action(form=ChangeVotesForm, form_in_modal=True)
+    def change_votes_modal(self, request, obj):
+        change_by = int(request.POST["change_by"])
+        obj.votes += change_by
+        obj.save()
+        self.message_user(request, f"Number of votes changed by {change_by}")
+
     @action(
         description="+1",
         label="vote++",
@@ -82,6 +89,7 @@ class ChoiceAdmin(DjangoObjectActions, admin.ModelAdmin):
         "increment_vote",
         "decrement_vote",
         "change_votes",
+        "change_votes_modal",
         "reset_vote",
         "edit_poll",
         "raise_key_error",

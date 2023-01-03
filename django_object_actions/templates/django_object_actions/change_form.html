@@ -9,7 +9,7 @@
 
 {% block object-tools-items %}
   {% for tool in objectactions %}
-    {% if not tool.form %}
+    {% if not tool.has_inline_form %}
       <li class="objectaction-item" data-tool-name="{{ tool.name }}">
         {% url tools_view_name pk=object_id tool=tool.name as action_url %}
         <form name="{{ tool.name }}__form" method="post" action="{% add_preserved_filters action_url %}">
@@ -31,7 +31,7 @@
 {% block object-tools %}
   {{ block.super }}
   {% for tool in objectactions %}
-    {% if tool.form %}
+    {% if tool.has_inline_form %}
         {% url tools_view_name pk=object_id tool=tool.name as action_url %}
         <div class="clear">
           <form name="{{ tool.name }}__form" method="post" action="{% add_preserved_filters action_url %}">

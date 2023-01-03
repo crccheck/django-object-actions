@@ -1,0 +1,15 @@
+{% extends "admin/base_site.html" %}
+{% load add_preserved_filters from admin_urls %}
+
+{% block content %}
+<div id="content-main">
+    <form name="{{ tool.name }}__form" method="post" action="{% add_preserved_filters action_url %}">
+        {% csrf_token %}
+        {{ form.as_table }}
+        <div>
+            <input type="submit" value="Submit" name="modal_submit">
+            <input type="submit" value="Cancel" name="modal_cancel">
+        </div>
+    </form>
+</div>
+{% endblock %}
