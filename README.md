@@ -1,14 +1,11 @@
-Django Object Actions
-=====================
+# Django Object Actions
 
 [![CI](https://github.com/crccheck/django-object-actions/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/crccheck/django-object-actions/actions/workflows/ci.yml?query=branch%3Amaster)
 
 If you've ever tried making admin object tools you may have thought, "why can't
 this be as easy as making Django Admin Actions?" Well now they can be.
 
-
-Quick-Start Guide
------------------
+## Quick-Start Guide
 
 Install Django Object Actions:
 
@@ -32,16 +29,14 @@ class ArticleAdmin(DjangoObjectActions, admin.ModelAdmin):
     change_actions = ('publish_this', )
 ```
 
+## Usage
 
-Usage
------
-
-Defining new &*tool actions* is just like defining regular [admin actions]. The
+Defining new &_tool actions_ is just like defining regular [admin actions]. The
 major difference is the functions for `django-object-actions` will take an
-object instance instead of a queryset (see *Re-using Admin Actions* below).
+object instance instead of a queryset (see _Re-using Admin Actions_ below).
 
-*Tool actions* are exposed by putting them in a `change_actions` attribute in
-your `admin.ModelAdmin`. You can also add *tool actions* to the main changelist
+_Tool actions_ are exposed by putting them in a `change_actions` attribute in
+your `admin.ModelAdmin`. You can also add _tool actions_ to the main changelist
 views too. There, you'll get a queryset like a regular [admin action][admin actions]:
 
 ```python
@@ -72,7 +67,7 @@ you'll need to take extra care because `django-object-actions` uses them too.
 
 ### Re-using Admin Actions
 
-If you would like a preexisting admin action to also be an *object action*, add
+If you would like a preexisting admin action to also be an _object action_, add
 the `takes_instance_or_queryset` decorator to convert object instances into a
 queryset and pass querysets:
 
@@ -92,7 +87,7 @@ class RobotAdmin(DjangoObjectActions, admin.ModelAdmin):
 
 [admin actions]: https://docs.djangoproject.com/en/stable/ref/contrib/admin/actions/
 
-### Customizing *Object Actions*
+### Customizing _Object Actions_
 
 To give the action some a helpful title tooltip, you can use the `action` decorator
 and set the description argument.
@@ -191,9 +186,7 @@ If you don't intend to use the template customizations at all, don't
 add `django_object_actions` to your `INSTALLED_APPS` at all and use
 `BaseDjangoObjectActions` instead of `DjangoObjectActions`.
 
-
-More Examples
--------------
+## More Examples
 
 Making an action that links off-site:
 
@@ -203,9 +196,7 @@ def external_link(self, request, obj):
     return HttpResponseRedirect(f'https://example.com/{obj.id}')
 ```
 
-
-Limitations
------------
+## Limitations
 
 1.  `django-object-actions` expects functions to be methods of the model
     admin. While Django gives you a lot more options for their admin
@@ -218,15 +209,11 @@ Limitations
     your own actions irregardless of what this provides. Better default
     security is planned for the future.
 
-
-Python and Django compatibility
--------------------------------
+## Python and Django compatibility
 
 See [`ci.yml`](./.github/workflows/ci.yml) for which Python and Django versions this supports.
 
-
-Demo Admin & Docker images
---------------------------
+## Demo Admin & Docker images
 
 You can try the demo admin against several versions of Django with these Docker
 images: https://hub.docker.com/r/crccheck/django-object-actions/tags
@@ -234,9 +221,7 @@ images: https://hub.docker.com/r/crccheck/django-object-actions/tags
 This runs the example Django project in `./example_project` based on the "polls"
 tutorial. `admin.py` demos what you can do with this app.
 
-
-Development
------------
+## Development
 
 Getting started:
 
@@ -256,9 +241,7 @@ view the `Makefile` to see what other things you can do.
 Some commands assume you are in the virtualenv. If you see
 "ModuleNotFoundError"s, try running `poetry shell` first.
 
-
-Similar Packages
-----------------
+## Similar Packages
 
 If you want an actions menu for each row of your changelist, check out [Django
 Admin Row Actions](https://github.com/DjangoAdminHackers/django-admin-row-actions).
