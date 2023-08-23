@@ -93,14 +93,14 @@ toml = ["tomli"]
 
 [[package]]
 name = "dj-database-url"
-version = "1.3.0"
+version = "2.1.0"
 description = "Use Database URLs in your Django Application."
 category = "dev"
 optional = false
 python-versions = "*"
 files = [
-    {file = "dj-database-url-1.3.0.tar.gz", hash = "sha256:87be5f7c4c83d9b3d8ce94b834f96cea14b3986f3629aac097afdd9318d7b098"},
-    {file = "dj_database_url-1.3.0-py3-none-any.whl", hash = "sha256:80a115bd7675c9fe14a900b2f8b5c8b1822b5a279b333bf9b2804de681656c7c"},
+    {file = "dj-database-url-2.1.0.tar.gz", hash = "sha256:f2042cefe1086e539c9da39fad5ad7f61173bf79665e69bf7e4de55fa88b135f"},
+    {file = "dj_database_url-2.1.0-py3-none-any.whl", hash = "sha256:04bc34b248d4c21aaa13e4ab419ae6575ef5f10f3df735ce7da97722caa356e0"},
 ]
 
 [package.dependencies]
@@ -287,4 +287,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.7"
-content-hash = "a594428fef2d1a2aaa6c844bb40056a86a9c55189ed602390dd3827af46badc8"
+content-hash = "24d1ba21080f62fdd172392b30b6b6168f9e410e5707c14f96390c1dfa047796"

@@ -34,7 +34,7 @@ python = "^3.7"
 coverage = "7.*"
 django-extensions = "3.*"
 factory-boy = "3.*"
-dj-database-url = "1.*"
+dj-database-url = "2.*"
 
 [tool.semantic_release]
 branch = "master"
