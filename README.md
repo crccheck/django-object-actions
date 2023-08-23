@@ -27,6 +27,7 @@ class ArticleAdmin(DjangoObjectActions, admin.ModelAdmin):
         publish_obj(obj)
 
     change_actions = ('publish_this', )
+    changelist_actions = ('...', )
 ```
 
 ## Usage
