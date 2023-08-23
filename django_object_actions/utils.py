@@ -317,7 +317,7 @@ def action(
     function=None, *, permissions=None, description=None, label=None, attrs=None
 ):
     """
-    Conveniently add attributes to an action function::
+    Conveniently add attributes to an action function:
 
         @action(
             permissions=['publish'],
@@ -328,7 +328,7 @@ def action(
             queryset.update(status='p')
 
     This is equivalent to setting some attributes (with the original, longer
-    names) on the function directly::
+    names) on the function directly:
 
         def make_published(self, request, queryset):
             queryset.update(status='p')
@@ -337,8 +337,7 @@ def action(
         make_published.label = 'Publish'
 
     This is the django-object-actions equivalent of
-    https://docs.djangoproject.com
-    /en/dev/ref/contrib/admin/actions/#django.contrib.admin.action
+    https://docs.djangoproject.com/en/stable/ref/contrib/admin/actions/#django.contrib.admin.action
     """
 
     def decorator(func):
