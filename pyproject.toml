@@ -14,30 +14,43 @@ repository = "https://github.com/crccheck/django-object-actions"
 
 keywords = ["django", "admin"]
 classifiers = [
-    "Development Status :: 5 - Production/Stable",
-    "Framework :: Django",
-    "Intended Audience :: Developers",
-    "License :: OSI Approved :: Apache Software License",
-    "Operating System :: OS Independent",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.7",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
+  "Development Status :: 5 - Production/Stable",
+  "Framework :: Django",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: Apache Software License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.7",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
 ]
 
 [tool.poetry.dependencies]
 python = "^3.7"
 
 [tool.poetry.dev-dependencies]
-coverage = "6.*"
+coverage = "7.*"
 django-extensions = "3.*"
 factory-boy = "3.*"
-dj-database-url = "1.*"
+dj-database-url = "2.*"
 
 [tool.semantic_release]
 branch = "master"
 version_toml = "pyproject.toml:tool.poetry.version"
 version_variable = "django_object_actions/__init__.py:__version__"
 build_command = "pip install poetry && poetry build"
+
+[tool.coverage.run]
+source = ["django_object_actions"]
+omit = ["*/tests/*"]
+branch = true
+
+[tool.coverage.report]
+exclude_lines = [
+  "pragma: no cover",
+  "__repr__",
+  "__unicode__",
+  "raise NotImplementedError",
+]
