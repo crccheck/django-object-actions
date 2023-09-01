@@ -22,7 +22,7 @@ class AppTests(LoggedInTestCase):
     def test_tool_func_gets_executed(self):
         c = Choice.objects.get(pk=1)
         votes = c.votes
-        response = self.client.get(
+        response = self.client.post(
             reverse("admin:polls_choice_actions", args=(1, "increment_vote"))
         )
         self.assertEqual(response.status_code, 302)
@@ -31,10 +31,23 @@ class AppTests(LoggedInTestCase):
         c = Choice.objects.get(pk=1)
         self.assertEqual(c.votes, votes + 1)
 
+    def test_tool_func_gets_executed_with_form_params(self):
+        c = Choice.objects.get(pk=1)
+        votes = c.votes
+        response = self.client.post(
+            reverse("admin:polls_choice_actions", args=(1, "change_votes")),
+            data={"change_by": "10"},
+        )
+        self.assertEqual(response.status_code, 302)
+        url = reverse("admin:polls_choice_change", args=(1,))
+        self.assertTrue(response["location"].endswith(url))
+        c = Choice.objects.get(pk=1)
+        self.assertEqual(c.votes, votes + 10)
+
     def test_tool_can_return_httpresponse(self):
         # we know this url works because of fixtures
         url = reverse("admin:polls_choice_actions", args=(2, "edit_poll"))
-        response = self.client.get(url)
+        response = self.client.post(url)
         # we expect a redirect
         self.assertEqual(response.status_code, 302)
         self.assertTrue(
@@ -45,24 +58,24 @@ class AppTests(LoggedInTestCase):
         # This is more of a test of render_to_response than the app, but I think
         # it's good to document that this is something we can do.
         url = reverse("admin:polls_poll_actions", args=(1, "delete_all_choices"))
-        response = self.client.get(url)
+        response = self.client.post(url)
         self.assertTemplateUsed(response, "clear_choices.html")
 
     def test_message_user_sends_message(self):
         url = reverse("admin:polls_poll_actions", args=(1, "delete_all_choices"))
         self.assertNotIn("messages", self.client.cookies)
-        self.client.get(url)
+        self.client.post(url)
         self.assertIn("messages", self.client.cookies)
 
     def test_intermediate_page_with_post_works(self):
         self.assertTrue(Choice.objects.filter(poll=1).count())
         url = reverse("admin:polls_poll_actions", args=(1, "delete_all_choices"))
-        response = self.client.post(url)
+        response = self.client.post(url, data={"sure": "Sure"})
         self.assertEqual(response.status_code, 302)
         self.assertEqual(Choice.objects.filter(poll=1).count(), 0)
 
     def test_undefined_tool_404s(self):
-        response = self.client.get(
+        response = self.client.post(
             reverse("admin:polls_poll_actions", args=(1, "weeeewoooooo"))
         )
         self.assertEqual(response.status_code, 404)
@@ -70,10 +83,10 @@ class AppTests(LoggedInTestCase):
     def test_key_error_tool_500s(self):
         self.assertRaises(
             KeyError,
-            self.client.get,
+            self.client.post,
             reverse("admin:polls_choice_actions", args=(1, "raise_key_error")),
         )
 
     def test_render_button(self):
-        response = self.client.get(reverse("admin:polls_choice_change", args=(1,)))
+        response = self.client.post(reverse("admin:polls_choice_change", args=(1,)))
         self.assertEqual(response.status_code, 200)

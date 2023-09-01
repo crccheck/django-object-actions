@@ -4,12 +4,14 @@ from itertools import chain
 from django.contrib import messages
 from django.contrib.admin.utils import unquote
 from django.db.models.query import QuerySet
+from django.forms import Form
 from django.http import Http404, HttpResponseRedirect
 from django.http.response import HttpResponseBase
 from django.views.generic import View
 from django.views.generic.detail import SingleObjectMixin
 from django.views.generic.list import MultipleObjectMixin
 from django.urls import re_path, reverse
+from django.shortcuts import render
 
 
 class BaseDjangoObjectActions(object):
@@ -154,11 +156,14 @@ class BaseDjangoObjectActions(object):
         """Represents the tool as a dict with extra meta."""
         tool = getattr(self, tool_name)
         standard_attrs, custom_attrs = self._get_button_attrs(tool)
+        form, is_inline = self._get_form(tool)
         return dict(
             name=tool_name,
             label=getattr(tool, "label", tool_name.replace("_", " ").capitalize()),
             standard_attrs=standard_attrs,
             custom_attrs=custom_attrs,
+            form=form,
+            has_inline_form=is_inline,
         )
 
     def _get_button_attrs(self, tool):
@@ -191,6 +196,13 @@ class BaseDjangoObjectActions(object):
             else:
                 custom_attrs[k] = v
         return standard_attrs, custom_attrs
+
+    def _get_form(self, tool):
+        form = getattr(tool, "form", None)
+        if callable(form) and not isinstance(form, Form):
+            form = form()
+        is_inline = form and not getattr(tool, "form_in_modal", False)
+        return form, is_inline
 
 
 class DjangoObjectActions(BaseDjangoObjectActions):
@@ -238,7 +250,7 @@ class BaseActionView(View):
         """
         raise NotImplementedError
 
-    def get(self, request, tool, **kwargs):
+    def post(self, request, tool, **kwargs):
         # Fix for case if there are special symbols in object pk
         for k, v in self.kwargs.items():
             self.kwargs[k] = unquote(v)
@@ -248,14 +260,22 @@ class BaseActionView(View):
         except KeyError:
             raise Http404("Action does not exist")
 
+        form = getattr(view, "form", None)
+        show_modal = form and getattr(view, "form_in_modal", False)
+
+        if show_modal and "modal_cancel" in request.POST:
+            return HttpResponseRedirect(self.back_url)
+
+        if show_modal and "modal_submit" not in request.POST:
+            return render(
+                request, "django_object_actions/modal_form.html", {"form": form}
+            )
+
         ret = view(request, *self.view_args)
         if isinstance(ret, HttpResponseBase):
             return ret
 
         return HttpResponseRedirect(self.back_url)
-
-    # HACK to allow POST requests too
-    post = get
 
     def message_user(self, request, message):
         """
@@ -314,7 +334,14 @@ def takes_instance_or_queryset(func):
 
 
 def action(
-    function=None, *, permissions=None, description=None, label=None, attrs=None
+    function=None,
+    *,
+    permissions=None,
+    description=None,
+    label=None,
+    attrs=None,
+    form=None,
+    form_in_modal=None,
 ):
     """
     Conveniently add attributes to an action function:
@@ -349,6 +376,10 @@ def action(
             func.label = label
         if attrs is not None:
             func.attrs = attrs
+        if form is not None:
+            func.form = form
+        if form_in_modal is not None:
+            func.form_in_modal = form_in_modal
         return func
 
     if function is None:
