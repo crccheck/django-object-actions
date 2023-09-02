@@ -5,13 +5,16 @@
   {% for tool in objectactions %}
     <li class="objectaction-item" data-tool-name="{{ tool.name }}">
       {% url tools_view_name tool=tool.name as action_url %}
-      <a href="{% add_preserved_filters action_url %}" title="{{ tool.standard_attrs.title }}"
-         {% for k, v in tool.custom_attrs.items %}
-           {{ k }}="{{ v }}"
-         {% endfor %}
-         class="{{ tool.standard_attrs.class }}">
-      {{ tool.label|capfirst }}
-      </a>
+      <form name="{{ tool.name }}__form" method="post" action="{% add_preserved_filters action_url %}">
+        {% csrf_token %}
+        <a href="javascript:window.document.forms['{{ tool.name }}__form'].submit()" title="{{ tool.standard_attrs.title }}"
+          {% for k, v in tool.custom_attrs.items %}
+            {{ k }}="{{ v }}"
+          {% endfor %}
+          class="{{ tool.standard_attrs.class }}">
+          {{ tool.label|capfirst }}
+        </a>
+      </form>
     </li>
   {% endfor %}
   {{ block.super }}

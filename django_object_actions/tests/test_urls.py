@@ -11,5 +11,5 @@ class ChangeListTests(LoggedInTestCase):
         response = self.client.get(reverse("admin:polls_choice_changelist"))
         self.assertEqual(response.status_code, 200)
         self.assertIn(
-            b'href="/admin/polls/choice/actions/delete_all/"', response.content
+            b'action="/admin/polls/choice/actions/delete_all/"', response.content
         )
