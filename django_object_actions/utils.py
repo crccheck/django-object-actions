@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.contrib.admin.utils import unquote
 from django.db.models.query import QuerySet
 from django.http import Http404, HttpResponseRedirect
-from django.http.response import HttpResponseBase
+from django.http.response import HttpResponseBase, HttpResponseNotAllowed
 from django.views.generic import View
 from django.views.generic.detail import SingleObjectMixin
 from django.views.generic.list import MultipleObjectMixin
@@ -159,6 +159,7 @@ class BaseDjangoObjectActions(object):
             label=getattr(tool, "label", tool_name.replace("_", " ").capitalize()),
             standard_attrs=standard_attrs,
             custom_attrs=custom_attrs,
+            button_type=tool.button_type,
         )
 
     def _get_button_attrs(self, tool):
@@ -238,7 +239,7 @@ class BaseActionView(View):
         """
         raise NotImplementedError
 
-    def get(self, request, tool, **kwargs):
+    def dispatch(self, request, tool, **kwargs):
         # Fix for case if there are special symbols in object pk
         for k, v in self.kwargs.items():
             self.kwargs[k] = unquote(v)
@@ -248,14 +249,14 @@ class BaseActionView(View):
         except KeyError:
             raise Http404("Action does not exist")
 
+        if request.method not in view.methods:
+            return HttpResponseNotAllowed(view.methods)
+
         ret = view(request, *self.view_args)
         if isinstance(ret, HttpResponseBase):
             return ret
 
         return HttpResponseRedirect(self.back_url)
-
-    # HACK to allow POST requests too
-    post = get
 
     def message_user(self, request, message):
         """
@@ -314,7 +315,9 @@ def takes_instance_or_queryset(func):
 
 
 def action(
-    function=None, *, permissions=None, description=None, label=None, attrs=None
+    function=None, *, permissions=None, description=None, label=None, attrs=None,
+    methods=('GET', 'POST'),
+    button_type='a',
 ):
     """
     Conveniently add attributes to an action function:
@@ -349,6 +352,8 @@ def action(
             func.label = label
         if attrs is not None:
             func.attrs = attrs
+        func.methods = methods
+        func.button_type = button_type
         return func
 
     if function is None:
