@@ -1,6 +1,7 @@
 """
 Integration tests
 """
+
 from django.urls import reverse
 
 from .tests import LoggedInTestCase
