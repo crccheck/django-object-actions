@@ -1,6 +1,7 @@
 """
 Integration tests that actually try and use the tools setup in admin.py
 """
+
 from django.contrib.admin.utils import quote
 from django.http import HttpResponse
 from django.urls import reverse

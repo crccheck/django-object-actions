@@ -1,4 +1,5 @@
 """A Django app for adding object tools for models in the admin."""
+
 __version__ = "4.2.0"
 
 
