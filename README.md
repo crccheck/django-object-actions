@@ -244,6 +244,9 @@ Some commands assume you are in the virtualenv. If you see
 
 ## Similar Packages
 
+[Django Modal Actions](https://github.com/Mng-dev-ai/django-modal-actions) can
+open a simple form in a modal dialog.
+
 If you want an actions menu for each row of your changelist, check out [Django
 Admin Row Actions](https://github.com/DjangoAdminHackers/django-admin-row-actions).
 
