@@ -247,7 +247,3 @@ Some commands assume you are in the virtualenv. If you see
 If you want an actions menu for each row of your changelist, check out [Django
 Admin Row Actions](https://github.com/DjangoAdminHackers/django-admin-row-actions).
 
-Django Object Actions is very similar to
-[django-object-tools](https://github.com/praekelt/django-object-tools), but does
-not require messing with your urls.py, does not do anything special with
-permissions, and uses the same patterns as making [admin actions].
