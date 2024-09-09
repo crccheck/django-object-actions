@@ -2,7 +2,6 @@ from functools import wraps
 from itertools import chain
 
 from django.contrib import messages
-from django.contrib.admin import ModelAdmin
 from django.contrib.admin.utils import unquote
 from django.db.models.query import QuerySet
 from django.http import Http404, HttpResponseRedirect
