@@ -46,7 +46,6 @@ class AppTests(LoggedInTestCase):
         # it's good to document that this is something we can do.
         url = reverse("admin:polls_poll_actions", args=(1, "delete_all_choices"))
         response = self.client.get(url)
-        print(url, response)
         self.assertTemplateUsed(response, "clear_choices.html")
 
     def test_message_user_sends_message(self):
