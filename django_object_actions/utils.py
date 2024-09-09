@@ -218,7 +218,6 @@ class BaseActionView(View):
     model = None
     actions = None
     current_app = None
-    methods = ("GET", "POST")
 
     @property
     def view_args(self):
@@ -250,8 +249,11 @@ class BaseActionView(View):
         except KeyError:
             raise Http404("Action does not exist")
 
-        if request.method not in self.methods:
-            return HttpResponseNotAllowed(view.methods)
+        # TODO move ('get', 'post' config default someplace else)
+        allowed_methods = getattr(view, "methods", ("GET", "POST"))
+        print("dispatch", request.method, allowed_methods)
+        if request.method.upper() not in allowed_methods:
+            return HttpResponseNotAllowed(allowed_methods)
 
         ret = view(request, *self.view_args)
         if isinstance(ret, HttpResponseBase):

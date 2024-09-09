@@ -76,9 +76,15 @@ class ChangeTests(LoggedInTestCase):
         self.assertIn("foo", response.context_data)
 
     def test_changelist_action_view(self):
-        url = "/admin/polls/choice/actions/delete_all/"
+        url = reverse("admin:polls_choice_actions", args=("delete_all",))
         response = self.client.get(url)
         self.assertRedirects(response, "/admin/polls/choice/")
+
+    def test_changelist_action_post_only_tool_rejects_get(self):
+        poll = PollFactory.create()
+        url = reverse("admin:polls_choice_actions", args=(poll.pk, "reset_vote"))
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 405)
 
     def test_changelist_nonexistent_action(self):
         url = "/admin/polls/choice/actions/xyzzy/"

@@ -186,11 +186,12 @@ preferable that actions use a HTTP POST instead of a GET.
 You can configure an action to only use POST with:
 
 ```python
-@action(methods=("post",), button_type="form")
+@action(methods=("POST",), button_type="form")
 ```
 
-One caveat is Django's styling is pinned to anchor tags[^1], so to maintain visual
-consistency with other actions, we have to use anchor tags too.
+One caveat is Django's styling is pinned to anchor tags[^1], so to maintain
+visual consistency with other actions, we have to use anchor tags too and use
+JavaScript to turn make it act like a form.
 
 [^1]: https://github.com/django/django/blob/826ef006681eae1e9b4bd0e4f18fa13713025cba/django/contrib/admin/static/admin/css/base.css#L786
 
@@ -267,4 +268,3 @@ open a simple form in a modal dialog.
 
 If you want an actions menu for each row of your changelist, check out [Django
 Admin Row Actions](https://github.com/DjangoAdminHackers/django-admin-row-actions).
-
