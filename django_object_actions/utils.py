@@ -2,6 +2,7 @@ from functools import wraps
 from itertools import chain
 
 from django.contrib import messages
+from django.contrib.admin import ModelAdmin
 from django.contrib.admin.utils import unquote
 from django.db.models.query import QuerySet
 from django.http import Http404, HttpResponseRedirect
@@ -159,7 +160,7 @@ class BaseDjangoObjectActions(object):
             label=getattr(tool, "label", tool_name.replace("_", " ").capitalize()),
             standard_attrs=standard_attrs,
             custom_attrs=custom_attrs,
-            button_type=tool.button_type,
+            button_type=getattr(tool, "button_type", "a"),
         )
 
     def _get_button_attrs(self, tool):
@@ -218,6 +219,7 @@ class BaseActionView(View):
     model = None
     actions = None
     current_app = None
+    methods = ("GET", "POST")
 
     @property
     def view_args(self):
@@ -249,7 +251,7 @@ class BaseActionView(View):
         except KeyError:
             raise Http404("Action does not exist")
 
-        if request.method not in view.methods:
+        if request.method not in self.methods:
             return HttpResponseNotAllowed(view.methods)
 
         ret = view(request, *self.view_args)
