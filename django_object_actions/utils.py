@@ -315,9 +315,14 @@ def takes_instance_or_queryset(func):
 
 
 def action(
-    function=None, *, permissions=None, description=None, label=None, attrs=None,
-    methods=('GET', 'POST'),
-    button_type='a',
+    function=None,
+    *,
+    permissions=None,
+    description=None,
+    label=None,
+    attrs=None,
+    methods=("GET", "POST"),
+    button_type="a",
 ):
     """
     Conveniently add attributes to an action function:
