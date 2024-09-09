@@ -25,7 +25,7 @@ class CommentTests(LoggedInTestCase):
         response = self.client.get(action_url)
         self.assertRedirects(response, comment_url)
 
-    @patch("django_object_actions.utils.ChangeActionView.get")
+    @patch("django_object_actions.utils.ChangeActionView.dispatch")
     def test_action_on_a_model_with_arbitrary_pk_works(self, mock_view):
         mock_view.return_value = HttpResponse()
         action_url = "/admin/polls/comment/{0}/actions/hodor/".format(" i am a pk ")
@@ -35,7 +35,7 @@ class CommentTests(LoggedInTestCase):
         self.assertTrue(mock_view.called)
         self.assertEqual(mock_view.call_args[1]["pk"], " i am a pk ")
 
-    @patch("django_object_actions.utils.ChangeActionView.get")
+    @patch("django_object_actions.utils.ChangeActionView.dispatch")
     def test_action_on_a_model_with_slash_in_pk_works(self, mock_view):
         mock_view.return_value = HttpResponse()
         action_url = "/admin/polls/comment/{0}/actions/hodor/".format("pk/slash")
