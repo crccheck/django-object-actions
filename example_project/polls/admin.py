@@ -86,7 +86,7 @@ class PollAdmin(DjangoObjectActions, admin.ModelAdmin):
 
     def changelist_view(self, request, extra_context=None):
         extra_context = {"foo": "changelist_view"}
-        return super(PollAdmin, self).changelist_view(request, extra_context)
+        return super().changelist_view(request, extra_context)
 
     # Detail
     ########
@@ -99,7 +99,7 @@ class PollAdmin(DjangoObjectActions, admin.ModelAdmin):
 
     def change_view(self, request, object_id, form_url="", extra_context=None):
         extra = {"foo": "change_view"}
-        return super(PollAdmin, self).change_view(request, object_id, form_url, extra)
+        return super().change_view(request, object_id, form_url, extra)
 
     # Object actions
     ################
@@ -123,9 +123,7 @@ class PollAdmin(DjangoObjectActions, admin.ModelAdmin):
     change_actions = ("delete_all_choices", "question_mark")
 
     def get_change_actions(self, request, object_id, form_url):
-        actions = super(PollAdmin, self).get_change_actions(
-            request, object_id, form_url
-        )
+        actions = super().get_change_actions(request, object_id, form_url)
         actions = list(actions)
         if not request.user.is_superuser:
             return []

@@ -43,7 +43,7 @@ class BaseDjangoObjectActions:
 
     def get_urls(self):
         """Prepend `get_urls` with our own patterns."""
-        urls = super(BaseDjangoObjectActions, self).get_urls()
+        urls = super().get_urls()
         return self._get_action_urls() + urls
 
     def change_view(self, request, object_id, form_url="", extra_context=None):
@@ -57,7 +57,7 @@ class BaseDjangoObjectActions:
                 "tools_view_name": self.tools_view_name,
             }
         )
-        return super(BaseDjangoObjectActions, self).change_view(
+        return super().change_view(
             request, object_id, form_url, extra_context
         )
 
@@ -72,7 +72,7 @@ class BaseDjangoObjectActions:
                 "tools_view_name": self.tools_view_name,
             }
         )
-        return super(BaseDjangoObjectActions, self).changelist_view(
+        return super().changelist_view(
             request, extra_context
         )
 
@@ -112,9 +112,9 @@ class BaseDjangoObjectActions:
 
         model_name = self.model._meta.model_name
         # e.g.: polls_poll
-        base_url_name = "%s_%s" % (self.model._meta.app_label, model_name)
+        base_url_name = f"{self.model._meta.app_label}_{model_name}"
         # e.g.: polls_poll_actions
-        model_actions_url_name = "%s_actions" % base_url_name
+        model_actions_url_name = f"{base_url_name}_actions"
 
         self.tools_view_name = "admin:" + model_actions_url_name
 
@@ -131,7 +131,7 @@ class BaseDjangoObjectActions:
                     ChangeActionView.as_view(
                         model=self.model,
                         actions=actions,
-                        back="admin:%s_change" % base_url_name,
+                        back=f"admin:{base_url_name}_change",
                         current_app=self.admin_site.name,
                     )
                 ),
@@ -144,7 +144,7 @@ class BaseDjangoObjectActions:
                     ChangeListActionView.as_view(
                         model=self.model,
                         actions=actions,
-                        back="admin:%s_changelist" % base_url_name,
+                        back=f"admin:{base_url_name}_changelist",
                         current_app=self.admin_site.name,
                     )
                 ),

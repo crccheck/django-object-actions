@@ -28,7 +28,7 @@ class CommentTests(LoggedInTestCase):
     @patch("django_object_actions.utils.ChangeActionView.dispatch")
     def test_action_on_a_model_with_arbitrary_pk_works(self, mock_view):
         mock_view.return_value = HttpResponse()
-        action_url = "/admin/polls/comment/{0}/actions/hodor/".format(" i am a pk ")
+        action_url = "/admin/polls/comment/{}/actions/hodor/".format(" i am a pk ")
 
         self.client.get(action_url)
 
@@ -38,7 +38,7 @@ class CommentTests(LoggedInTestCase):
     @patch("django_object_actions.utils.ChangeActionView.dispatch")
     def test_action_on_a_model_with_slash_in_pk_works(self, mock_view):
         mock_view.return_value = HttpResponse()
-        action_url = "/admin/polls/comment/{0}/actions/hodor/".format("pk/slash")
+        action_url = "/admin/polls/comment/{}/actions/hodor/".format("pk/slash")
 
         self.client.get(action_url)
 
