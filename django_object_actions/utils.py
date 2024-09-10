@@ -57,9 +57,7 @@ class BaseDjangoObjectActions:
                 "tools_view_name": self.tools_view_name,
             }
         )
-        return super().change_view(
-            request, object_id, form_url, extra_context
-        )
+        return super().change_view(request, object_id, form_url, extra_context)
 
     def changelist_view(self, request, extra_context=None):
         extra_context = extra_context or {}
@@ -72,9 +70,7 @@ class BaseDjangoObjectActions:
                 "tools_view_name": self.tools_view_name,
             }
         )
-        return super().changelist_view(
-            request, extra_context
-        )
+        return super().changelist_view(request, extra_context)
 
     # USER OVERRIDABLE
     ##################
