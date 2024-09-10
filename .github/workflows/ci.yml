@@ -50,13 +50,15 @@ jobs:
       - run: make test
 
   lint:
-    name: "Black"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.11"
+          python-version: "3.12"
+      - run: pip install poetry
+      - run: poetry install --with=dev
+      - run: make lint
       - run: pip install black
       - run: black --check .
