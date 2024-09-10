@@ -27,6 +27,10 @@ install: ## Install development dependencies
 	poetry install
 	pip install Django
 
+lint: ## Check the project for lint errors
+	poetry run ruff check .
+	poetry run ruff format --diff .
+
 tdd: ## Run tests with a file watcher
 	PYTHONPATH=. nodemon --ext py -x sh -c "poetry run python -W ignore::RuntimeWarning $(MANAGE) test --failfast django_object_actions || true"
 

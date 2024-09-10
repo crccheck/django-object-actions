@@ -7,7 +7,7 @@ from example_project.polls.models import Choice
 
 class LoggedInTestCase(TestCase):
     def setUp(self):
-        super(LoggedInTestCase, self).setUp()
+        super().setUp()
         UserFactory.create(
             is_staff=True, is_superuser=True, username="admin", password="admin"
         )

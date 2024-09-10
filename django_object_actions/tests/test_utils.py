@@ -81,7 +81,7 @@ class BaseDjangoObjectActionsTest(TestCase):
 
 class BaseActionViewTests(TestCase):
     def setUp(self):
-        super(BaseActionViewTests, self).setUp()
+        super().setUp()
         self.view = BaseActionView()
 
     @mock.patch("django_object_actions.utils.messages")
