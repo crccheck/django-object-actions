@@ -52,7 +52,7 @@ class BaseDjangoObjectActions:
             {
                 "objectactions": [
                     self._get_tool_dict(action)
-                    for action in self.get_change_actions(request, object_id, form_url)
+                    for action in self.get_change_actions(request, unquote(object_id), form_url)
                 ],
                 "tools_view_name": self.tools_view_name,
             }
