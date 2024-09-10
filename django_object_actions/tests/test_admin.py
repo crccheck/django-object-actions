@@ -19,7 +19,7 @@ class CommentTests(LoggedInTestCase):
     def test_action_on_a_model_with_uuid_pk_works(self):
         comment = CommentFactory()
         comment_url = reverse("admin:polls_comment_change", args=(comment.pk,))
-        action_url = "/admin/polls/comment/{0}/actions/hodor/".format(comment.pk)
+        action_url = f"/admin/polls/comment/{comment.pk}/actions/hodor/"
         # sanity check that url has a uuid
         self.assertIn("-", action_url)
         response = self.client.get(action_url)
@@ -52,9 +52,7 @@ class ExtraTests(LoggedInTestCase):
         related_data_url = reverse(
             "admin:polls_relateddata_change", args=(related_data.pk,)
         )
-        action_url = "/admin/polls/relateddata/{}/actions/fill_up/".format(
-            quote(related_data.pk)
-        )
+        action_url = f"/admin/polls/relateddata/{quote(related_data.pk)}/actions/fill_up/"
 
         response = self.client.get(action_url)
         self.assertNotEqual(response.status_code, 404)

@@ -15,7 +15,7 @@ DEFAULT_METHODS_ALLOWED = ("GET", "POST")
 DEFAULT_BUTTON_TYPE = "a"
 
 
-class BaseDjangoObjectActions(object):
+class BaseDjangoObjectActions:
     """
     ModelAdmin mixin to add new actions just like adding admin actions.
 
