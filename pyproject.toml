@@ -31,11 +31,12 @@ classifiers = [
 [tool.poetry.dependencies]
 python = "^3.7"
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 coverage = "7.*"
 django-extensions = "3.*"
 factory-boy = "3.*"
 dj-database-url = "2.*"
+ruff = "*"
 
 [tool.semantic_release]
 version_toml = ["pyproject.toml:tool.poetry.version"]
