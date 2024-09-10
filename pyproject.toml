@@ -55,3 +55,5 @@ exclude_lines = [
   "__unicode__",
   "raise NotImplementedError",
 ]
+
+[tool.ruff]

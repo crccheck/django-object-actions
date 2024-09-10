@@ -60,5 +60,3 @@ jobs:
       - run: pip install poetry
       - run: poetry install --with=dev
       - run: make lint
-      - run: pip install black
-      - run: black --check .
