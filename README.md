@@ -190,8 +190,8 @@ You can configure an action to only use POST with:
 ```
 
 One caveat is Django's styling is pinned to anchor tags[^1], so to maintain
-visual consistency with other actions, we have to use anchor tags too and use
-JavaScript to turn make it act like a form.
+visual consistency, we have to use anchor tags and use JavaScript to make it act
+like the submit button of the form.
 
 [^1]: https://github.com/django/django/blob/826ef006681eae1e9b4bd0e4f18fa13713025cba/django/contrib/admin/static/admin/css/base.css#L786
 
