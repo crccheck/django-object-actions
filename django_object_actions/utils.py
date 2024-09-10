@@ -11,6 +11,9 @@ from django.views.generic.detail import SingleObjectMixin
 from django.views.generic.list import MultipleObjectMixin
 from django.urls import re_path, reverse
 
+DEFAULT_METHODS_ALLOWED = ("GET", "POST")
+DEFAULT_BUTTON_TYPE = "a"
+
 
 class BaseDjangoObjectActions(object):
     """
@@ -159,7 +162,7 @@ class BaseDjangoObjectActions(object):
             label=getattr(tool, "label", tool_name.replace("_", " ").capitalize()),
             standard_attrs=standard_attrs,
             custom_attrs=custom_attrs,
-            button_type=tool.button_type,
+            button_type=getattr(tool, "button_type", DEFAULT_BUTTON_TYPE),
         )
 
     def _get_button_attrs(self, tool):
@@ -249,8 +252,9 @@ class BaseActionView(View):
         except KeyError:
             raise Http404("Action does not exist")
 
-        if request.method not in view.methods:
-            return HttpResponseNotAllowed(view.methods)
+        allowed_methods = getattr(view, "methods", DEFAULT_METHODS_ALLOWED)
+        if request.method.upper() not in allowed_methods:
+            return HttpResponseNotAllowed(allowed_methods)
 
         ret = view(request, *self.view_args)
         if isinstance(ret, HttpResponseBase):
@@ -315,9 +319,14 @@ def takes_instance_or_queryset(func):
 
 
 def action(
-    function=None, *, permissions=None, description=None, label=None, attrs=None,
-    methods=('GET', 'POST'),
-    button_type='a',
+    function=None,
+    *,
+    permissions=None,
+    description=None,
+    label=None,
+    attrs=None,
+    methods=DEFAULT_METHODS_ALLOWED,
+    button_type=DEFAULT_BUTTON_TYPE,
 ):
     """
     Conveniently add attributes to an action function:

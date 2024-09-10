@@ -45,7 +45,7 @@ class ChoiceAdmin(DjangoObjectActions, admin.ModelAdmin):
     def delete_all(self, request, queryset):
         self.message_user(request, "just kidding!")
 
-    @action(description="0")
+    @action(description="0", methods=("POST",), button_type="form")
     def reset_vote(self, request, obj):
         obj.votes = 0
         obj.save()

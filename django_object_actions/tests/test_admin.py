@@ -25,7 +25,7 @@ class CommentTests(LoggedInTestCase):
         response = self.client.get(action_url)
         self.assertRedirects(response, comment_url)
 
-    @patch("django_object_actions.utils.ChangeActionView.get")
+    @patch("django_object_actions.utils.ChangeActionView.dispatch")
     def test_action_on_a_model_with_arbitrary_pk_works(self, mock_view):
         mock_view.return_value = HttpResponse()
         action_url = "/admin/polls/comment/{0}/actions/hodor/".format(" i am a pk ")
@@ -35,7 +35,7 @@ class CommentTests(LoggedInTestCase):
         self.assertTrue(mock_view.called)
         self.assertEqual(mock_view.call_args[1]["pk"], " i am a pk ")
 
-    @patch("django_object_actions.utils.ChangeActionView.get")
+    @patch("django_object_actions.utils.ChangeActionView.dispatch")
     def test_action_on_a_model_with_slash_in_pk_works(self, mock_view):
         mock_view.return_value = HttpResponse()
         action_url = "/admin/polls/comment/{0}/actions/hodor/".format("pk/slash")
@@ -76,9 +76,15 @@ class ChangeTests(LoggedInTestCase):
         self.assertIn("foo", response.context_data)
 
     def test_changelist_action_view(self):
-        url = "/admin/polls/choice/actions/delete_all/"
+        url = reverse("admin:polls_choice_actions", args=("delete_all",))
         response = self.client.get(url)
         self.assertRedirects(response, "/admin/polls/choice/")
+
+    def test_changelist_action_post_only_tool_rejects_get(self):
+        poll = PollFactory.create()
+        url = reverse("admin:polls_choice_actions", args=(poll.pk, "reset_vote"))
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 405)
 
     def test_changelist_nonexistent_action(self):
         url = "/admin/polls/choice/actions/xyzzy/"

@@ -32,7 +32,7 @@ class ArticleAdmin(DjangoObjectActions, admin.ModelAdmin):
 
 ## Usage
 
-Defining new &_tool actions_ is just like defining regular [admin actions]. The
+Defining new _tool actions_ is just like defining regular [admin actions]. The
 major difference is the functions for `django-object-actions` will take an
 object instance instead of a queryset (see _Re-using Admin Actions_ below).
 
@@ -176,6 +176,25 @@ def get_change_actions(self, request, object_id, form_url):
 
 The same is true for changelist actions with `get_changelist_actions`.
 
+### Using POST instead of GET for actions
+
+⚠️ This is a beta feature and subject to change
+
+Since actions usually change data, for safety and semantics, it would be
+preferable that actions use a HTTP POST instead of a GET.
+
+You can configure an action to only use POST with:
+
+```python
+@action(methods=("POST",), button_type="form")
+```
+
+One caveat is Django's styling is pinned to anchor tags[^1], so to maintain
+visual consistency, we have to use anchor tags and use JavaScript to make it act
+like the submit button of the form.
+
+[^1]: https://github.com/django/django/blob/826ef006681eae1e9b4bd0e4f18fa13713025cba/django/contrib/admin/static/admin/css/base.css#L786
+
 ### Alternate Installation
 
 You don't have to add this to `INSTALLED_APPS`, all you need to to do
@@ -249,4 +268,3 @@ open a simple form in a modal dialog.
 
 If you want an actions menu for each row of your changelist, check out [Django
 Admin Row Actions](https://github.com/DjangoAdminHackers/django-admin-row-actions).
-
