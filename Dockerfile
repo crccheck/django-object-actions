@@ -1,5 +1,5 @@
 # TODO upgrade once old Django versions are dropped
-FROM python:3.6-alpine3.7
+FROM python:3.9-alpine
 
 RUN apk add --no-cache make
 
