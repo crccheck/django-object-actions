@@ -31,16 +31,13 @@ jobs:
         include: ${{ fromJson(needs.prepare.outputs.matrix) }}
     name: "Python ${{ matrix.python-version }} + Django ${{ matrix.django-version }}"
     runs-on: ubuntu-latest
-    env:
-      POETRY_VIRTUALENVS_CREATE: false
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-      - run: pip install poetry
-      - run: poetry install
-      - run: poetry build --format wheel
+      - run: pip install -e '.[build,dev]'
+      - run: python -m build
       - name: Make sure tests use dist instead of source
         run: |
           rm -rf django_object_actions
@@ -51,11 +48,10 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
-      - run: pip install poetry
-      - run: poetry install --with=dev
+          python-version: "3.13"
+      - run: pip install -e '.[dev]'
       - run: make lint

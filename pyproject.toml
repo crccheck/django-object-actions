@@ -1,3 +1,7 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "django-object-actions"
 version = "4.3.0"
@@ -5,7 +9,6 @@ description = "A Django app for adding object tools for models in the admin"
 authors = [{ name = "crccheck", email = "c@crccheck.com" }]
 license = { text = "Apache-2.0" }
 readme = "README.md"
-# repository = "https://github.com/crccheck/django-object-actions"
 keywords = ["django", "admin"]
 classifiers = [
   "Development Status :: 5 - Production/Stable",
@@ -21,6 +24,9 @@ classifiers = [
   "Programming Language :: Python :: 3.13",
 ]
 
+[project.urls]
+"Homepage" = "https://github.com/crccheck/django-object-actions"
+
 [project.optional-dependencies]
 dev = [
   "coverage==7.*",
@@ -29,6 +35,7 @@ dev = [
   "dj-database-url==2.*",
   "ruff",
 ]
+build = ["build", "twine"]
 
 [tool.setuptools]
 packages = ["django_object_actions"]
@@ -36,7 +43,7 @@ packages = ["django_object_actions"]
 [tool.semantic_release]
 version_toml = ["pyproject.toml:project.version"]
 version_variables = ["django_object_actions/__init__.py:__version__"]
-build_command = "pip build"
+build_command = "python -m build"
 
 [tool.coverage.run]
 source = ["django_object_actions"]

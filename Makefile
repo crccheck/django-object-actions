@@ -24,23 +24,23 @@ clean: ## Remove generated files
 	find . -type d -name "__pycache__" -exec rm -rf {} \; || true
 
 install: ## Install development dependencies
-	poetry install
+	pip install -e '.[build,dev]'
 	pip install Django
 
 lint: ## Check the project for lint errors
-	poetry run ruff check .
-	poetry run ruff format --diff .
+	ruff check .
+	ruff format --diff .
 
 tdd: ## Run tests with a file watcher
-	PYTHONPATH=. nodemon --ext py -x sh -c "poetry run python -W ignore::RuntimeWarning $(MANAGE) test --failfast django_object_actions || true"
+	PYTHONPATH=. nodemon --ext py -x sh -c "python -W ignore::RuntimeWarning $(MANAGE) test --failfast django_object_actions || true"
 
 test: ## Run test suite
-	PYTHONPATH=. poetry run python -W ignore::RuntimeWarning $(MANAGE) test django_object_actions
+	PYTHONPATH=. python -W ignore::RuntimeWarning $(MANAGE) test django_object_actions
 
 coverage: ## Run and then display coverage report
-	poetry run coverage erase
-	PYTHONPATH=. poetry run coverage run $(MANAGE) test django_object_actions
-	poetry run coverage report --show-missing
+	coverage erase
+	PYTHONPATH=. coverage run $(MANAGE) test django_object_actions
+	coverage report --show-missing
 
 resetdb: ## Delete and then recreate the dev sqlite database
 	python $(MANAGE) reset_db --router=default --noinput
