@@ -3,7 +3,7 @@ name = "django-object-actions"
 version = "4.3.0"
 description = "A Django app for adding object tools for models in the admin"
 authors = [{ name = "crccheck", email = "c@crccheck.com" }]
-license = "Apache-2.0"
+license = { text = "Apache-2.0" }
 readme = "README.md"
 # repository = "https://github.com/crccheck/django-object-actions"
 keywords = ["django", "admin"]
@@ -25,8 +25,8 @@ classifiers = [
 dev = [
   "coverage==7.*",
   "django-extensions==3.*",
-  "factory-boy == 3.*",
-  "dj-database-url == 2.*",
+  "factory-boy==3.*",
+  "dj-database-url==2.*",
   "ruff",
 ]
 
