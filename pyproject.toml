@@ -30,6 +30,9 @@ dev = [
   "ruff",
 ]
 
+[tool.setuptools]
+packages = ["django_object_actions"]
+
 [tool.semantic_release]
 version_toml = ["pyproject.toml:project.version"]
 version_variables = ["django_object_actions/__init__.py:__version__"]
