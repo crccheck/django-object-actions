@@ -38,7 +38,13 @@ dev = [
 build = ["build", "twine"]
 
 [tool.setuptools]
-packages = ["django_object_actions"]
+# packages = ["django_object_actions"]
+
+[tool.setuptools.packages.find]
+where = ["django_object_actions"]
+
+[tool.setuptools.package-data]
+django_object_actions = ["*.html"]
 
 [tool.semantic_release]
 version_toml = ["pyproject.toml:project.version"]
