@@ -1,17 +1,11 @@
-[build-system]
-requires = ["poetry_core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
-
-[tool.poetry]
+[project]
 name = "django-object-actions"
 version = "4.3.0"
 description = "A Django app for adding object tools for models in the admin"
-authors = ["crccheck <c@crccheck.com>"]
+authors = [{ name = "crccheck", email = "c@crccheck.com" }]
 license = "Apache-2.0"
 readme = "README.md"
-
-repository = "https://github.com/crccheck/django-object-actions"
-
+# repository = "https://github.com/crccheck/django-object-actions"
 keywords = ["django", "admin"]
 classifiers = [
   "Development Status :: 5 - Production/Stable",
@@ -27,20 +21,19 @@ classifiers = [
   "Programming Language :: Python :: 3.13",
 ]
 
-[tool.poetry.dependencies]
-python = "^3.9"
-
-[tool.poetry.group.dev.dependencies]
-coverage = "7.*"
-django-extensions = "3.*"
-factory-boy = "3.*"
-dj-database-url = "2.*"
-ruff = "*"
+[project.optional-dependencies]
+dev = [
+  "coverage==7.*",
+  "django-extensions==3.*",
+  "factory-boy == 3.*",
+  "dj-database-url == 2.*",
+  "ruff",
+]
 
 [tool.semantic_release]
-version_toml = ["pyproject.toml:tool.poetry.version"]
+version_toml = ["pyproject.toml:project.version"]
 version_variables = ["django_object_actions/__init__.py:__version__"]
-build_command = "pip install poetry && poetry build"
+build_command = "pip build"
 
 [tool.coverage.run]
 source = ["django_object_actions"]
