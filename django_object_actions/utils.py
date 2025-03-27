@@ -245,8 +245,8 @@ class BaseActionView(View):
 
         try:
             view = self.actions[tool]
-        except KeyError:
-            raise Http404("Action does not exist")
+        except KeyError as exc:
+            raise Http404("Action does not exist") from exc
 
         allowed_methods = getattr(view, "methods", DEFAULT_METHODS_ALLOWED)
         if request.method.upper() not in allowed_methods:
