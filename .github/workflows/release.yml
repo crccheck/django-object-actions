@@ -1,3 +1,4 @@
+# https://python-semantic-release.readthedocs.io/en/latest/automatic-releases/github-actions.html#examples
 name: Release
 
 on:
@@ -16,26 +17,31 @@ jobs:
       contents: write
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          ref: ${{ github.ref_name }}
           persist-credentials: false
+      - name: Setup | Force release branch to be at workflow sha
+        run: |
+          git reset --hard ${{ github.sha }}
       - name: Python Semantic Release
         id: release
         # https://github.com/python-semantic-release/python-semantic-release/releases
         # https://python-semantic-release.readthedocs.io/en/latest/github-action.html
-        uses: python-semantic-release/python-semantic-release@v9.8.8
+        uses: python-semantic-release/python-semantic-release@v9.21.0
         with:
           github_token: ${{ secrets.BOT_GITHUB_TOKEN }}
 
-      - name: Publish package distributions to PyPI
+      - name: Publish | Upload package to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         # NOTE: DO NOT wrap the conditional in ${{ }} as it will always evaluate to true.
         # See https://github.com/actions/runner/issues/1173
         if: steps.release.outputs.released == 'true'
 
-      - name: Publish package distributions to GitHub Releases
-        uses: python-semantic-release/upload-to-gh-release@main
+      - name: Publish | Upload to GitHub Release Assets
+        uses: python-semantic-release/upload-to-gh-release@9.21.0
         if: steps.release.outputs.released == 'true'
         with:
           github_token: ${{ secrets.BOT_GITHUB_TOKEN }}
+          tag: ${{ steps.release.outputs.tag }}

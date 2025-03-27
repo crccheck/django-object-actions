@@ -258,9 +258,6 @@ make quickstart  # runs 'make resetdb' and some extra steps
 Various helpers are available as make commands. Type `make help` and
 view the `Makefile` to see what other things you can do.
 
-Some commands assume you are in the virtualenv. If you see
-"ModuleNotFoundError"s, try running `poetry shell` first.
-
 ## Similar Packages
 
 [Django Modal Actions](https://github.com/Mng-dev-ai/django-modal-actions) can
