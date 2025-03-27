@@ -67,4 +67,14 @@ exclude_lines = [
 [tool.ruff]
 
 [tool.ruff.lint]
-extend-select = ["UP"]
+extend-select = [
+  "A",   # flake8-builtins
+  "B",   # flake8-bugbear
+  "G",   # flake8-logging-format
+  "I",   # isort
+  "N",   # pep8-naming
+  "RET", # flakes8-return
+  "RUF", # Ruff-specific rules
+  "UP",  # pyupgrade
+]
+ignore = ["RUF012"]

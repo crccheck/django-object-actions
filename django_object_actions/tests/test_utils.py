@@ -1,13 +1,14 @@
 from unittest import mock
 
 from django.test import TestCase
+
 from example_project.polls.models import Poll
 
 from ..utils import (
-    BaseDjangoObjectActions,
     BaseActionView,
-    takes_instance_or_queryset,
+    BaseDjangoObjectActions,
     action,
+    takes_instance_or_queryset,
 )
 
 

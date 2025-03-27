@@ -2,17 +2,19 @@
 Integration tests that actually try and use the tools setup in admin.py
 """
 
+from unittest.mock import patch
+
 from django.contrib.admin.utils import quote
 from django.http import HttpResponse
 from django.urls import reverse
-from unittest.mock import patch
 
-from .tests import LoggedInTestCase
 from example_project.polls.factories import (
     CommentFactory,
     PollFactory,
     RelatedDataFactory,
 )
+
+from .tests import LoggedInTestCase
 
 
 class CommentTests(LoggedInTestCase):
