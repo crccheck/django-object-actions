@@ -7,14 +7,13 @@ __version__ = "4.3.0"
 from .utils import (
     BaseDjangoObjectActions,
     DjangoObjectActions,
-    takes_instance_or_queryset,
     action,
+    takes_instance_or_queryset,
 )
-
 
 __all__ = [
     "BaseDjangoObjectActions",
     "DjangoObjectActions",
-    "takes_instance_or_queryset",
     "action",
+    "takes_instance_or_queryset",
 ]
