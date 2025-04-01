@@ -6,11 +6,11 @@ from django.urls import reverse
 
 from django_object_actions import (
     DjangoObjectActions,
-    takes_instance_or_queryset,
     action,
+    takes_instance_or_queryset,
 )
 
-from .models import Choice, Poll, Comment, RelatedData
+from .models import Choice, Comment, Poll, RelatedData
 
 
 class ChoiceAdmin(DjangoObjectActions, admin.ModelAdmin):
@@ -110,7 +110,7 @@ class PollAdmin(DjangoObjectActions, admin.ModelAdmin):
 
         if request.method == "POST":
             obj.choice_set.all().delete()
-            return
+            return None
 
         self.message_user(request, "All choices deleted")
         return render(request, "clear_choices.html", {"object": obj})

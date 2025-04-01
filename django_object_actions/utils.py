@@ -6,10 +6,10 @@ from django.contrib.admin.utils import unquote
 from django.db.models.query import QuerySet
 from django.http import Http404, HttpResponseRedirect
 from django.http.response import HttpResponseBase, HttpResponseNotAllowed
+from django.urls import re_path, reverse
 from django.views.generic import View
 from django.views.generic.detail import SingleObjectMixin
 from django.views.generic.list import MultipleObjectMixin
-from django.urls import re_path, reverse
 
 DEFAULT_METHODS_ALLOWED = ("GET", "POST")
 DEFAULT_BUTTON_TYPE = "a"
@@ -245,8 +245,8 @@ class BaseActionView(View):
 
         try:
             view = self.actions[tool]
-        except KeyError:
-            raise Http404("Action does not exist")
+        except KeyError as exc:
+            raise Http404("Action does not exist") from exc
 
         allowed_methods = getattr(view, "methods", DEFAULT_METHODS_ALLOWED)
         if request.method.upper() not in allowed_methods:
@@ -363,5 +363,4 @@ def action(
 
     if function is None:
         return decorator
-    else:
-        return decorator(function)
+    return decorator(function)
