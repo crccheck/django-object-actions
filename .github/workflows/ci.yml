@@ -12,7 +12,7 @@ jobs:
     steps:
       - name: Create matrix
         id: create_matrix
-        uses: fabiocaccamo/create-matrix-action@v3
+        uses: fabiocaccamo/create-matrix-action@v5
         with:
           matrix: |
             python-version {3.9}, django-version {4.2}
