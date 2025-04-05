@@ -1,6 +1,6 @@
 # Django Object Actions
 
-[![CI](https://github.com/crccheck/django-object-actions/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/crccheck/django-object-actions/actions/workflows/ci.yml?query=branch%3Amaster)
+[![CI](https://github.com/crccheck/django-object-actions/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/crccheck/django-object-actions/actions/workflows/ci.yml?query=branch%3Amain)
 
 If you've ever tried making admin object tools you may have thought, "why can't
 this be as easy as making Django Admin Actions?" Well now they can be.

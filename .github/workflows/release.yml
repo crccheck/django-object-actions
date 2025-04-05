@@ -6,7 +6,7 @@ on:
   # Disabled to be able to roll multiple breaking releases into one release
   # push:
   #   branches:
-  #     - master
+  #     - main
 
 jobs:
   release:
@@ -25,7 +25,7 @@ jobs:
       - name: Setup | Force release branch to be at workflow sha
         run: |
           git reset --hard ${{ github.sha }}
-      - name: Python Semantic Release
+      - name: Action | Python Semantic Release
         id: release
         # https://github.com/python-semantic-release/python-semantic-release/releases
         # https://python-semantic-release.readthedocs.io/en/latest/github-action.html
