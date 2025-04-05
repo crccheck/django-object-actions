@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "django-object-actions"
-version = "4.3.0"
+version = "5.0.0"
 description = "A Django app for adding object tools for models in the admin"
 authors = [{ name = "crccheck", email = "c@crccheck.com" }]
 license = { text = "Apache-2.0" }

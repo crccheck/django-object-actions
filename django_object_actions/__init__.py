@@ -1,6 +1,6 @@
 """A Django app for adding object tools for models in the admin."""
 
-__version__ = "4.3.0"
+__version__ = "5.0.0"
 
 
 from .utils import (
