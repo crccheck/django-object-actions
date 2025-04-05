@@ -6,7 +6,7 @@ on:
       - edited
       - synchronize
     branches:
-      - master
+      - main
 jobs:
   lint-pr:
     runs-on: ubuntu-latest
