@@ -3,7 +3,6 @@
 __version__ = "4.3.0"
 
 
-# kind of like __all__, make these available for public
 from .utils import (
     BaseDjangoObjectActions,
     DjangoObjectActions,

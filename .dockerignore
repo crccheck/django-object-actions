@@ -2,7 +2,6 @@
 .coverage
 
 .env
-.tox/
 *.db
 *.sqlite
 
