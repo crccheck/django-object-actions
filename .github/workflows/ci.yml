@@ -40,7 +40,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ matrix.python-version }}-${{ matrix.django-version }}
+          key: ${{ runner.os }}-pip-${{ matrix.python-version }}-${{ matrix.django-version }}-${{ hashFiles('pyproject.toml') }}
           restore-keys: |
             ${{ runner.os }}-pip-
       - run: pip install -e '.[dev]' "Django==${{ matrix.django-version }}.*"
