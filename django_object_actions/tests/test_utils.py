@@ -76,7 +76,7 @@ class BaseDjangoObjectActionsTest(TestCase):
 
     def test_get_button_attrs_custom_attrs_get_partitioned(self):
         mock_tool = type("mock_tool", (object,), {"attrs": {"nonstandard": "wombat"}})
-        attrs, custom = self.instance._get_button_attrs(mock_tool)
+        _attrs, custom = self.instance._get_button_attrs(mock_tool)
         self.assertEqual(custom["nonstandard"], "wombat")
 
 
