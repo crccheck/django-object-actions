@@ -36,14 +36,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Cache pip
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ matrix.python-version }}-${{ matrix.django-version }}-${{ hashFiles('pyproject.toml') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-      - run: pip install -e '.[dev]' "Django==${{ matrix.django-version }}.*"
+      - run: pip install -e '.[dev]'
+      - run: pip install "Django==${{ matrix.django-version }}.*"
       - run: make test
 
   lint:
