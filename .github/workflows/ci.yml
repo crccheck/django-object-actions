@@ -12,6 +12,7 @@ jobs:
     steps:
       - name: Create matrix
         id: create_matrix
+        # https://github.com/fabiocaccamo/create-matrix-action/releases
         uses: fabiocaccamo/create-matrix-action@v5
         with:
           matrix: |
@@ -33,7 +34,7 @@ jobs:
     name: "Python ${{ matrix.python-version }} + Django ${{ matrix.django-version }}"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
@@ -44,7 +45,7 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: actions/setup-python@v6
         with:
           python-version: "3.13"

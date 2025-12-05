@@ -17,7 +17,7 @@ jobs:
       contents: write
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           ref: ${{ github.ref_name }}
           fetch-depth: 0
@@ -29,18 +29,20 @@ jobs:
         id: release
         # https://github.com/python-semantic-release/python-semantic-release/releases
         # https://python-semantic-release.readthedocs.io/en/latest/github-action.html
-        uses: python-semantic-release/python-semantic-release@v9.21.0
+        uses: python-semantic-release/python-semantic-release@v10.5.2
         with:
           github_token: ${{ secrets.BOT_GITHUB_TOKEN }}
 
       - name: Publish | Upload package to PyPI
+        # https://github.com/pypa/gh-action-pypi-publish/releases
         uses: pypa/gh-action-pypi-publish@release/v1
         # NOTE: DO NOT wrap the conditional in ${{ }} as it will always evaluate to true.
         # See https://github.com/actions/runner/issues/1173
         if: steps.release.outputs.released == 'true'
 
       - name: Publish | Upload to GitHub Release Assets
-        uses: python-semantic-release/publish-action@v9.21.0
+        # https://github.com/python-semantic-release/publish-action/releases
+        uses: python-semantic-release/publish-action@v10.5.2
         if: steps.release.outputs.released == 'true'
         with:
           github_token: ${{ secrets.BOT_GITHUB_TOKEN }}
