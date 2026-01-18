@@ -26,8 +26,8 @@ class ArticleAdmin(DjangoObjectActions, admin.ModelAdmin):
     def publish_this(self, request, obj):
         publish_obj(obj)
 
-    change_actions = ('publish_this', )
-    changelist_actions = ('...', )
+    change_actions = ("publish_this", )
+    changelist_actions = ("action_name", )
 ```
 
 ## Usage
@@ -54,8 +54,8 @@ class MyModelAdmin(DjangoObjectActions, admin.ModelAdmin):
     def make_published(modeladmin, request, queryset):
         queryset.update(status='p')
 
-    change_actions = ('toolfunc', )
-    changelist_actions = ('make_published', )
+    change_actions = ("toolfunc", )
+    changelist_actions = ("make_published", )
 ```
 
 Just like admin actions, you can send a message with `self.message_user`.
@@ -82,8 +82,8 @@ class RobotAdmin(DjangoObjectActions, admin.ModelAdmin):
     def tighten_lug_nuts(self, request, queryset):
         queryset.update(lugnuts=F('lugnuts') - 1)
 
-    change_actions = ['tighten_lug_nuts']
-    actions = ['tighten_lug_nuts']
+    change_actions = ("tighten_lug_nuts", )
+    actions = ("tighten_lug_nuts", )
 ```
 
 [admin actions]: https://docs.djangoproject.com/en/stable/ref/contrib/admin/actions/
@@ -233,13 +233,11 @@ def external_link(self, request, obj):
 
 See [`ci.yml`](./.github/workflows/ci.yml) for which Python and Django versions this supports.
 
-## Demo Admin & Docker images
+## Demo Admin
 
-You can try the demo admin against several versions of Django with these Docker
-images: https://hub.docker.com/r/crccheck/django-object-actions/tags
-
-This runs the example Django project in `./example_project` based on the "polls"
-tutorial. `admin.py` demos what you can do with this app.
+You can try the demo admin by running the example Django project in
+`./example_project`, which is based on the "polls" tutorial. `admin.py` demos
+what you can do with this app.
 
 ## Development
 
