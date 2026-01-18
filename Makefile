@@ -47,33 +47,12 @@ resetdb: ## Delete and then recreate the dev sqlite database
 	python $(MANAGE) migrate --noinput
 	python $(MANAGE) loaddata sample_data
 
-# DEPRECATED: Docker builds are currently broken and will likely get deleted rather than fixed
+docker/build: ## Build Docker image
+	docker build -t $(IMAGE):latest .
 
-docker/build: ## Build a full set of Docker images
-docker/build: docker/build/3.1 docker/build/3.0 docker/build/2.2.6 docker/build/2.1.13 docker/build/2.0.13 docker/build/1.11.25 docker/build/1.10.8 docker/build/1.9.13 docker/build/1.8.18
+docker/run: ## Run Docker image
+	@echo Login at http://localhost:8000/admin/ with admin/admin
+	docker run --rm -p 8000:8000 -it $(IMAGE):latest
 
-docker/build/%:
-	docker build --build-arg DJANGO_VERSION=$* \
-	  -t $(IMAGE):$$(echo "$*" | cut -f 1-2 -d.) .
-
-run: run/3.1
-
-run/%:
-	docker run --rm -p 8000:8000 -it $(IMAGE):$*
-
-docker/publish: ## Publish Docker images to the hub
-	docker push $(IMAGE):3.1
-	docker push $(IMAGE):3.0
-	docker push $(IMAGE):2.2
-	docker push $(IMAGE):2.1
-	docker push $(IMAGE):2.0
-	docker push $(IMAGE):1.11
-	docker push $(IMAGE):1.10
-	docker push $(IMAGE):1.9
-	docker push $(IMAGE):1.8
-
-test/%:
-	docker run --rm -p 8000:8000 -t $(IMAGE):$* make test
-
-bash:
-	docker run --rm -it $(IMAGE):3.1 /bin/sh
+docker/test: ## Run tests in Docker
+	docker run --rm -t $(IMAGE):latest make test
