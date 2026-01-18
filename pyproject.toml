@@ -32,6 +32,7 @@ classifiers = [
 [project.optional-dependencies]
 dev = [
   "coverage==7.*",
+  "Django>=4.2",
   "django-extensions==3.*",
   "factory-boy==3.*",
   "dj-database-url==2.*",

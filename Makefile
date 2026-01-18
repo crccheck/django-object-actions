@@ -24,8 +24,7 @@ clean: ## Remove generated files
 	find . -type d -name "__pycache__" -exec rm -rf {} \; || true
 
 install: ## Install development dependencies
-	pip install -e '.[build,dev]'
-	pip install Django
+	pip install -e '.[dev]'
 
 lint: ## Check the project for lint errors
 	ruff check .
