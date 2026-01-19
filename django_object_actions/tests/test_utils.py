@@ -1,13 +1,17 @@
+import warnings
 from unittest import mock
 
-from django.test import TestCase
+from django.test import TestCase, override_settings
 
 from example_project.polls.models import Poll
 
+from .. import utils
 from ..utils import (
     BaseActionView,
     BaseDjangoObjectActions,
     action,
+    get_default_button_type,
+    get_default_http_method,
     takes_instance_or_queryset,
 )
 
@@ -162,3 +166,83 @@ class DecoratorActionTest(TestCase):
                 "class": "addlink",
             },
         )
+
+
+class DefaultHttpMethodSettingTest(TestCase):
+    def setUp(self):
+        # Reset the warning flag before each test
+        utils._SETTING_WARNING_EMITTED = False
+
+    def tearDown(self):
+        # Reset the warning flag after each test
+        utils._SETTING_WARNING_EMITTED = False
+
+    @override_settings(DJANGO_OBJECT_ACTIONS_DEFAULT_HTTP_METHOD="GET")
+    def test_explicit_get_setting_returns_get(self):
+        self.assertEqual(get_default_http_method(), "GET")
+
+    @override_settings(DJANGO_OBJECT_ACTIONS_DEFAULT_HTTP_METHOD="POST")
+    def test_explicit_post_setting_returns_post(self):
+        self.assertEqual(get_default_http_method(), "POST")
+
+    @override_settings(DJANGO_OBJECT_ACTIONS_DEFAULT_HTTP_METHOD="GET")
+    def test_get_setting_returns_anchor_button_type(self):
+        self.assertEqual(get_default_button_type(), "a")
+
+    @override_settings(DJANGO_OBJECT_ACTIONS_DEFAULT_HTTP_METHOD="POST")
+    def test_post_setting_returns_form_button_type(self):
+        self.assertEqual(get_default_button_type(), "form")
+
+    @override_settings(DJANGO_OBJECT_ACTIONS_DEFAULT_HTTP_METHOD="INVALID")
+    def test_invalid_setting_raises_value_error(self):
+        with self.assertRaises(ValueError) as ctx:
+            get_default_http_method()
+        self.assertIn("INVALID", str(ctx.exception))
+        self.assertIn("must be 'GET' or 'POST'", str(ctx.exception))
+
+    def test_no_setting_emits_deprecation_warning(self):
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always")
+            get_default_http_method()
+            self.assertEqual(len(w), 1)
+            self.assertTrue(issubclass(w[0].category, DeprecationWarning))
+            self.assertIn("default HTTP method will change", str(w[0].message))
+
+    def test_deprecation_warning_emitted_only_once(self):
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always")
+            get_default_http_method()
+            get_default_http_method()
+            get_default_http_method()
+            self.assertEqual(len(w), 1)
+
+    @override_settings(DJANGO_OBJECT_ACTIONS_DEFAULT_HTTP_METHOD="GET")
+    def test_explicit_setting_does_not_emit_warning(self):
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always")
+            get_default_http_method()
+            self.assertEqual(len(w), 0)
+
+    @override_settings(DJANGO_OBJECT_ACTIONS_DEFAULT_HTTP_METHOD="POST")
+    def test_action_decorator_respects_post_setting(self):
+        @action(description="Test action")
+        def my_action(modeladmin, request, queryset):
+            pass
+
+        self.assertEqual(my_action.button_type, "form")
+
+    @override_settings(DJANGO_OBJECT_ACTIONS_DEFAULT_HTTP_METHOD="GET")
+    def test_action_decorator_respects_get_setting(self):
+        @action(description="Test action")
+        def my_action(modeladmin, request, queryset):
+            pass
+
+        self.assertEqual(my_action.button_type, "a")
+
+    @override_settings(DJANGO_OBJECT_ACTIONS_DEFAULT_HTTP_METHOD="POST")
+    def test_explicit_button_type_overrides_setting(self):
+        @action(button_type="a")
+        def my_action(modeladmin, request, queryset):
+            pass
+
+        self.assertEqual(my_action.button_type, "a")
