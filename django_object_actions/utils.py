@@ -1,6 +1,9 @@
+import warnings
 from functools import wraps
 from itertools import chain
+from typing import Literal
 
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.admin.utils import unquote
 from django.db.models.query import QuerySet
@@ -13,6 +16,39 @@ from django.views.generic.list import MultipleObjectMixin
 
 DEFAULT_METHODS_ALLOWED = ("GET", "POST")
 DEFAULT_BUTTON_TYPE = "a"
+
+_SETTING_WARNING_EMITTED = False
+
+
+def get_default_http_method() -> Literal["GET", "POST"]:
+    """Get the default HTTP method, emitting deprecation warning if not configured."""
+    global _SETTING_WARNING_EMITTED
+
+    has_setting = hasattr(settings, "DJANGO_OBJECT_ACTIONS_DEFAULT_HTTP_METHOD")
+    method = getattr(settings, "DJANGO_OBJECT_ACTIONS_DEFAULT_HTTP_METHOD", "GET")
+
+    if method not in ("GET", "POST"):
+        raise ValueError(
+            f"DJANGO_OBJECT_ACTIONS_DEFAULT_HTTP_METHOD must be 'GET' or 'POST', "
+            f"got '{method}'"
+        )
+
+    if not has_setting and not _SETTING_WARNING_EMITTED:
+        _SETTING_WARNING_EMITTED = True
+        warnings.warn(
+            "django-object-actions: The default HTTP method will change from GET to "
+            "POST in a future version. Set DJANGO_OBJECT_ACTIONS_DEFAULT_HTTP_METHOD "
+            "in your Django settings to silence this warning.",
+            DeprecationWarning,
+            stacklevel=3,
+        )
+
+    return method
+
+
+def get_default_button_type() -> Literal["a", "form"]:
+    """Get default button type: 'a' for GET, 'form' for POST."""
+    return "a" if get_default_http_method() == "GET" else "form"
 
 
 class BaseDjangoObjectActions:
@@ -158,7 +194,7 @@ class BaseDjangoObjectActions:
             label=getattr(tool, "label", tool_name.replace("_", " ").capitalize()),
             standard_attrs=standard_attrs,
             custom_attrs=custom_attrs,
-            button_type=getattr(tool, "button_type", DEFAULT_BUTTON_TYPE),
+            button_type=getattr(tool, "button_type", get_default_button_type()),
         )
 
     def _get_button_attrs(self, tool):
@@ -322,7 +358,7 @@ def action(
     label=None,
     attrs=None,
     methods=DEFAULT_METHODS_ALLOWED,
-    button_type=DEFAULT_BUTTON_TYPE,
+    button_type: Literal["a", "form"] | None = None,
 ):
     """
     Conveniently add attributes to an action function:
@@ -358,7 +394,10 @@ def action(
         if attrs is not None:
             func.attrs = attrs
         func.methods = methods
-        func.button_type = button_type
+        # Resolve button_type at decoration time, not import time
+        func.button_type = (
+            button_type if button_type is not None else get_default_button_type()
+        )
         return func
 
     if function is None:
