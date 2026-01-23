@@ -33,15 +33,16 @@ def get_default_http_method() -> Literal["GET", "POST"]:
             f"got '{method}'"
         )
 
-    if not has_setting and not _SETTING_WARNING_EMITTED:
-        _SETTING_WARNING_EMITTED = True
-        warnings.warn(
-            "django-object-actions: The default HTTP method will change from GET to "
-            "POST in a future version. Set DJANGO_OBJECT_ACTIONS_DEFAULT_HTTP_METHOD "
-            "in your Django settings to silence this warning.",
-            DeprecationWarning,
-            stacklevel=3,
-        )
+    # TODO: Enable deprecation warning in next version
+    # if not has_setting and not _SETTING_WARNING_EMITTED:
+    #     _SETTING_WARNING_EMITTED = True
+    #     warnings.warn(
+    #         "django-object-actions: The default HTTP method will change from GET to "
+    #         "POST in a future version. Set DJANGO_OBJECT_ACTIONS_DEFAULT_HTTP_METHOD "
+    #         "in your Django settings to silence this warning.",
+    #         DeprecationWarning,
+    #         stacklevel=3,
+    #     )
 
     return method
 

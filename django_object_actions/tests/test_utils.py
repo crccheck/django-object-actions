@@ -200,21 +200,22 @@ class DefaultHttpMethodSettingTest(TestCase):
         self.assertIn("INVALID", str(ctx.exception))
         self.assertIn("must be 'GET' or 'POST'", str(ctx.exception))
 
-    def test_no_setting_emits_deprecation_warning(self):
-        with warnings.catch_warnings(record=True) as w:
-            warnings.simplefilter("always")
-            get_default_http_method()
-            self.assertEqual(len(w), 1)
-            self.assertTrue(issubclass(w[0].category, DeprecationWarning))
-            self.assertIn("default HTTP method will change", str(w[0].message))
+    # TODO: Enable when deprecation warning is enabled
+    # def test_no_setting_emits_deprecation_warning(self):
+    #     with warnings.catch_warnings(record=True) as w:
+    #         warnings.simplefilter("always")
+    #         get_default_http_method()
+    #         self.assertEqual(len(w), 1)
+    #         self.assertTrue(issubclass(w[0].category, DeprecationWarning))
+    #         self.assertIn("default HTTP method will change", str(w[0].message))
 
-    def test_deprecation_warning_emitted_only_once(self):
-        with warnings.catch_warnings(record=True) as w:
-            warnings.simplefilter("always")
-            get_default_http_method()
-            get_default_http_method()
-            get_default_http_method()
-            self.assertEqual(len(w), 1)
+    # def test_deprecation_warning_emitted_only_once(self):
+    #     with warnings.catch_warnings(record=True) as w:
+    #         warnings.simplefilter("always")
+    #         get_default_http_method()
+    #         get_default_http_method()
+    #         get_default_http_method()
+    #         self.assertEqual(len(w), 1)
 
     @override_settings(DJANGO_OBJECT_ACTIONS_DEFAULT_HTTP_METHOD="GET")
     def test_explicit_setting_does_not_emit_warning(self):
