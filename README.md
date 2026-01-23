@@ -195,8 +195,7 @@ When set to `"POST"`, action buttons will render as forms that submit via POST.
 When set to `"GET"` (or not set), actions render as regular links.
 
 **Migration note:** The default will change from `"GET"` to `"POST"` in a future
-major version. If you don't set this explicitly, you'll see a deprecation warning.
-We recommend setting it explicitly now to prepare for the change.
+major version.
 
 #### Per-action configuration
 
