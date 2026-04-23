@@ -1,5 +1,4 @@
 from functools import wraps
-from itertools import chain
 
 from django.contrib import messages
 from django.contrib.admin.utils import unquote
@@ -75,7 +74,7 @@ class BaseDjangoObjectActions:
     # USER OVERRIDABLE
     ##################
 
-    def get_change_actions(self, request, object_id, form_url):
+    def get_change_actions(self, request, object_id, **kwargs):
         """
         Override this to customize what actions get to the change view.
 
@@ -104,7 +103,6 @@ class BaseDjangoObjectActions:
 
     def _get_action_urls(self):
         """Get the url patterns that route each action to a view."""
-        actions = {}
 
         model_name = self.model._meta.model_name
         # e.g.: polls_poll
@@ -114,10 +112,6 @@ class BaseDjangoObjectActions:
 
         self.tools_view_name = "admin:" + model_actions_url_name
 
-        # WISHLIST use get_change_actions and get_changelist_actions
-        # TODO separate change and changelist actions
-        for action in chain(self.change_actions, self.changelist_actions):
-            actions[action] = getattr(self, action)
         return [
             # change, supports the same pks the admin does
             # https://github.com/django/django/blob/stable/1.10.x/django/contrib/admin/options.py#L555
@@ -126,7 +120,8 @@ class BaseDjangoObjectActions:
                 self.admin_site.admin_view(  # checks permissions
                     ChangeActionView.as_view(
                         model=self.model,
-                        actions=actions,
+                        actions=self.get_change_actions,
+                        modeladmin=self,
                         back=f"admin:{base_url_name}_change",
                         current_app=self.admin_site.name,
                     )
@@ -139,7 +134,8 @@ class BaseDjangoObjectActions:
                 self.admin_site.admin_view(  # checks permissions
                     ChangeListActionView.as_view(
                         model=self.model,
-                        actions=actions,
+                        actions=self.get_changelist_actions,
+                        modeladmin=self,
                         back=f"admin:{base_url_name}_changelist",
                         current_app=self.admin_site.name,
                     )
@@ -215,6 +211,7 @@ class BaseActionView(View):
 
     back = None
     model = None
+    modeladmin = None
     actions = None
     current_app = None
 
@@ -238,13 +235,22 @@ class BaseActionView(View):
         """
         raise NotImplementedError
 
+    def get_actions(self, request, **kwargs):
+        if callable(self.actions):
+            return {action: getattr(self.modeladmin, action) for action in self.actions(request, **kwargs)}
+        return self.actions
+
     def dispatch(self, request, tool, **kwargs):
         # Fix for case if there are special symbols in object pk
         for k, v in self.kwargs.items():
             self.kwargs[k] = unquote(v)
 
         try:
-            view = self.actions[tool]
+            if (pk := self.kwargs.get("pk")) is not None:
+                get_action_kwargs = {"object_id": pk}
+            else:
+                get_action_kwargs = {}
+            view = self.get_actions(request, **get_action_kwargs)[tool]
         except KeyError as exc:
             raise Http404("Action does not exist") from exc
 
