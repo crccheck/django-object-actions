@@ -11,12 +11,12 @@
 {% elif tool.button_type == 'form' %}
   <form method="post" action="{% add_preserved_filters action_url %}">
     {% csrf_token %}
-    <a href="#" onclick="this.parentNode.submit(); return false;"
+    <button type="submit"
       title="{{ tool.standard_attrs.title }}"
       {% for k, v in tool.custom_attrs.items %}
         {{ k }}="{{ v }}"
       {% endfor %}
       class="{{ tool.standard_attrs.class }}"
-    >{{ tool.label|capfirst }}</a>
+    >{{ tool.label|capfirst }}</button>
   </form>
 {% endif %}

@@ -44,9 +44,11 @@ build = ["build", "twine"]
 packages = [
   "django_object_actions",
   "django_object_actions.templates.django_object_actions",
+  "django_object_actions.static.django_object_actions.css",
 ]
 [tool.setuptools.package-data]
 "django_object_actions.templates.django_object_actions" = ["*.html"]
+"django_object_actions.static.django_object_actions.css" = ["*.css"]
 
 [tool.semantic_release]
 version_toml = ["pyproject.toml:project.version"]
