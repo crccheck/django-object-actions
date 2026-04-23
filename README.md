@@ -216,6 +216,77 @@ def external_link(self, request, obj):
     return HttpResponseRedirect(f'https://example.com/{obj.id}')
 ```
 
+### Intermediate confirmation and form pages
+
+Because an action is called with the current request, you can render a
+confirmation on GET and apply the change on POST. `@action` allows both
+methods by default.
+
+```python
+from django.shortcuts import render
+
+@action(label="Delete all choices")
+def delete_all_choices(self, request, obj):
+    if request.method == "POST":
+        obj.choice_set.all().delete()
+        return None
+    return render(request, "admin/confirm.html", {"object": obj})
+```
+
+For anything beyond a confirmation button, delegate to a `FormView` rather
+than handling the form inline. Unpacking `admin.site.each_context(request)`
+into the template context preserves the admin breadcrumbs, header, and user
+menu on the rendered page:
+
+```python
+from django.contrib import admin
+from django.shortcuts import redirect
+from django.views.generic import FormView
+
+from .forms import VerifyForm
+
+
+class ArticleAdmin(DjangoObjectActions, admin.ModelAdmin):
+    @action(label="Verify")
+    def verify(self, request, obj):
+        return VerifyView.as_view()(request, target=obj)
+
+    change_actions = ("verify",)
+
+
+class VerifyView(FormView):
+    form_class = VerifyForm
+    template_name = "admin/generic_form.html"
+
+    def dispatch(self, request, *args, target, **kwargs):
+        self.target = target
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        return {
+            **super().get_context_data(**kwargs),
+            **admin.site.each_context(self.request),
+            "title": "Verify article",
+        }
+
+    def form_valid(self, form):
+        self.target.mark_as_verified(**form.cleaned_data)
+        return redirect("admin:myapp_article_change", self.target.pk)
+```
+
+The template:
+
+```html
+{% extends "admin/base_site.html" %}
+{% block content %}
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Save">
+  </form>
+{% endblock %}
+```
+
 ## Limitations
 
 1.  `django-object-actions` expects functions to be methods of the model
