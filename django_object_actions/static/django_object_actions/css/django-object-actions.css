@@ -1,6 +1,8 @@
-/* Admin's .object-tools li a:link,a:visited styles don't apply to <button>,
-   so mirror them here for button_type='form' actions. Keep in sync if
-   admin's object-tools rules change. */
+/* Mirrors Django admin's .object-tools a rules for <button> elements used by
+   button_type='form' actions. To verify sync, grep for "object-tools" in
+   Django's django/contrib/admin/static/admin/css/base.css and compare.
+   Extra properties (box-sizing, border, font-family, line-height, cursor) are
+   needed because <button> has browser defaults that <a> does not. */
 
 .object-tools li form {
     display: contents;
@@ -25,6 +27,11 @@
 }
 
 .object-tools li button:hover,
+.object-tools li button:active {
+    background-color: var(--object-tools-hover-bg);
+}
+
 .object-tools li button:focus {
-    background: var(--object-tools-hover-bg);
+    background-color: var(--object-tools-hover-bg);
+    text-decoration: none;
 }

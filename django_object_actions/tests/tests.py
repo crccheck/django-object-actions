@@ -77,3 +77,11 @@ class AppTests(LoggedInTestCase):
     def test_render_button(self):
         response = self.client.get(reverse("admin:polls_choice_change", args=(1,)))
         self.assertEqual(response.status_code, 200)
+
+    def test_render_button_form_type_renders_button_element(self):
+        response = self.client.get(reverse("admin:polls_choice_change", args=(1,)))
+        self.assertContains(response, '<button type="submit"')
+
+    def test_render_button_link_type_renders_anchor_element(self):
+        response = self.client.get(reverse("admin:polls_choice_change", args=(1,)))
+        self.assertContains(response, "<a href=")
