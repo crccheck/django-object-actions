@@ -13,7 +13,7 @@ jobs:
       - name: Create matrix
         id: create_matrix
         # https://github.com/fabiocaccamo/create-matrix-action/releases
-        uses: fabiocaccamo/create-matrix-action@v5
+        uses: fabiocaccamo/create-matrix-action@v6
         with:
           matrix: |
             python-version {3.9}, django-version {4.2}
@@ -21,7 +21,7 @@ jobs:
             python-version {3.11}, django-version {4.2,5.0,5.1,5.2}
             python-version {3.12}, django-version {4.2,5.0,5.1,5.2,6.0}
             python-version {3.13}, django-version {5.1,5.2,6.0}
-            python-version {3.14}, django-version {6.0}
+            python-version {3.14}, django-version {5.2,6.0}
     outputs:
       matrix: ${{ steps.create_matrix.outputs.matrix }}
 
