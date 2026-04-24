@@ -29,7 +29,7 @@ jobs:
         id: release
         # https://github.com/python-semantic-release/python-semantic-release/releases
         # https://python-semantic-release.readthedocs.io/en/latest/github-action.html
-        uses: python-semantic-release/python-semantic-release@v10.5.2
+        uses: python-semantic-release/python-semantic-release@v10.5.3
         with:
           github_token: ${{ secrets.BOT_GITHUB_TOKEN }}
 
@@ -42,7 +42,7 @@ jobs:
 
       - name: Publish | Upload to GitHub Release Assets
         # https://github.com/python-semantic-release/publish-action/releases
-        uses: python-semantic-release/publish-action@v10.5.2
+        uses: python-semantic-release/publish-action@v10.5.3
         if: steps.release.outputs.released == 'true'
         with:
           github_token: ${{ secrets.BOT_GITHUB_TOKEN }}

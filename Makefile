@@ -24,7 +24,7 @@ clean: ## Remove generated files
 	find . -type d -name "__pycache__" -exec rm -rf {} \; || true
 
 install: ## Install development dependencies
-	pip install -e '.[dev]'
+	uv pip install --upgrade -e '.[dev]'
 
 lint: ## Check the project for lint errors
 	ruff check .
