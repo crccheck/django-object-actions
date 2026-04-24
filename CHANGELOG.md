@@ -1,6 +1,5 @@
 # CHANGELOG
 
-
 ## v5.0.0 (2025-04-05)
 
 ### Bug Fixes
@@ -8,11 +7,6 @@
 - **ci**: Fix release should use python-semantic-release/publish-action
   ([#183](https://github.com/crccheck/django-object-actions/pull/183),
   [`ce75176`](https://github.com/crccheck/django-object-actions/commit/ce75176329fda9e9776a77525bf98d55c0a4150f))
-
-Unable to resolve action `python-semantic-release/upload-to-gh-release@9.21.0`, unable to find
-  version `9.21.0`
-
-It is now named `python-semantic-release/publish-action`
 
 - **ci**: Fix renamed branch s/master/main
   ([#184](https://github.com/crccheck/django-object-actions/pull/184),
@@ -33,10 +27,10 @@ It is now named `python-semantic-release/publish-action`
   [`988ce82`](https://github.com/crccheck/django-object-actions/commit/988ce82b39e92fa282ac0201cd105093b2d11289))
 
 Python 3.7 hasn't been supported in ages, and it's causing errors on CI actions so let's just drop
-  it.
+it.
 
 It appears that [dropping Python 3.7 is desired
-  anyway](https://github.com/crccheck/django-object-actions/blob/master/CHANGELOG.md#v430-2024-09-10)!
+anyway](https://github.com/crccheck/django-object-actions/blob/master/CHANGELOG.md#v430-2024-09-10)!
 
 - Run tests for Django 5.1 on tested Python versions
   ([#178](https://github.com/crccheck/django-object-actions/pull/178),
@@ -62,8 +56,7 @@ https://docs.djangoproject.com/en/5.2/releases/5.2/
   [`fa2b4d7`](https://github.com/crccheck/django-object-actions/commit/fa2b4d720662337fe9b7217661bf984f11640229))
 
 Bringing in rules I've had success with elsewhere. More consistent style helps with readability and
-  maintainability. Some of the rules help with code simplicity and with reducing bugs too.
-
+maintainability. Some of the rules help with code simplicity and with reducing bugs too.
 
 ## v4.3.0 (2024-09-10)
 
@@ -83,10 +76,10 @@ https://docs.djangoproject.com/en/5.0/releases/5.0/
   [`50a03af`](https://github.com/crccheck/django-object-actions/commit/50a03afdf1571a5cb17db282df089f81a3c20ad2))
 
 There have been a lot of releases since v8.0.8
-  https://github.com/python-semantic-release/python-semantic-release/blob/master/CHANGELOG.md#v808-2023-08-26
+https://github.com/python-semantic-release/python-semantic-release/blob/master/CHANGELOG.md#v808-2023-08-26
 
 The breaking change was dropping Python 3.7. While this project supports 3.7... that will change the
-  next opportunity
+next opportunity
 
 ### Code Style
 
@@ -100,7 +93,7 @@ The breaking change was dropping Python 3.7. While this project supports 3.7... 
   [`813687e`](https://github.com/crccheck/django-object-actions/commit/813687e76241f8a6786fa20ea707ae470f1463ab))
 
 Adding new Django Modal Actions package Deleting Django Object Actions which hasn't had a commit in
-  3 years
+3 years
 
 ### Features
 
@@ -109,10 +102,9 @@ Adding new Django Modal Actions package Deleting Django Object Actions which has
   [`494d581`](https://github.com/crccheck/django-object-actions/commit/494d5817307343018ccc8398d64f95228e57f51b))
 
 Followup to #168 to get CI to pass again, documents how to make a POST only action, and adds some
-  test coverage.
+test coverage.
 
 There are still a few cleanup issues but this should get things moving on POST only actions again.
-
 
 ## v4.2.0 (2023-09-08)
 
@@ -127,8 +119,8 @@ There are still a few cleanup issues but this should get things moving on POST o
   [`70d2c81`](https://github.com/crccheck/django-object-actions/commit/70d2c8110e3c087366a67c4499fa0895035fbdfd))
 
 I missed some updated config changes -
-  https://python-semantic-release.readthedocs.io/en/latest/migrating_from_v7.html#version-toml -
-  https://python-semantic-release.readthedocs.io/en/latest/configuration.html#config-version-variables
+https://python-semantic-release.readthedocs.io/en/latest/migrating_from_v7.html#version-toml -
+https://python-semantic-release.readthedocs.io/en/latest/configuration.html#config-version-variables
 
 ### Chores
 
@@ -146,15 +138,15 @@ Ran black on to comply with format from 23.x version
   [`3e42b3b`](https://github.com/crccheck/django-object-actions/commit/3e42b3be4fdced017f23234b5da2c17373fbc50b))
 
 fixes deprecation warnings in CI: > The `set-output` command is deprecated and will be disabled
-  soon. Please upgrade to using Environment Files. For more information see:
-  https://github.blog/changelog/2022-10-11-github-actions-deprecating-save-state-and-set-output-commands/
+soon. Please upgrade to using Environment Files. For more information see:
+https://github.blog/changelog/2022-10-11-github-actions-deprecating-save-state-and-set-output-commands/
 
 - **ci**: Upgrade python-semantic-release
   ([#145](https://github.com/crccheck/django-object-actions/pull/145),
   [`53417a0`](https://github.com/crccheck/django-object-actions/commit/53417a01bc78a9a7bb59f4599154d180914f064b))
 
 Hopefully this fixes the broken GitHub Action too
-  https://github.com/crccheck/django-object-actions/actions/runs/3464471740 `error: No module named
+https://github.com/crccheck/django-object-actions/actions/runs/3464471740 `error: No module named
   'packaging'`
 
 https://github.com/python-semantic-release/python-semantic-release/issues/489
@@ -183,8 +175,7 @@ To reduce future diffs from autoformat
 Just upgrading to stay current. Need to use "feat" to trigger a release.
 
 Docs: - https://python-semantic-release.readthedocs.io/en/latest/migrating_from_v7.html -
-  https://github.com/pypa/gh-action-pypi-publish#usage
-
+https://github.com/pypa/gh-action-pypi-publish#usage
 
 ## v4.1.0 (2022-11-14)
 
@@ -210,15 +201,15 @@ Just some housekeeping and local dev tweaks.
   [`5638f99`](https://github.com/crccheck/django-object-actions/commit/5638f999d32ea7f6de60b895d23ce89624120769))
 
 Add an `@action` decorator that behave's like Django's `admin.action` decorator[^1] to clean up
-  customizing object actions.
+customizing object actions.
 
 [closes #115](https://github.com/crccheck/django-object-actions/issues/115)
 
 Also relates to #107
 
 [^1]:
-  https://docs.djangoproject.com/en/stable/ref/contrib/admin/actions/#django.contrib.admin.action
 
+https://docs.djangoproject.com/en/stable/ref/contrib/admin/actions/#django.contrib.admin.action
 
 ## v4.0.0 (2022-03-12)
 
@@ -235,7 +226,7 @@ Also relates to #107
   [`6283e62`](https://github.com/crccheck/django-object-actions/commit/6283e621eebe55e22c72323fc1509bf77d93932d))
 
 This updates CI to use https://github.com/fabiocaccamo/create-matrix-action to simplify the config
-  file. Poetry's lock file updated as I reinstalled on a new computer.
+file. Poetry's lock file updated as I reinstalled on a new computer.
 
 ### Documentation
 
@@ -256,15 +247,14 @@ This updates CI to use https://github.com/fabiocaccamo/create-matrix-action to s
   [`8deebed`](https://github.com/crccheck/django-object-actions/commit/8deebedda55d0e5d466969c7f27a9c60e680e5e8))
 
 BREAKING CHANGE: Python 3.6 is past end-of-life and is no longer supported. Keeping it in
-  `pyproject.toml` was causing pains trying to install packages. Let's drop it while we're dropping
-  support for other old stuff.
+`pyproject.toml` was causing pains trying to install packages. Let's drop it while we're dropping
+support for other old stuff.
 
 ### Breaking Changes
 
 - Python 3.6 is past end-of-life and is no longer supported. Keeping it in `pyproject.toml` was
   causing pains trying to install packages. Let's drop it while we're dropping support for other old
   stuff.
-
 
 ## v3.1.0 (2021-12-18)
 
@@ -274,7 +264,7 @@ BREAKING CHANGE: Python 3.6 is past end-of-life and is no longer supported. Keep
   [`040a802`](https://github.com/crccheck/django-object-actions/commit/040a8029c298d8bb17ffab0b75b9b9ecc3d70de2))
 
 Fix "error: [Errno 2] No such file or directory: 'django-object-actions/init.py'" error when
-  creating a release
+creating a release
 
 ### Chores
 
@@ -283,7 +273,7 @@ Fix "error: [Errno 2] No such file or directory: 'django-object-actions/init.py'
   [`c24c299`](https://github.com/crccheck/django-object-actions/commit/c24c299470d055bd1e0cb9256d65b6b0a56ce7f3))
 
 To verify that it's getting packaged correctly. In particular, I need to make sure the `.html` files
-  are in the package.
+are in the package.
 
 ### Features
 
@@ -307,19 +297,19 @@ I'll switch it to be automated on push to `master` at some point.
   [`f16cb00`](https://github.com/crccheck/django-object-actions/commit/f16cb0089d172cfa9a84c49121fc434d84e21abe))
 
 I've been using Poetry because it takes the hassle out of virtualenv management and has sane
-  defaults that just work for building artifacts and uploading to PyPI.
+defaults that just work for building artifacts and uploading to PyPI.
 
 Because I had to redo how tests were run, I went ahead and removed the Tox testing requirement too
-  and so I had to redo the Github Actions for testing too.
+and so I had to redo the Github Actions for testing too.
 
 One thing I didn't anticipate is that Github Actions caching doesn't work for Poetry, only with
-  `requirements.txt` and Pipenv
-  https://github.blog/changelog/2021-11-23-github-actions-setup-python-now-supports-dependency-caching/
+`requirements.txt` and Pipenv
+https://github.blog/changelog/2021-11-23-github-actions-setup-python-now-supports-dependency-caching/
 
 ## Verifying the change I compared `python setup.py build` vs `poetry build` and the only difference
-  was some top level meta differences and Poetry added the `tests` directory which is fine. Both
-  have the `.html` templates which is the important thing.
 
+was some top level meta differences and Poetry added the `tests` directory which is fine. Both
+have the `.html` templates which is the important thing.
 
 ## v3.0.2 (2021-04-09)
 
@@ -331,7 +321,7 @@ One thing I didn't anticipate is that Github Actions caching doesn't work for Po
 https://docs.djangoproject.com/en/3.2/releases/3.2/
 
 I really need to drop support for old versions now. Lots of deps are starting to step on each other
-  and drop things. Django itself doesn't support Django 3.0 anymore with the release of Django 3.2
+and drop things. Django itself doesn't support Django 3.0 anymore with the release of Django 3.2
 
 - **release**: 3.0.2
   ([`dbcecbf`](https://github.com/crccheck/django-object-actions/commit/dbcecbfe67254f6fff64e670c443a6c1d662a9ff))
@@ -344,8 +334,7 @@ I really need to drop support for old versions now. Lots of deps are starting to
 
 Use `django.urls.re_path()` when available, instead of the deprecated `django.conf.urls.url()`.
 
-* `re_path()` is available since Django 2.0. * `url()` will be removed in Django 4.0.
-
+- `re_path()` is available since Django 2.0. \* `url()` will be removed in Django 4.0.
 
 ## v3.0.1 (2020-08-08)
 
@@ -356,9 +345,9 @@ Use `django.urls.re_path()` when available, instead of the deprecated `django.co
   [`0c90ce1`](https://github.com/crccheck/django-object-actions/commit/0c90ce12a066baf873037eed415052074430d9d2))
 
 for case if object in database has any of special symbols
-  https://github.com/django/django/blob/master/django/contrib/admin/utils.py#L17 clicking on action
-  button causes 404 error, as in SingleObjectMixin there are already parsed kwargs from url, and
-  they are unquoted
+https://github.com/django/django/blob/master/django/contrib/admin/utils.py#L17 clicking on action
+button causes 404 error, as in SingleObjectMixin there are already parsed kwargs from url, and
+they are unquoted
 
 made unquoting kwargs
 
@@ -366,7 +355,6 @@ made unquoting kwargs
 
 - **release**: 3.0.1
   ([`fa48985`](https://github.com/crccheck/django-object-actions/commit/fa48985e5da6acdc327eae72b97edcd387d8afba))
-
 
 ## v3.0.0 (2020-08-08)
 
@@ -381,7 +369,7 @@ made unquoting kwargs
   [`4eaf14c`](https://github.com/crccheck/django-object-actions/commit/4eaf14c3caff36d5ab274835d38baef7e66213dc))
 
 Django 3.0 is out: https://docs.djangoproject.com/en/3.0/releases/3.0/ Let's see if we're
-  compatible. It turns out no code changes are needed huzzah!
+compatible. It turns out no code changes are needed huzzah!
 
 - **deps**: Add Django 3.1 support
   ([#109](https://github.com/crccheck/django-object-actions/pull/109),
@@ -399,7 +387,6 @@ BREAKING CHANGE: drop Python 3.4 support in preparation for adding type hints an
 
 Prereq for #107
 
-
 ## v2.0.0 (2019-11-29)
 
 ### Chores
@@ -415,14 +402,13 @@ Prereq for #107
 BREAKING CHANGE: This release drops Python 2 support
 
 Django has [dropped Python 2
-  support](https://docs.djangoproject.com/en/2.2/releases/2.0/#python-compatibility) ever since
-  Django 2.0 (December 2, 2017). With Django 3.0 coming very soon and Python 2 reaching end of life,
-  it doesn't make sense to continue supporting Python 2.
+support](https://docs.djangoproject.com/en/2.2/releases/2.0/#python-compatibility) ever since
+Django 2.0 (December 2, 2017). With Django 3.0 coming very soon and Python 2 reaching end of life,
+it doesn't make sense to continue supporting Python 2.
 
 ### Breaking Changes
 
 - This release drops Python 2 support
-
 
 ## v1.1.2 (2019-11-14)
 
@@ -432,11 +418,11 @@ Django has [dropped Python 2
   [`42055a3`](https://github.com/crccheck/django-object-actions/commit/42055a391044a3d828531cb0ab7ff6abe4f5a659))
 
 There's a lot of momentum to using [Black](https://github.com/psf/black). For example, [Django will
-  use it](https://github.com/django/deps/blob/master/accepted/0008-black.rst)
+use it](https://github.com/django/deps/blob/master/accepted/0008-black.rst)
 
 This pulls the bandaid off to avoid mixing lint changes w/ code changes in the future. I opted to
-  not dictate how Black is run because I'm not 100% sure how that should happen. To make sure PRs
-  contributors are following this, I added a lint check in CI.
+not dictate how Black is run because I'm not 100% sure how that should happen. To make sure PRs
+contributors are following this, I added a lint check in CI.
 
 - **release**: 1.1.2
   ([`0cd8a24`](https://github.com/crccheck/django-object-actions/commit/0cd8a24ac7ae90a169735e4035ce89701f7cff20))
@@ -445,7 +431,6 @@ This pulls the bandaid off to avoid mixing lint changes w/ code changes in the f
 
 - Add syntax highlighting ([#102](https://github.com/crccheck/django-object-actions/pull/102),
   [`399affa`](https://github.com/crccheck/django-object-actions/commit/399affa66664a65216c51346e96972eb5ae22499))
-
 
 ## v1.1.1 (2019-10-06)
 
@@ -456,8 +441,8 @@ This pulls the bandaid off to avoid mixing lint changes w/ code changes in the f
   [`8b8aed3`](https://github.com/crccheck/django-object-actions/commit/8b8aed3b131cf60bc8823c703299f50cf84d9dcc))
 
 I probably copy pasted something wrong and brought an extra arg into the `reverse`, so `reverse`
-  never found anything and the actions in the changelist never rendered with a `href`. This makes
-  the args match the url definition so these buttons work again.
+never found anything and the actions in the changelist never rendered with a `href`. This makes
+the args match the url definition so these buttons work again.
 
 Thanks to @mvbrn for the original fix.
 
@@ -514,7 +499,6 @@ closes #96
 
 * haha need a script to run tests
 
-
 ## v1.1.0 (2019-05-04)
 
 ### Features
@@ -524,24 +508,17 @@ closes #96
 
 With this change the default label changes from `some_action` to `Some action`
 
-
 ## v1.0.0 (2018-03-09)
-
 
 ## v0.10.0 (2017-05-10)
 
-
 ## v0.9.0 (2016-12-04)
-
 
 ## v0.8.2 (2016-04-23)
 
-
 ## v0.8.1 (2016-04-23)
 
-
 ## v0.8.0 (2016-02-25)
-
 
 ## v0.7.0 (2016-01-13)
 
@@ -550,27 +527,19 @@ With this change the default label changes from `some_action` to `Some action`
 - More tweaks as I read code
   ([`936fe08`](https://github.com/crccheck/django-object-actions/commit/936fe084054daf90ab2011c337aac02d2701b5a5))
 
-
 ## v0.6.0 (2015-12-06)
-
 
 ## v0.5.1 (2014-11-27)
 
-
 ## v0.5.0 (2014-07-01)
-
 
 ## v0.4.0 (2014-02-12)
 
-
 ## v0.3.0 (2014-01-09)
-
 
 ## v0.2.0 (2013-11-09)
 
-
 ## v0.1.1 (2013-02-26)
-
 
 ## v0.1.0 (2013-02-24)
 
