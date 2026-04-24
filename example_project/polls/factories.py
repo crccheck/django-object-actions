@@ -48,7 +48,9 @@ def get_random_string(length):
 
 class RelatedDataFactory(factory.django.DjangoModelFactory):
     id = factory.lazy_attribute(
-        lambda __: f"{get_random_string(2)}:{get_random_string(2)}-{get_random_string(2)}!{get_random_string(2)}"
+        lambda __: (
+            f"{get_random_string(2)}:{get_random_string(2)}-{get_random_string(2)}!{get_random_string(2)}"
+        )
     )
 
     class Meta:
