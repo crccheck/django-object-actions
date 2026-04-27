@@ -189,12 +189,6 @@ You can configure an action to only use POST with:
 @action(methods=("POST",), button_type="form")
 ```
 
-One caveat is Django's styling is pinned to anchor tags[^1], so to maintain
-visual consistency, we have to use anchor tags and use JavaScript to make it act
-like the submit button of the form.
-
-[^1]: https://github.com/django/django/blob/826ef006681eae1e9b4bd0e4f18fa13713025cba/django/contrib/admin/static/admin/css/base.css#L786
-
 ### Alternate Installation
 
 You don't have to add this to `INSTALLED_APPS`, all you need to to do
@@ -202,9 +196,15 @@ is copy the template `django_object_actions/change_form.html` some place
 Django's template loader [will find
 it](https://docs.djangoproject.com/en/stable/ref/settings/#template-dirs).
 
-If you don't intend to use the template customizations at all, don't
-add `django_object_actions` to your `INSTALLED_APPS` at all and use
-`BaseDjangoObjectActions` instead of `DjangoObjectActions`.
+If you don't intend to use the template customizations or bundled CSS at
+all, don't add `django_object_actions` to your `INSTALLED_APPS` at all
+and use `BaseDjangoObjectActions` instead of `DjangoObjectActions`. If
+you use `button_type='form'` actions, add this to your admin class:
+
+```python
+class Media:
+    css = {"all": ["django_object_actions/css/django-object-actions.css"]}
+```
 
 ## More Examples
 

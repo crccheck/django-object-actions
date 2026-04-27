@@ -197,6 +197,9 @@ class DjangoObjectActions(BaseDjangoObjectActions):
     change_form_template = "django_object_actions/change_form.html"
     change_list_template = "django_object_actions/change_list.html"
 
+    class Media:
+        css = {"all": ["django_object_actions/css/django-object-actions.css"]}
+
 
 class BaseActionView(View):
     """
