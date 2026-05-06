@@ -207,7 +207,7 @@ def my_action(self, request, obj):
     ...
 ```
 
-The `button_type` parameter controls how the button renders:
+The `button_type` parameter controls which kind of DOM element the button renders:
 
 - `"a"` (default for GET): renders as an anchor tag/link
 - `"form"`: renders as a form that submits via POST

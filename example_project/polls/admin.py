@@ -42,6 +42,7 @@ class ChoiceAdmin(DjangoObjectActions, admin.ModelAdmin):
         obj.votes -= 1
         obj.save()
 
+    @action(button_type="a")
     def delete_all(self, request, queryset):
         self.message_user(request, "just kidding!")
 

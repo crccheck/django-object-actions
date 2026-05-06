@@ -198,7 +198,7 @@ class DefaultHttpMethodSettingTest(TestCase):
         with self.assertRaises(ValueError) as ctx:
             get_default_http_method()
         self.assertIn("INVALID", str(ctx.exception))
-        self.assertIn("must be 'GET' or 'POST'", str(ctx.exception))
+        self.assertIn('must be "GET" or "POST"', str(ctx.exception))
 
     # TODO: Enable when deprecation warning is enabled
     # def test_no_setting_emits_deprecation_warning(self):

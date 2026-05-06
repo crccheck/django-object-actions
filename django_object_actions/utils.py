@@ -1,7 +1,7 @@
 import warnings
 from functools import wraps
 from itertools import chain
-from typing import Literal
+from typing import Literal, Optional
 
 from django.conf import settings
 from django.contrib import messages
@@ -367,7 +367,7 @@ def action(
     label=None,
     attrs=None,
     methods=DEFAULT_METHODS_ALLOWED,
-    button_type: Literal["a", "form"] | None = None,
+    button_type: Optional[Literal["a", "form"]] = None,
 ):
     """
     Conveniently add attributes to an action function:
