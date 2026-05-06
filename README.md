@@ -178,16 +178,39 @@ The same is true for changelist actions with `get_changelist_actions`.
 
 ### Using POST instead of GET for actions
 
-⚠️ This is a beta feature and subject to change
-
 Since actions usually change data, for safety and semantics, it would be
 preferable that actions use a HTTP POST instead of a GET.
 
-You can configure an action to only use POST with:
+#### Global default (recommended)
+
+To control default HTTP method for all actions globally, use
+`DJANGO_OBJECT_ACTIONS_DEFAULT_HTTP_METHOD` in your Django settings:
+
+```python
+# settings.py
+DJANGO_OBJECT_ACTIONS_DEFAULT_HTTP_METHOD = "POST"  # or "GET"
+```
+
+When set to `"POST"`, action buttons will render as forms that submit via POST.
+When set to `"GET"` (or not set), actions render as regular links.
+
+**Migration note:** The default will change from `"GET"` to `"POST"` in the next
+major version.
+
+#### Per-action configuration
+
+You can also configure individual actions to use POST:
 
 ```python
 @action(methods=("POST",), button_type="form")
+def my_action(self, request, obj):
+    ...
 ```
+
+The `button_type` parameter controls which kind of DOM element the button renders:
+
+- `"a"` (default for GET): renders as an anchor tag/link
+- `"form"`: renders as a form that submits via POST
 
 ### Alternate Installation
 
