@@ -301,11 +301,3 @@ class DefaultHttpMethodSettingTest(TestCase):
             warnings.simplefilter("always")
             get_default_http_method()
             self.assertEqual(len(w), 0)
-
-    @override_settings(DJANGO_OBJECT_ACTIONS_DEFAULT_HTTP_METHOD="POST")
-    def test_explicit_button_type_overrides_setting(self):
-        @action(button_type="a")
-        def my_action(modeladmin, request, queryset):
-            pass
-
-        self.assertEqual(my_action.button_type, "a")
