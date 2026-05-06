@@ -194,7 +194,7 @@ DJANGO_OBJECT_ACTIONS_DEFAULT_HTTP_METHOD = "POST"  # or "GET"
 When set to `"POST"`, action buttons will render as forms that submit via POST.
 When set to `"GET"` (or not set), actions render as regular links.
 
-**Migration note:** The default will change from `"GET"` to `"POST"` in a future
+**Migration note:** The default will change from `"GET"` to `"POST"` in the next
 major version.
 
 #### Per-action configuration

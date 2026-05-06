@@ -17,10 +17,7 @@ from django.views.generic.list import MultipleObjectMixin
 DEFAULT_METHODS_ALLOWED = ("GET", "POST")
 DEFAULT_HTTP_METHOD = "GET"  # This will become "POST" in the future
 
-# Plan:
-# In this major release: switch ENABLE_WARNING on, give users time to add DJANGO_OBJECT_ACTIONS_DEFAULT_HTTP_METHOD
-# Next major release: change DEFAULT_HTTP_METHOD to POST and delete ENABLE_WARNING logic
-ENABLE_WARNING = False
+# Next major release: change DEFAULT_HTTP_METHOD to POST and delete warning logic
 _SETTING_WARNING_EMITTED = False
 
 
@@ -37,17 +34,16 @@ def get_default_http_method() -> Literal["GET", "POST"]:
             f'got "{method}"'
         )
 
-    if ENABLE_WARNING:
-        has_setting = hasattr(settings, "DJANGO_OBJECT_ACTIONS_DEFAULT_HTTP_METHOD")
-        if not has_setting and not _SETTING_WARNING_EMITTED:
-            _SETTING_WARNING_EMITTED = True
-            warnings.warn(
-                "django-object-actions: The default HTTP method will change from GET to "
-                "POST in a future version. Set DJANGO_OBJECT_ACTIONS_DEFAULT_HTTP_METHOD "
-                "in your Django settings to silence this warning.",
-                DeprecationWarning,
-                stacklevel=3,
-            )
+    has_setting = hasattr(settings, "DJANGO_OBJECT_ACTIONS_DEFAULT_HTTP_METHOD")
+    if not has_setting and not _SETTING_WARNING_EMITTED:
+        _SETTING_WARNING_EMITTED = True
+        warnings.warn(
+            "django-object-actions: The default HTTP method will change from GET to "
+            "POST in a future version. Set DJANGO_OBJECT_ACTIONS_DEFAULT_HTTP_METHOD "
+            "in your Django settings to silence this warning.",
+            DeprecationWarning,
+            stacklevel=3,
+        )
 
     return method
 
