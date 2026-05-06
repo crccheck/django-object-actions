@@ -183,7 +183,7 @@ preferable that actions use a HTTP POST instead of a GET.
 
 #### Global default (recommended)
 
-You can configure the default HTTP method for all actions globally using
+To control default HTTP method for all actions globally, use
 `DJANGO_OBJECT_ACTIONS_DEFAULT_HTTP_METHOD` in your Django settings:
 
 ```python
