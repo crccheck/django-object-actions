@@ -85,6 +85,71 @@ class BaseDjangoObjectActionsTest(TestCase):
         self.assertEqual(custom["nonstandard"], "wombat")
 
 
+@override_settings(DJANGO_OBJECT_ACTIONS_DEFAULT_HTTP_METHOD="GET")
+class GetToolDictButtonTypeTest(TestCase):
+    def setUp(self):
+        self.instance = BaseDjangoObjectActions()
+        self.instance.model = mock.Mock(
+            **{"_meta.app_label": "app", "_meta.model_name": "model"}
+        )
+        utils._SETTING_WARNING_EMITTED = False
+
+    def tearDown(self):
+        utils._SETTING_WARNING_EMITTED = False
+
+    def test_get_tool_dict_bare_method_resolves_button_type_at_render_time(self):
+        def my_action(modeladmin, request, obj):
+            pass
+
+        self.instance.my_action = my_action
+
+        with override_settings(DJANGO_OBJECT_ACTIONS_DEFAULT_HTTP_METHOD="POST"):
+            result = self.instance._get_tool_dict("my_action")
+
+        self.assertEqual(result["button_type"], "form")
+
+    def test_get_tool_dict_decorated_and_bare_methods_agree_under_setting_change(self):
+        # @action decorated under GET, but setting changes to POST before render.
+        # Both should reflect the current setting, not the decoration-time setting.
+        @action(description="Decorated under GET")
+        def decorated_action(modeladmin, request, obj):
+            pass
+
+        def bare_method(modeladmin, request, obj):
+            pass
+
+        self.instance.decorated_action = decorated_action
+        self.instance.bare_method = bare_method
+
+        with override_settings(DJANGO_OBJECT_ACTIONS_DEFAULT_HTTP_METHOD="POST"):
+            decorated_result = self.instance._get_tool_dict("decorated_action")
+            bare_result = self.instance._get_tool_dict("bare_method")
+
+        self.assertEqual(decorated_result["button_type"], "form")
+        self.assertEqual(bare_result["button_type"], "form")
+
+    @override_settings(DJANGO_OBJECT_ACTIONS_DEFAULT_HTTP_METHOD="POST")
+    def test_action_decorator_respects_post_setting(self):
+        @action(description="Test action")
+        def my_action(modeladmin, request, queryset):
+            pass
+
+        self.instance.my_action = my_action
+        result = self.instance._get_tool_dict("my_action")
+
+        self.assertEqual(result["button_type"], "form")
+
+    def test_action_decorator_respects_get_setting(self):
+        @action(description="Test action")
+        def my_action(modeladmin, request, queryset):
+            pass
+
+        self.instance.my_action = my_action
+        result = self.instance._get_tool_dict("my_action")
+
+        self.assertEqual(result["button_type"], "a")
+
+
 class BaseActionViewTests(TestCase):
     def setUp(self):
         super().setUp()
@@ -225,22 +290,6 @@ class DefaultHttpMethodSettingTest(TestCase):
             warnings.simplefilter("always")
             get_default_http_method()
             self.assertEqual(len(w), 0)
-
-    @override_settings(DJANGO_OBJECT_ACTIONS_DEFAULT_HTTP_METHOD="POST")
-    def test_action_decorator_respects_post_setting(self):
-        @action(description="Test action")
-        def my_action(modeladmin, request, queryset):
-            pass
-
-        self.assertEqual(my_action.button_type, "form")
-
-    @override_settings(DJANGO_OBJECT_ACTIONS_DEFAULT_HTTP_METHOD="GET")
-    def test_action_decorator_respects_get_setting(self):
-        @action(description="Test action")
-        def my_action(modeladmin, request, queryset):
-            pass
-
-        self.assertEqual(my_action.button_type, "a")
 
     @override_settings(DJANGO_OBJECT_ACTIONS_DEFAULT_HTTP_METHOD="POST")
     def test_explicit_button_type_overrides_setting(self):

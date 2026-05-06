@@ -399,9 +399,7 @@ def action(
         if attrs is not None:
             func.attrs = attrs
         func.methods = methods
-        func.button_type = (
-            button_type if button_type is not None else get_default_button_type()
-        )
+        func.button_type = button_type
         return func
 
     if function is None:
