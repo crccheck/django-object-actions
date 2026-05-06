@@ -42,7 +42,7 @@ def get_default_http_method() -> Literal["GET", "POST"]:
             "POST in a future version. Set DJANGO_OBJECT_ACTIONS_DEFAULT_HTTP_METHOD "
             "in your Django settings to silence this warning.",
             DeprecationWarning,
-            stacklevel=2,
+            stacklevel=3,
         )
 
     return method

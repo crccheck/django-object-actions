@@ -149,6 +149,17 @@ class GetToolDictButtonTypeTest(TestCase):
 
         self.assertEqual(result["button_type"], "a")
 
+    @override_settings(DJANGO_OBJECT_ACTIONS_DEFAULT_HTTP_METHOD="POST")
+    def test_explicit_button_type_overrides_default_http_method_setting(self):
+        @action(button_type="a")
+        def my_action(modeladmin, request, queryset):
+            pass
+
+        self.instance.my_action = my_action
+        result = self.instance._get_tool_dict("my_action")
+
+        self.assertEqual(result["button_type"], "a")
+
 
 class BaseActionViewTests(TestCase):
     def setUp(self):

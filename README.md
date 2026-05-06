@@ -305,7 +305,7 @@ The template:
   <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
-    <input type="submit" value="Save" />
+    <input type="submit" value="Save">
   </form>
 {% endblock %}
 ```
