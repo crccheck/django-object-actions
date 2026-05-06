@@ -302,11 +302,11 @@ The template:
 ```html
 {% extends "admin/base_site.html" %}
 {% block content %}
-<form method="POST" enctype="multipart/form-data">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <input type="submit" value="Save" />
-</form>
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Save" />
+  </form>
 {% endblock %}
 ```
 

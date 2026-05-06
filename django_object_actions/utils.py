@@ -42,7 +42,7 @@ def get_default_http_method() -> Literal["GET", "POST"]:
             "POST in a future version. Set DJANGO_OBJECT_ACTIONS_DEFAULT_HTTP_METHOD "
             "in your Django settings to silence this warning.",
             DeprecationWarning,
-            stacklevel=3,
+            stacklevel=2,
         )
 
     return method
@@ -196,7 +196,7 @@ class BaseDjangoObjectActions:
             label=getattr(tool, "label", tool_name.replace("_", " ").capitalize()),
             standard_attrs=standard_attrs,
             custom_attrs=custom_attrs,
-            button_type=getattr(tool, "button_type", get_default_button_type()),
+            button_type=getattr(tool, "button_type", None) or get_default_button_type(),
         )
 
     def _get_button_attrs(self, tool):
