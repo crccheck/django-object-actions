@@ -300,9 +300,11 @@ class VerifyView(FormView):
 The template:
 
 ```html
-{% extends "admin/base_site.html" %} {% block content %}
+{% extends "admin/base_site.html" %}
+{% block content %}
 <form method="POST" enctype="multipart/form-data">
-  {% csrf_token %} {{ form.as_p }}
+  {% csrf_token %}
+  {{ form.as_p }}
   <input type="submit" value="Save" />
 </form>
 {% endblock %}

@@ -17,6 +17,7 @@ from django.views.generic.list import MultipleObjectMixin
 DEFAULT_METHODS_ALLOWED = ("GET", "POST")
 DEFAULT_BUTTON_TYPE = "a"
 
+ENABLE_WARNING = False  # TODO: enable this in an upcoming release
 _SETTING_WARNING_EMITTED = False
 
 
@@ -24,25 +25,24 @@ def get_default_http_method() -> Literal["GET", "POST"]:
     """Get the default HTTP method, emitting deprecation warning if not configured."""
     global _SETTING_WARNING_EMITTED
 
-    has_setting = hasattr(settings, "DJANGO_OBJECT_ACTIONS_DEFAULT_HTTP_METHOD")
     method = getattr(settings, "DJANGO_OBJECT_ACTIONS_DEFAULT_HTTP_METHOD", "GET")
-
     if method not in ("GET", "POST"):
         raise ValueError(
-            f"DJANGO_OBJECT_ACTIONS_DEFAULT_HTTP_METHOD must be 'GET' or 'POST', "
+            "DJANGO_OBJECT_ACTIONS_DEFAULT_HTTP_METHOD must be 'GET' or 'POST', "
             f"got '{method}'"
         )
 
-    # TODO: Enable deprecation warning in next version
-    # if not has_setting and not _SETTING_WARNING_EMITTED:
-    #     _SETTING_WARNING_EMITTED = True
-    #     warnings.warn(
-    #         "django-object-actions: The default HTTP method will change from GET to "
-    #         "POST in a future version. Set DJANGO_OBJECT_ACTIONS_DEFAULT_HTTP_METHOD "
-    #         "in your Django settings to silence this warning.",
-    #         DeprecationWarning,
-    #         stacklevel=3,
-    #     )
+    if ENABLE_WARNING:
+        has_setting = hasattr(settings, "DJANGO_OBJECT_ACTIONS_DEFAULT_HTTP_METHOD")
+        if not has_setting and not _SETTING_WARNING_EMITTED:
+            _SETTING_WARNING_EMITTED = True
+            warnings.warn(
+                "django-object-actions: The default HTTP method will change from GET to "
+                "POST in a future version. Set DJANGO_OBJECT_ACTIONS_DEFAULT_HTTP_METHOD "
+                "in your Django settings to silence this warning.",
+                DeprecationWarning,
+                stacklevel=3,
+            )
 
     return method
 
@@ -398,7 +398,6 @@ def action(
         if attrs is not None:
             func.attrs = attrs
         func.methods = methods
-        # Resolve button_type at decoration time, not import time
         func.button_type = (
             button_type if button_type is not None else get_default_button_type()
         )
