@@ -15,9 +15,12 @@ from django.views.generic.detail import SingleObjectMixin
 from django.views.generic.list import MultipleObjectMixin
 
 DEFAULT_METHODS_ALLOWED = ("GET", "POST")
-DEFAULT_BUTTON_TYPE = "a"
+DEFAULT_HTTP_METHOD = "GET"  # This will become "POST" in the future
 
-ENABLE_WARNING = False  # TODO: enable this in an upcoming release
+# Plan:
+# In this major release: switch ENABLE_WARNING on, give users time to add DJANGO_OBJECT_ACTIONS_DEFAULT_HTTP_METHOD
+# Next major release: change DEFAULT_HTTP_METHOD to POST and delete ENABLE_WARNING logic
+ENABLE_WARNING = False
 _SETTING_WARNING_EMITTED = False
 
 
@@ -25,11 +28,13 @@ def get_default_http_method() -> Literal["GET", "POST"]:
     """Get the default HTTP method, emitting deprecation warning if not configured."""
     global _SETTING_WARNING_EMITTED
 
-    method = getattr(settings, "DJANGO_OBJECT_ACTIONS_DEFAULT_HTTP_METHOD", "GET")
+    method = getattr(
+        settings, "DJANGO_OBJECT_ACTIONS_DEFAULT_HTTP_METHOD", DEFAULT_HTTP_METHOD
+    )
     if method not in ("GET", "POST"):
         raise ValueError(
-            "DJANGO_OBJECT_ACTIONS_DEFAULT_HTTP_METHOD must be 'GET' or 'POST', "
-            f"got '{method}'"
+            'DJANGO_OBJECT_ACTIONS_DEFAULT_HTTP_METHOD must be "GET" or "POST", '
+            f'got "{method}"'
         )
 
     if ENABLE_WARNING:
