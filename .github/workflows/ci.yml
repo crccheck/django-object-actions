@@ -13,7 +13,7 @@ jobs:
       - name: Create matrix
         id: create_matrix
         # https://github.com/fabiocaccamo/create-matrix-action/releases
-        uses: fabiocaccamo/create-matrix-action@v6
+        uses: fabiocaccamo/create-matrix-action@v7
         with:
           matrix: |
             python-version {3.9}, django-version {4.2}
