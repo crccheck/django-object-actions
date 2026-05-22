@@ -1,5 +1,51 @@
 # CHANGELOG
 
+<!-- version list -->
+
+## v5.1.0 (2026-05-22)
+
+_This release is published under the Apache-2.0 License._
+
+### Features
+
+- Add DJANGO_OBJECT_ACTIONS_DEFAULT_HTTP_METHOD setting ([#190](https://github.com/crccheck/django-object-actions/pull/190), [`3c466b8`](https://github.com/crccheck/django-object-actions/commit/3c466b81cd33d50acfb97c960ba49fc533da0f53))
+
+---
+
+**Detailed Changes**: [v5.0.1...v5.1.0](https://github.com/crccheck/django-object-actions/compare/v5.0.1...v5.1.0)
+
+## v5.0.1 (2026-04-29)
+
+_This release is published under the Apache-2.0 License._
+
+### Bug Fixes
+
+- Render form-type object actions as semantic button[submit] ([#196](https://github.com/crccheck/django-object-actions/pull/196), [`df54fa3`](https://github.com/crccheck/django-object-actions/commit/df54fa35bb7c8936a71b09f7dfce1e46b05be534))
+
+### Chores
+
+- Add a standard apps.py ([#197](https://github.com/crccheck/django-object-actions/pull/197), [`460f1c8`](https://github.com/crccheck/django-object-actions/commit/460f1c8b19b8f1d788902547fbe0cc438f3fbae4))
+
+- Add Python 3.14 and Django 6 to testing matrix ([#187](https://github.com/crccheck/django-object-actions/pull/187), [`256b8f3`](https://github.com/crccheck/django-object-actions/commit/256b8f375fc51858df293b40e6163759d7df42b7))
+
+- Basic maintenance and document a skill ([#195](https://github.com/crccheck/django-object-actions/pull/195), [`22825b0`](https://github.com/crccheck/django-object-actions/commit/22825b045f380a9284fbee360f96b11c31a551bd))
+
+- Only maintain one Docker path and doc tweaks ([#188](https://github.com/crccheck/django-object-actions/pull/188), [`4193da8`](https://github.com/crccheck/django-object-actions/commit/4193da84b2d2c18736313846b5edf8088bfa3645))
+
+- Remove 'black' lint references in favor of 'ruff' ([#186](https://github.com/crccheck/django-object-actions/pull/186), [`8adb227`](https://github.com/crccheck/django-object-actions/commit/8adb227fa2954c09a1b64ec942b018f8d3081138))
+
+### Documentation
+
+- Document intermediate confirmation and form page pattern ([#193](https://github.com/crccheck/django-object-actions/pull/193), [`fd3db28`](https://github.com/crccheck/django-object-actions/commit/fd3db28a72d7590a7ec08cad641aab9e9fdd81b1))
+
+### Refactoring
+
+- Simpler deps and use dependency groups ([#189](https://github.com/crccheck/django-object-actions/pull/189), [`3a7d34a`](https://github.com/crccheck/django-object-actions/commit/3a7d34a1fc712e1f86f96b92f4c78ebd973ee217))
+
+---
+
+**Detailed Changes**: [v5.0.0...v5.0.1](https://github.com/crccheck/django-object-actions/compare/v5.0.0...v5.0.1)
+
 ## v5.0.0 (2025-04-05)
 
 ### Bug Fixes
