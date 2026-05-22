@@ -1,6 +1,6 @@
 ---
 name: maintenance
-description: "Runs the full maintenance workflow: upgrade GitHub Actions, sync deps, lint, test, and commit changes. Use when the user says 'run maintenance', 'do maintenance', or 'maintenance run'."
+description: "Runs the full maintenance workflow: upgrade GitHub Actions and deps"
 allowed-tools: Bash, Read, Edit, Write, Agent, WebFetch, WebSearch
 ---
 
