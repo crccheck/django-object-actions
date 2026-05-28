@@ -8,13 +8,70 @@ from django.contrib.admin.utils import quote
 from django.http import HttpResponse
 from django.urls import reverse
 
+from example_project.polls.admin import RelatedDataAdmin
 from example_project.polls.factories import (
     CommentFactory,
     PollFactory,
     RelatedDataFactory,
 )
+from example_project.polls.models import RelatedData
 
 from .tests import LoggedInTestCase
+
+
+class Issue137Tests(LoggedInTestCase):
+    """Test that object_id passed to get_change_actions is unquoted (issue #137)."""
+
+    def test_get_change_actions_can_query_with_object_id(self):
+        """
+        When a model has a CharField primary key with characters that get
+        quoted in URLs (like underscores), get_change_actions should receive
+        the unquoted value so it can query the database, matching Django admin's
+        behavior.
+        """
+        from django.contrib import admin as django_admin
+
+        related_data = RelatedDataFactory(id="user_001_name")
+
+        class QueryingAdmin(RelatedDataAdmin):
+            def get_change_actions(self, request, object_id, form_url):
+                # Before fix, this would fail because object_id is still quoted
+                obj = self.model.objects.get(pk=object_id)
+                if obj.id == related_data.id:
+                    return ["fill_up"]
+                return []
+
+        django_admin.site.unregister(RelatedData)
+        django_admin.site.register(RelatedData, QueryingAdmin)
+        try:
+            admin_change_url = reverse(
+                "admin:polls_relateddata_change", args=(related_data.pk,)
+            )
+            response = self.client.get(admin_change_url)
+            self.assertEqual(response.status_code, 200)
+            # Action should be present since we returned it
+            self.assertIn("fill_up", response.rendered_content)
+        finally:
+            django_admin.site.unregister(RelatedData)
+            django_admin.site.register(RelatedData, RelatedDataAdmin)
+
+    def test_change_view_with_quoted_pk_renders_correct_actions(self):
+        """
+        If get_change_actions uses the object_id to look up the model
+        (e.g. self.model.objects.get(pk=object_id)), it must work with
+        CharField pks that contain URL-quoteable characters.
+        """
+        related_data = RelatedDataFactory(id="item_001_test")
+        quoted_pk = quote(related_data.pk)
+        self.assertNotEqual(quoted_pk, related_data.pk)
+
+        admin_change_url = reverse(
+            "admin:polls_relateddata_change", args=(related_data.pk,)
+        )
+        response = self.client.get(admin_change_url)
+        self.assertEqual(response.status_code, 200)
+        # The action button for 'fill_up' should be rendered
+        self.assertIn("fill_up", response.rendered_content)
 
 
 class CommentTests(LoggedInTestCase):
