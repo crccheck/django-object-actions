@@ -2,6 +2,21 @@
 
 <!-- version list -->
 
+## v5.1.2 (2026-05-28)
+
+### Bug Fixes
+
+- Unquote object_id before passing to get_change_actions
+  ([#199](https://github.com/crccheck/django-object-actions/pull/199),
+  [`f9099eb`](https://github.com/crccheck/django-object-actions/commit/f9099eb7f06fe91595eb431b136be7f388754c32))
+
+### Chores
+
+- **tests**: Fix ineffective regression test for #199
+  ([#200](https://github.com/crccheck/django-object-actions/pull/200),
+  [`c54eaf4`](https://github.com/crccheck/django-object-actions/commit/c54eaf41016aa00180a8c7568434b39d5aca5450))
+
+
 ## v5.1.1 (2026-05-22)
 
 ### Bug Fixes
