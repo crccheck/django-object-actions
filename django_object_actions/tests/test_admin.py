@@ -21,8 +21,6 @@ from .tests import LoggedInTestCase
 class RelatedDataTests(LoggedInTestCase):
     def test_get_change_actions_receives_unquoted_object_id(self):
         related_data = RelatedDataFactory(id="user_001_name")
-        quoted_pk = quote(related_data.pk)
-        self.assertNotEqual(quoted_pk, related_data.pk)
         received = []
 
         original = RelatedDataAdmin.get_change_actions
@@ -31,7 +29,7 @@ class RelatedDataTests(LoggedInTestCase):
             received.append(object_id)
             return original(self, request, object_id, form_url)
 
-        url = f"/admin/polls/relateddata/{quoted_pk}/change/"
+        url = "/admin/polls/relateddata/user_5F001_5Fname/change/"
         with patch.object(RelatedDataAdmin, "get_change_actions", capturing):
             response = self.client.get(url)
 
