@@ -53,6 +53,9 @@ version_toml = ["pyproject.toml:project.version"]
 version_variables = ["django_object_actions/__init__.py:__version__"]
 build_command = "pip install -e '.[build]' && python -m build"
 
+[tool.semantic_release.changelog]
+template_dir = ".github/workflows/release"
+
 [tool.coverage.run]
 source = ["django_object_actions"]
 omit = ["*/tests/*"]
