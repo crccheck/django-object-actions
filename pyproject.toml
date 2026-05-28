@@ -36,6 +36,7 @@ dev = [
   "django-extensions==3.*",
   "factory-boy==3.*",
   "dj-database-url==2.*",
+  "python-semantic-release",
   "ruff",
 ]
 build = ["build", "twine"]

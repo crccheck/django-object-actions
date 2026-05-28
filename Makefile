@@ -41,6 +41,11 @@ coverage: ## Run and then display coverage report
 	PYTHONPATH=. coverage run $(MANAGE) test django_object_actions
 	coverage report --show-missing
 
+.PHONY: CHANGELOG.md
+CHANGELOG.md: ## Preview the changelog
+	printf '[tool.semantic_release.branches.any]\nmatch = ".*"' > /tmp/psr-override.toml
+	.venv/bin/semantic-release -c /tmp/psr-override.toml changelog
+
 resetdb: ## Delete and then recreate the dev sqlite database
 	python $(MANAGE) reset_db --router=default --noinput
 	python $(MANAGE) migrate --noinput
