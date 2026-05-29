@@ -16,10 +16,9 @@ jobs:
         uses: fabiocaccamo/create-matrix-action@842c9dabf1cec0ba7417f30ec26ce2290b951ef0 # v7
         with:
           matrix: |
-            python-version {3.9}, django-version {4.2}
-            python-version {3.10}, django-version {4.2,5.0,5.1,5.2}
-            python-version {3.11}, django-version {4.2,5.0,5.1,5.2}
-            python-version {3.12}, django-version {4.2,5.0,5.1,5.2,6.0,6.1}
+            python-version {3.10}, django-version {5.0,5.1,5.2}
+            python-version {3.11}, django-version {5.0,5.1,5.2}
+            python-version {3.12}, django-version {5.0,5.1,5.2,6.0,6.1}
             python-version {3.13}, django-version {5.1,5.2,6.0,6.1}
             python-version {3.14}, django-version {5.2,6.0,6.1}
             python-version {3.15}, django-version {6.1}

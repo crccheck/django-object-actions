@@ -10,7 +10,7 @@ authors = [{ name = "crccheck", email = "c@crccheck.com" }]
 license = { text = "Apache-2.0" }
 readme = "README.md"
 keywords = ["django", "admin"]
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 classifiers = [
   "Development Status :: 5 - Production/Stable",
   "Framework :: Django",
@@ -18,7 +18,6 @@ classifiers = [
   "License :: OSI Approved :: Apache Software License",
   "Operating System :: OS Independent",
   "Programming Language :: Python :: 3",
-  "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
@@ -33,7 +32,7 @@ classifiers = [
 [project.optional-dependencies]
 dev = [
   "coverage==7.*",
-  "Django>=4.2",
+  "Django>=5.0",
   "django-extensions==3.*",
   "factory-boy==3.*",
   "dj-database-url==2.*",
