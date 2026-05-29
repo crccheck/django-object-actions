@@ -69,7 +69,6 @@ class ChoiceAdmin(DjangoObjectActions, admin.ModelAdmin):
     changelist_actions = ("delete_all",)
 
 
-
 class ChoiceInline(admin.StackedInline):
     model = Choice
     extra = 3
@@ -136,7 +135,6 @@ class PollAdmin(DjangoObjectActions, admin.ModelAdmin):
         return actions
 
 
-
 @admin.register(Comment)
 class CommentAdmin(DjangoObjectActions, admin.ModelAdmin):
     # Object actions
@@ -150,7 +148,6 @@ class CommentAdmin(DjangoObjectActions, admin.ModelAdmin):
         obj.save()
 
     change_actions = ("hodor",)
-
 
 
 @admin.register(RelatedData)

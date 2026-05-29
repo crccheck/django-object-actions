@@ -17,6 +17,7 @@ class UserFactory(factory.django.DjangoModelFactory):
     last_name = factory.Faker("last_name")
     username = factory.Faker("slug")
     email = factory.Faker("email")
+
     @factory.post_generation
     def password(self, create, extracted, **kwargs):
         self.set_password(extracted or "password")
