@@ -13,6 +13,7 @@ from django_object_actions import (
 from .models import Choice, Comment, Poll, RelatedData
 
 
+@admin.register(Choice)
 class ChoiceAdmin(DjangoObjectActions, admin.ModelAdmin):
     list_display = ("poll", "choice_text", "votes")
 
@@ -68,14 +69,13 @@ class ChoiceAdmin(DjangoObjectActions, admin.ModelAdmin):
     changelist_actions = ("delete_all",)
 
 
-admin.site.register(Choice, ChoiceAdmin)
-
 
 class ChoiceInline(admin.StackedInline):
     model = Choice
     extra = 3
 
 
+@admin.register(Poll)
 class PollAdmin(DjangoObjectActions, admin.ModelAdmin):
     # List
     ######
@@ -136,9 +136,8 @@ class PollAdmin(DjangoObjectActions, admin.ModelAdmin):
         return actions
 
 
-admin.site.register(Poll, PollAdmin)
 
-
+@admin.register(Comment)
 class CommentAdmin(DjangoObjectActions, admin.ModelAdmin):
     # Object actions
     ################
@@ -153,9 +152,8 @@ class CommentAdmin(DjangoObjectActions, admin.ModelAdmin):
     change_actions = ("hodor",)
 
 
-admin.site.register(Comment, CommentAdmin)
 
-
+@admin.register(RelatedData)
 class RelatedDataAdmin(DjangoObjectActions, admin.ModelAdmin):
     # Object actions
     ################
@@ -169,9 +167,6 @@ class RelatedDataAdmin(DjangoObjectActions, admin.ModelAdmin):
         obj.save()
 
     change_actions = ("fill_up",)
-
-
-admin.site.register(RelatedData, RelatedDataAdmin)
 
 
 support_admin = AdminSite(name="support")
