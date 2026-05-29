@@ -196,17 +196,20 @@ class DecoratorTest(TestCase):
         def myfunc(foo, bar, queryset):
             return queryset
 
+        modeladmin = mock.MagicMock()
+        modeladmin.get_queryset.return_value = Poll.objects.all()
+
         # passing in an instance yields a queryset (using positional args)
-        queryset = myfunc(None, None, self.obj)
+        queryset = myfunc(modeladmin, None, self.obj)
         # the resulting queryset only has one item and it's self.obj
         self.assertEqual(queryset.get(), self.obj)
 
         # passing in a queryset yields the same queryset
-        queryset = myfunc(None, None, self.queryset)
+        queryset = myfunc(modeladmin, None, self.queryset)
         self.assertEqual(queryset, self.queryset)
 
         # passing in an instance yields a queryset (using keyword args)
-        queryset = myfunc(None, None, queryset=self.obj)
+        queryset = myfunc(modeladmin, None, queryset=self.obj)
         # the resulting queryset only has one item and it's self.obj
         self.assertEqual(queryset.get(), self.obj)
 
