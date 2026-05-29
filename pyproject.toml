@@ -52,7 +52,7 @@ packages = ["django_object_actions"]
 [tool.semantic_release]
 version_toml = ["pyproject.toml:project.version"]
 version_variables = ["django_object_actions/__init__.py:__version__"]
-build_command = "pip install --dependency-group build && python -m build"
+build_command = "pip install build twine && python -m build"
 
 [tool.semantic_release.changelog]
 template_dir = ".github/workflows/release"
