@@ -28,8 +28,6 @@
 
 ## v5.1.0 (2026-05-22)
 
-_This release is published under the Apache-2.0 License._
-
 ### Features
 
 - Add DJANGO_OBJECT_ACTIONS_DEFAULT_HTTP_METHOD setting ([#190](https://github.com/crccheck/django-object-actions/pull/190), [`3c466b8`](https://github.com/crccheck/django-object-actions/commit/3c466b81cd33d50acfb97c960ba49fc533da0f53))
@@ -39,8 +37,6 @@ _This release is published under the Apache-2.0 License._
 **Detailed Changes**: [v5.0.1...v5.1.0](https://github.com/crccheck/django-object-actions/compare/v5.0.1...v5.1.0)
 
 ## v5.0.1 (2026-04-29)
-
-_This release is published under the Apache-2.0 License._
 
 ### Bug Fixes
 
