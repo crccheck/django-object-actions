@@ -31,11 +31,11 @@ classifiers = [
 
 [dependency-groups]
 dev = [
-  "coverage==7.*",
-  "Django>=5.2",
-  "django-extensions==3.*",
-  "factory-boy==3.*",
-  "dj-database-url==2.*",
+  "coverage",
+  "django",
+  "django-extensions",
+  "factory-boy",
+  "dj-database-url",
   "python-semantic-release",
   "ruff",
 ]
