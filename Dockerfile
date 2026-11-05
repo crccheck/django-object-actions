@@ -6,7 +6,8 @@ ADD . /app
 WORKDIR /app
 ENV PYTHONPATH=/app
 
-RUN pip --disable-pip-version-check install -e '.[dev]'
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/uv
+RUN uv pip install --system -e . --group dev
 
 RUN make resetdb
 RUN echo "from django.contrib.auth import get_user_model; \
