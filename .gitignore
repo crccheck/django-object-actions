@@ -1,16 +1,10 @@
 *.pyc
 __pycache__
-.DS_Store
 .coverage
-.tox/
 *.db
 *.sqlite
 .venv
-.idea
-
-# Private files
-.env
-
+uv.lock
 
 # build
 MANIFEST

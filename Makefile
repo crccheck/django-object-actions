@@ -23,12 +23,16 @@ clean: ## Remove generated files
 	find . -name ".DS_Store" -delete
 	find . -type d -name "__pycache__" -exec rm -rf {} \; || true
 
-install: ## Install development dependencies
-	uv pip install --upgrade -e . --group dev
+install: ## Install the project for local dev
+	uv sync --upgrade
 
-lint: ## Check the project for lint errors
-	ruff check .
-	ruff format --diff .
+lint: ## Check project linting rules
+	uv run ruff format --check .
+	uv run ruff check .
+
+delint: ## Fix fixable linting errors
+	uv run ruff format .
+	uv run ruff check . --fix
 
 tdd: ## Run tests with a file watcher
 	PYTHONPATH=. nodemon --ext py -x sh -c "python -W ignore::RuntimeWarning $(MANAGE) test --failfast django_object_actions || true"

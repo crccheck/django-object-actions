@@ -39,6 +39,9 @@ dev = [
   "ruff",
 ]
 
+[tool.uv]
+exclude-newer = "3 days"
+
 [tool.setuptools]
 packages = ["django_object_actions"]
 [tool.setuptools.package-data]
@@ -80,5 +83,6 @@ extend-select = [
   "RET", # flakes8-return
   "RUF", # Ruff-specific rules
   "UP",  # pyupgrade
+  "PLC", # pylint conventions
 ]
 ignore = ["RUF012"]

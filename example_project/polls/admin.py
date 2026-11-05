@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.contrib.admin import AdminSite
 from django.db.models import F
 from django.http import HttpResponseRedirect
+from django.shortcuts import render
 from django.urls import reverse
 
 from django_object_actions import (
@@ -106,8 +107,6 @@ class PollAdmin(DjangoObjectActions, admin.ModelAdmin):
 
     @action(label="Delete All Choices")
     def delete_all_choices(self, request, obj):
-        from django.shortcuts import render
-
         if request.method == "POST":
             obj.choice_set.all().delete()
             return None
