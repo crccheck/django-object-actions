@@ -344,17 +344,7 @@ def takes_instance_or_queryset(func):
         # func follows the prototype documented at:
         # https://docs.djangoproject.com/en/dev/ref/contrib/admin/actions/#writing-action-functions
         if not isinstance(queryset, QuerySet):
-            try:
-                # Django >=1.8
-                queryset = self.get_queryset(request).filter(pk=queryset.pk)
-            except AttributeError:
-                try:
-                    # Django >=1.6,<1.8
-                    model = queryset._meta.model
-                except AttributeError:  # pragma: no cover
-                    # Django <1.6
-                    model = queryset._meta.concrete_model
-                queryset = model.objects.filter(pk=queryset.pk)
+            queryset = self.get_queryset(request).filter(pk=queryset.pk)
         return func(self, request, queryset)
 
     return decorated_function

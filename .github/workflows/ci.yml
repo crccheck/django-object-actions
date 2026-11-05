@@ -16,11 +16,9 @@ jobs:
         uses: fabiocaccamo/create-matrix-action@842c9dabf1cec0ba7417f30ec26ce2290b951ef0 # v7
         with:
           matrix: |
-            python-version {3.9}, django-version {4.2}
-            python-version {3.10}, django-version {4.2,5.0,5.1,5.2}
-            python-version {3.11}, django-version {4.2,5.0,5.1,5.2}
-            python-version {3.12}, django-version {4.2,5.0,5.1,5.2,6.0,6.1}
-            python-version {3.13}, django-version {5.1,5.2,6.0,6.1}
+            python-version {3.11}, django-version {5.2}
+            python-version {3.12}, django-version {5.2,6.0,6.1}
+            python-version {3.13}, django-version {5.2,6.0,6.1}
             python-version {3.14}, django-version {5.2,6.0,6.1}
             python-version {3.15}, django-version {6.1}
     outputs:
@@ -39,8 +37,12 @@ jobs:
       - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: ${{ matrix.python-version }}
-      - run: pip install -e '.[dev]'
-      - run: pip install "Django==${{ matrix.django-version }}.*"
+      # https://github.com/astral-sh/setup-uv/releases
+      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
+        with:
+          activate-environment: true
+      - run: uv pip install -e . --group dev
+      - run: uv pip install "Django==${{ matrix.django-version }}.*"
       - run: make test
 
   lint:
@@ -50,5 +52,9 @@ jobs:
       - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: "3.13"
-      - run: pip install -e '.[dev]'
+      # https://github.com/astral-sh/setup-uv/releases
+      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
+        with:
+          activate-environment: true
+      - run: uv pip install -e . --group dev
       - run: make lint

@@ -11,12 +11,18 @@ from . import models
 class UserFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = get_user_model()
+        skip_postgeneration_save = True
 
     first_name = factory.Faker("first_name")
     last_name = factory.Faker("last_name")
     username = factory.Faker("slug")
     email = factory.Faker("email")
-    password = factory.PostGenerationMethodCall("set_password", "password")
+
+    @factory.post_generation
+    def password(self, create, extracted, **kwargs):
+        self.set_password(extracted or "password")
+        if create:
+            self.save()
 
 
 class PollFactory(factory.django.DjangoModelFactory):

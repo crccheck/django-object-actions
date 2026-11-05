@@ -10,7 +10,8 @@ authors = [{ name = "crccheck", email = "c@crccheck.com" }]
 license = { text = "Apache-2.0" }
 readme = "README.md"
 keywords = ["django", "admin"]
-requires-python = ">=3.9"
+requires-python = ">=3.11"
+dependencies = ["Django>=5.2"]
 classifiers = [
   "Development Status :: 5 - Production/Stable",
   "Framework :: Django",
@@ -18,8 +19,6 @@ classifiers = [
   "License :: OSI Approved :: Apache Software License",
   "Operating System :: OS Independent",
   "Programming Language :: Python :: 3",
-  "Programming Language :: Python :: 3.9",
-  "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
@@ -30,17 +29,19 @@ classifiers = [
 [project.urls]
 "Homepage" = "https://github.com/crccheck/django-object-actions"
 
-[project.optional-dependencies]
+[dependency-groups]
 dev = [
-  "coverage==7.*",
-  "Django>=4.2",
-  "django-extensions==3.*",
-  "factory-boy==3.*",
-  "dj-database-url==2.*",
+  "coverage",
+  "django",
+  "django-extensions",
+  "factory-boy",
+  "dj-database-url",
   "python-semantic-release",
   "ruff",
 ]
-build = ["build", "twine"]
+
+[tool.uv]
+exclude-newer = "3 days"
 
 [tool.setuptools]
 packages = ["django_object_actions"]
@@ -53,7 +54,7 @@ packages = ["django_object_actions"]
 [tool.semantic_release]
 version_toml = ["pyproject.toml:project.version"]
 version_variables = ["django_object_actions/__init__.py:__version__"]
-build_command = "pip install -e '.[build]' && python -m build"
+build_command = "pip install build && python -m build"
 
 [tool.semantic_release.changelog]
 template_dir = ".github/workflows/release"
@@ -83,5 +84,6 @@ extend-select = [
   "RET", # flakes8-return
   "RUF", # Ruff-specific rules
   "UP",  # pyupgrade
+  "PLC", # pylint conventions
 ]
 ignore = ["RUF012"]
