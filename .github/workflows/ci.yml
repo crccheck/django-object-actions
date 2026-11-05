@@ -13,15 +13,16 @@ jobs:
       - name: Create matrix
         id: create_matrix
         # https://github.com/fabiocaccamo/create-matrix-action/releases
-        uses: fabiocaccamo/create-matrix-action@v7
+        uses: fabiocaccamo/create-matrix-action@842c9dabf1cec0ba7417f30ec26ce2290b951ef0 # v7
         with:
           matrix: |
             python-version {3.9}, django-version {4.2}
             python-version {3.10}, django-version {4.2,5.0,5.1,5.2}
             python-version {3.11}, django-version {4.2,5.0,5.1,5.2}
-            python-version {3.12}, django-version {4.2,5.0,5.1,5.2,6.0}
-            python-version {3.13}, django-version {5.1,5.2,6.0}
-            python-version {3.14}, django-version {5.2,6.0}
+            python-version {3.12}, django-version {4.2,5.0,5.1,5.2,6.0,6.1}
+            python-version {3.13}, django-version {5.1,5.2,6.0,6.1}
+            python-version {3.14}, django-version {5.2,6.0,6.1}
+            python-version {3.15}, django-version {6.1}
     outputs:
       matrix: ${{ steps.create_matrix.outputs.matrix }}
 
@@ -34,8 +35,8 @@ jobs:
     name: "Python ${{ matrix.python-version }} + Django ${{ matrix.django-version }}"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-python@v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: ${{ matrix.python-version }}
       - run: pip install -e '.[dev]'
@@ -45,8 +46,8 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-python@v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: "3.13"
       - run: pip install -e '.[dev]'
