@@ -39,7 +39,6 @@ dev = [
   "python-semantic-release",
   "ruff",
 ]
-build = ["build", "twine"]
 
 [tool.setuptools]
 packages = ["django_object_actions"]
@@ -52,7 +51,7 @@ packages = ["django_object_actions"]
 [tool.semantic_release]
 version_toml = ["pyproject.toml:project.version"]
 version_variables = ["django_object_actions/__init__.py:__version__"]
-build_command = "pip install build twine && python -m build"
+build_command = "pip install build && python -m build"
 
 [tool.semantic_release.changelog]
 template_dir = ".github/workflows/release"
