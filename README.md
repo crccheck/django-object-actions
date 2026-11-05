@@ -21,13 +21,14 @@ In your admin.py:
 ```python
 from django_object_actions import DjangoObjectActions, action
 
+
 class ArticleAdmin(DjangoObjectActions, admin.ModelAdmin):
-    @action(label="Publish", description="Submit this article") # optional
+    @action(label="Publish", description="Submit this article")  # optional
     def publish_this(self, request, obj):
         publish_obj(obj)
 
-    change_actions = ("publish_this", )
-    changelist_actions = ("action_name", )
+    change_actions = ("publish_this",)
+    changelist_actions = ("action_name",)
 ```
 
 ## Usage
@@ -43,19 +44,20 @@ views too. There, you'll get a queryset like a regular [admin action][admin acti
 ```python
 from django_object_actions import DjangoObjectActions
 
+
 class MyModelAdmin(DjangoObjectActions, admin.ModelAdmin):
     @action(
         label="This will be the label of the button",  # optional
-        description="This will be the tooltip of the button" # optional
+        description="This will be the tooltip of the button",  # optional
     )
     def toolfunc(self, request, obj):
         pass
 
     def make_published(modeladmin, request, queryset):
-        queryset.update(status='p')
+        queryset.update(status="p")
 
-    change_actions = ("toolfunc", )
-    changelist_actions = ("make_published", )
+    change_actions = ("toolfunc",)
+    changelist_actions = ("make_published",)
 ```
 
 Just like admin actions, you can send a message with `self.message_user`.
@@ -75,15 +77,16 @@ queryset and pass querysets:
 ```python
 from django_object_actions import DjangoObjectActions, takes_instance_or_queryset
 
+
 class RobotAdmin(DjangoObjectActions, admin.ModelAdmin):
     # ... snip ...
 
     @takes_instance_or_queryset
     def tighten_lug_nuts(self, request, queryset):
-        queryset.update(lugnuts=F('lugnuts') - 1)
+        queryset.update(lugnuts=F("lugnuts") - 1)
 
-    change_actions = ("tighten_lug_nuts", )
-    actions = ("tighten_lug_nuts", )
+    change_actions = ("tighten_lug_nuts",)
+    actions = ("tighten_lug_nuts",)
 ```
 
 [admin actions]: https://docs.djangoproject.com/en/stable/ref/contrib/admin/actions/
@@ -107,6 +110,8 @@ similar to how admin actions work:
 def increment_vote(self, request, obj):
     obj.votes = obj.votes + 1
     obj.save()
+
+
 increment_vote.short_description = "Increment the vote count by one"
 ```
 
@@ -127,6 +132,8 @@ or
 def increment_vote(self, request, obj):
     obj.votes = obj.votes + 1
     obj.save()
+
+
 increment_vote.label = "Vote++"
 ```
 
@@ -136,7 +143,7 @@ by adding a Django widget style
 attribute:
 
 ```python
-@action(attrs = {'class': 'addlink'})
+@action(attrs={"class": "addlink"})
 def increment_vote(self, request, obj):
     obj.votes = obj.votes + 1
     obj.save()
@@ -148,8 +155,10 @@ or
 def increment_vote(self, request, obj):
     obj.votes = obj.votes + 1
     obj.save()
+
+
 increment_vote.attrs = {
-    'class': 'addlink',
+    "class": "addlink",
 }
 ```
 
@@ -168,8 +177,8 @@ def get_change_actions(self, request, object_id, form_url):
         return []
 
     obj = self.model.objects.get(pk=object_id)
-    if obj.question.endswith('?'):
-        actions.remove('question_mark')
+    if obj.question.endswith("?"):
+        actions.remove("question_mark")
 
     return actions
 ```
@@ -203,8 +212,7 @@ You can also configure individual actions to use POST:
 
 ```python
 @action(methods=("POST",), button_type="form")
-def my_action(self, request, obj):
-    ...
+def my_action(self, request, obj): ...
 ```
 
 The `button_type` parameter controls which kind of DOM element the button renders:
@@ -236,7 +244,8 @@ Making an action that links off-site:
 ```python
 def external_link(self, request, obj):
     from django.http import HttpResponseRedirect
-    return HttpResponseRedirect(f'https://example.com/{obj.id}')
+
+    return HttpResponseRedirect(f"https://example.com/{obj.id}")
 ```
 
 ### Intermediate confirmation and form pages
@@ -247,6 +256,7 @@ methods by default.
 
 ```python
 from django.shortcuts import render
+
 
 @action(label="Delete all choices")
 def delete_all_choices(self, request, obj):

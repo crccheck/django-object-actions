@@ -1,7 +1,9 @@
+from __future__ import annotations
+
 import warnings
 from functools import wraps
 from itertools import chain
-from typing import Literal, Optional
+from typing import Literal
 
 from django.conf import settings
 from django.contrib import messages
@@ -193,13 +195,14 @@ class BaseDjangoObjectActions:
         """Represents the tool as a dict with extra meta."""
         tool = getattr(self, tool_name)
         standard_attrs, custom_attrs = self._get_button_attrs(tool)
-        return dict(
-            name=tool_name,
-            label=getattr(tool, "label", tool_name.replace("_", " ").capitalize()),
-            standard_attrs=standard_attrs,
-            custom_attrs=custom_attrs,
-            button_type=getattr(tool, "button_type", None) or get_default_button_type(),
-        )
+        return {
+            "name": tool_name,
+            "label": getattr(tool, "label", tool_name.replace("_", " ").capitalize()),
+            "standard_attrs": standard_attrs,
+            "custom_attrs": custom_attrs,
+            "button_type": getattr(tool, "button_type", None)
+            or get_default_button_type(),
+        }
 
     def _get_button_attrs(self, tool):
         """
@@ -365,7 +368,7 @@ def action(
     label=None,
     attrs=None,
     methods=DEFAULT_METHODS_ALLOWED,
-    button_type: Optional[Literal["a", "form"]] = None,
+    button_type: Literal["a", "form"] | None = None,
 ):
     """
     Conveniently add attributes to an action function:
